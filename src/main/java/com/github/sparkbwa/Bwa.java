@@ -418,6 +418,7 @@ public class Bwa implements Serializable {
 			return returnCode;
 		}
 		// The run was successful
+		
 		return 0;
 	}
 }
