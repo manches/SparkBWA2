@@ -407,8 +407,6 @@ public class Bwa implements Serializable {
 	* @return A Strings array containing the options which BWA was launched
 	*/
 	public int run(int alnStep) {
-		LOG.notice("["+this.getClass().getName()+"] :: MANCHES :: running "alnStep);
-		LOG.debug("["+this.getClass().getName()+"] :: MANCHES :: running "alnStep);
 		// Get the list of arguments passed by the user
 		String[] parametersArray = parseParameters(alnStep);
 
