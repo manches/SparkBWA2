@@ -417,8 +417,6 @@ public class Bwa implements Serializable {
 			LOG.error("["+this.getClass().getName()+"] :: BWA exited with error code: " + String.valueOf(returnCode));
 			return returnCode;
 		}
-		LOG.notice("["+this.getClass().getName()+"] :: MANCHES :: running finnish");
-		LOG.debug("["+this.getClass().getName()+"] :: MANCHES :: running finnish");
 		// The run was successful
 		return 0;
 	}
