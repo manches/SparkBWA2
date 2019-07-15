@@ -259,8 +259,6 @@ public class BwaInterpreter {
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.1: " + data._1());
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.2: " + data._2());
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.3: " + data._3());
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.4: " + data._4());
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
 		 }); 
 		
@@ -318,8 +316,6 @@ public class BwaInterpreter {
 		readsRDD.foreach(data -> {
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.1: " + data._1());
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.2: " + data._2());
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.3: " + data._3());
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.4: " + data._4());
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
 
 
