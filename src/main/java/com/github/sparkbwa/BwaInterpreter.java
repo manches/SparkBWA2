@@ -26,14 +26,10 @@ import org.apache.hadoop.fs.Path;
 import org.apache.spark.ContextCleaner;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
-import org.apache.spark.sql.DataFrame;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.storage.StorageLevel;
-import org.apache.spark.sql.Encoders;
 import scala.Tuple2;
 
 import java.io.BufferedReader;
@@ -70,13 +66,10 @@ public class BwaInterpreter {
 	 * @return The BwaInterpreter object with its options initialized.
 	 */
 	public BwaInterpreter(BwaOptions optionsFromShell, SparkContext context) {
-		//TODO
-		LOG.info("["+this.getClass().getName()+"] :: BwaInterpreter Constructor with context");
 
 		this.options = optionsFromShell;
 		this.ctx = new JavaSparkContext(context);
 		this.initInterpreter();
-		
 	}
 
 	/**
@@ -86,8 +79,6 @@ public class BwaInterpreter {
 	 * @return The BwaInterpreter object with its options initialized.
 	 */
 	public BwaInterpreter(String[] args) {
-		//TODO
-		LOG.info("["+this.getClass().getName()+"] :: BwaInterpreter Constructor without context");
 
 		this.options = new BwaOptions(args);
 		this.initInterpreter();
@@ -168,11 +159,8 @@ public class BwaInterpreter {
 	 * Method to perform and handle the single reads sorting
 	 * @return A RDD containing the strings with the sorted reads from the FASTQ file
 	 */
-	//private DataFrame handleSingleReadsSorting() { 
-	
 	private JavaRDD<String> handleSingleReadsSorting() {
 		JavaRDD<String> readsRDD = null;
-		Dataset<Row> readsDS =  null;
 
 		long startTime = System.nanoTime();
 
@@ -239,38 +227,31 @@ public class BwaInterpreter {
 	 * Method to perform and handle the paired reads sorting
 	 * @return A JavaRDD containing grouped reads from the paired FASTQ files
 	 */
-	private Dataset<Row> handlePairedReadsSorting() {
-//	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
+	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
-		Dataset<Row> readsDS =  null;
 
 		long startTime = System.nanoTime();
 
-		LOG.info("["+this.getClass().getName()+"] :: Not sorting in HDFS. Timing: " + startTime);
+		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
 
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
+
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
-			//readsRDD = pairedReadsRDD.sortByKey().values();
-			Dataset<Row> readsDSAux =  this.ctx.createDataset(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF();
-			readsDS = readsDSAux.values();
+			readsRDD = pairedReadsRDD.sortByKey().values();
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
 		// Sort in memory with partitioning
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
-			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
-			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
-			
-			readsDS = this.ctx.createDataset(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
-					.repartitionAndSortWithinPartitions(options.getPartitionNumber())
-					.values();
+			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
+			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
 
@@ -295,53 +276,11 @@ public class BwaInterpreter {
 			else {
 				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort");
 			}
-			
-			
-			
-			//-----------------------------------------------------------------------------
-			/*
-			List<Tuple2<String, String>> tuples = new ArrayList<Tuple2<String, String>>();
-	        tuples.add(new Tuple2<String, String>("name1", "caption1"));
-	        tuples.add(new Tuple2<String, String>("name3", "caption2"));
-	        tuples.add(new Tuple2<String, String>("name3", "caption3"));
 
-	        List<String> descriptions = Arrays.asList(new String[]{"desc1" , "desc2" , "desc3"});
-
-	        Encoder<Tuple2<String, String>> nameCaptionEncoder = Encoders.tuple(Encoders.STRING(), Encoders.STRING());
-	        Dataset<Tuple2<String, String>> nameValueDataSet = sqlContext.createDataset(tuples, nameCaptionEncoder);
-	        Dataset<String> descriptionDataSet = sqlContext.createDataset(descriptions, Encoders.STRING());
-	        Dataset<Row> nameValueDataSetWithId = nameValueDataSet.toDF("name","caption").withColumn("id",functions.monotonically_increasing_id()).select("*");
-	        Dataset<Row> descriptionDataSetId = descriptionDataSet.withColumn("id",functions.monotonically_increasing_id()).select("*");
-	        nameValueDataSetWithId.join(descriptionDataSetId ,"id").show();
-			
-			//-----------------------------------------------------------------------------
-		 	Encoder<Tuple2<String, Tuple2<String,String>>> encoder =
-			Encoders.tuple(Encoders.STRING(), Encoders.tuple(Encoders.STRING(), Encoders.STRING()));
-			List<Tuple2<String, Tuple2<String, String>>> data = Arrays.asList(tuple2("1", tuple2("a", "b")),tuple2("2", tuple2("c", "d")));
-			Dataset<Row> ds1 = spark.createDataset(data, encoder).toDF("value1", "value2");
-			
-			JavaPairRDD<String, Tuple2<String, String>> pairRDD = jsc.parallelizePairs(data);
-			Dataset<Row> ds2 = spark.createDataset(JavaPairRDD.toRDD(pairRDD), encoder).toDF("value1", "value2");
-
-			Assert.assertEquals(ds1.schema(), ds2.schema());
-			Assert.assertEquals(ds1.select(expr("value2._1")).collectAsList(),ds2.select(expr("value2._1")).collectAsList());
-			
-			
-			//-----------------------------------------------------------------------------
-
-			Encoder<Tuple2<String, Tuple2<String,String>>> encoder2 = Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.LONG()));
-			Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
-			*/
-			//-----------------------------------------------------------------------------
-			
-			readsDS = this.ctx.createDataset(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
-					.repartition(options.getPartitionNumber())
-					.values();
-			//readsRDD = pairedReadsRDD
-			//	.repartition(options.getPartitionNumber())
-			//	.values();
+			readsRDD = pairedReadsRDD
+				.repartition(options.getPartitionNumber())
+				.values();
 				//.persist(StorageLevel.MEMORY_ONLY());
-			
 		}
 
 		long endTime = System.nanoTime();
@@ -350,9 +289,7 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 
-		//return readsRDD;
-		return readsDS;
-		
+		return readsRDD;
 	}
 
 	/**
@@ -361,11 +298,10 @@ public class BwaInterpreter {
 	 * @param readsRDD The RDD containing the paired reads
 	 * @return A list of strings containing the resulting sam files where the output alignments are stored
 	 */
-	//private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
-	private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsRDD) {		
+	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-		return readsRDD.toJavaRDD()
-			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.toJavaRDD().context(), bwa), true)
+		return readsRDD
+			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();
 	}
 
@@ -394,16 +330,12 @@ public class BwaInterpreter {
 
 		List<String> returnedValues;
 		if (bwa.isPairedReads()) {
-			Dataset<Row> readsDS =  handlePairedReadsSorting();
-			//JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
+			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
 			returnedValues = MapPairedBwa(bwa, readsRDD);
 		}
 		else {
-			//TODO
-			//JavaRDD<String> readsRDD = handleSingleReadsSorting();
-			//returnedValues = MapSingleBwa(bwa, readsRDD);
-			LOG.info("["+this.getClass().getName()+"] :: Single BWA");
-			System.exit(0);
+			JavaRDD<String> readsRDD = handleSingleReadsSorting();
+			returnedValues = MapSingleBwa(bwa, readsRDD);
 		}
 
 		// In the case of use a reducer the final output has to be stored in just one file
@@ -445,17 +377,13 @@ public class BwaInterpreter {
 		/* // Previous version doesn't makes sense. We do not have tmp files in HDFS
 		for (String outputFile : returnedValues) {
 			LOG.info("["+this.getClass().getName()+"] :: SparkBWA:: Returned file ::" + outputFile);
-
 			//After the execution, if the inputTmp exists, it should be deleted
 			try {
 				if ((this.inputTmpFileName != null) && (!this.inputTmpFileName.isEmpty())) {
 					FileSystem fs = FileSystem.get(this.conf);
-
 					fs.delete(new Path(this.inputTmpFileName), true);
-
 					fs.close();
 				}
-
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -515,3 +443,6 @@ public class BwaInterpreter {
 		//ContextCleaner cleaner = this.ctx.sc().cleaner().get();
 	}
 }
+
+    © 2019 GitHub, Inc.
+    Terms
