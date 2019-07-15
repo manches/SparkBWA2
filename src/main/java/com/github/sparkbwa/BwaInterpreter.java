@@ -259,7 +259,7 @@ public class BwaInterpreter {
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			//readsRDD = pairedReadsRDD.sortByKey().values();
-			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.Long(), Encoders.tuple(Encoders.STRING(), Encoders.Long()) )).toDF()
+			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
 					.values();
 			
 			
@@ -272,7 +272,7 @@ public class BwaInterpreter {
 			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
 			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
-			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.Long(), Encoders.tuple(Encoders.STRING(), Encoders.Long()) )).toDF()
+			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
 					.repartitionAndSortWithinPartitions(options.getPartitionNumber())
 					.values();
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
@@ -338,7 +338,7 @@ public class BwaInterpreter {
 			*/
 			//-----------------------------------------------------------------------------
 			
-			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.Long(), Encoders.tuple(Encoders.STRING(), Encoders.Long()) )).toDF()
+			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
 					.repartition(options.getPartitionNumber())
 					.values();
 			//readsRDD = pairedReadsRDD
