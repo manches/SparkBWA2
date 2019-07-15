@@ -238,21 +238,27 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
 	
 		datasetTmp1.foreach(data -> {
+		        System.out.println("model="+data._1() + " label=" + data._2());
+		    }); 
+		/*
+		 * datasetTmp1.foreach(data -> {
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES1.1: " + data._1());
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES1.2: " + data._2());
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
 		 }); 
-	
+		 */
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		
-		datasetTmp2.foreach(data -> {
+		/*
+		 * 
+		 
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES2.1: " + data._1());
 			LOG.info("["+this.getClass().getName()+"] :: MANCHES2.2: " + data._2());
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
 		 }); 
-		
+		*/
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 
 		
