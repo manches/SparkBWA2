@@ -237,9 +237,11 @@ public class BwaInterpreter {
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
 	
-		datasetTmp1.foreach(data -> {
-		        System.out.println("model="+data._1() + " label=" + data._2());
-		    }); 
+		datasetTmp1.foreach((k,v)->{
+		     System.out.println(v.toString());
+		     LOG.info("["+this.getClass().getName()+"] :: MANCHES: " + k.toString() );
+		     LOG.info("["+this.getClass().getName()+"] :: MANCHES: " + v.toString() );
+		  });
 		/*
 		 * datasetTmp1.foreach(data -> {
 			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
