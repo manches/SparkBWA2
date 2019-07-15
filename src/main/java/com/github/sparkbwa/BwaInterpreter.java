@@ -255,12 +255,6 @@ public class BwaInterpreter {
 		
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 
-		pairedReadsRDD.foreach(data -> {
-			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.1: " + data._1());
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.2: " + data._2());
-			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
-		 }); 
 		
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
@@ -312,14 +306,6 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 
-		
-		readsRDD.foreach(data -> {
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.1: " + data._1());
-			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.2: " + data._2());
-			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
-
-
-		 });  
 		
 		return readsRDD;
 	}
