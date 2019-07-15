@@ -165,7 +165,8 @@ public class BwaInterpreter {
 	 * Method to perform and handle the single reads sorting
 	 * @return A RDD containing the strings with the sorted reads from the FASTQ file
 	 */
-	//private DataFrame handleSingleReadsSorting() {
+	//private DataFrame handleSingleReadsSorting() { 
+	
 	private JavaRDD<String> handleSingleReadsSorting() {
 		JavaRDD<String> readsRDD = null;
 		Dataframe readsDS =  null;
