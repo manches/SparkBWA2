@@ -27,6 +27,8 @@ import org.apache.spark.ContextCleaner;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.sql.DataFrame;
+import org.apache.spark.sql.DataSet;
+import org.apache.spark.sql.row;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -169,7 +171,7 @@ public class BwaInterpreter {
 	
 	private JavaRDD<String> handleSingleReadsSorting() {
 		JavaRDD<String> readsRDD = null;
-		Dataframe readsDS =  null;
+		Dataset<Row> readsDS =  null;
 
 		long startTime = System.nanoTime();
 
@@ -236,10 +238,10 @@ public class BwaInterpreter {
 	 * Method to perform and handle the paired reads sorting
 	 * @return A JavaRDD containing grouped reads from the paired FASTQ files
 	 */
-	private DataFrame handlePairedReadsSorting() {
+	private Dataset<Row> handlePairedReadsSorting() {
 //	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
-		Dataframe readsDS =  null;
+		Dataset<Row> readsDS =  null;
 
 		long startTime = System.nanoTime();
 
@@ -363,7 +365,7 @@ public class BwaInterpreter {
 	 * @return A list of strings containing the resulting sam files where the output alignments are stored
 	 */
 	//private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
-	private List<String> MapPairedBwa(Bwa bwa, Dataframe readsRDD) {		
+	private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsRDD) {		
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
 		return readsRDD.toJavaRDD()
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.toJavaRDD().context(), bwa), true)
@@ -395,7 +397,7 @@ public class BwaInterpreter {
 
 		List<String> returnedValues;
 		if (bwa.isPairedReads()) {
-			Dataframe readsDS =  handlePairedReadsSorting();
+			Dataset<Row> readsDS =  handlePairedReadsSorting();
 			//JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
 			returnedValues = MapPairedBwa(bwa, readsRDD);
 		}
