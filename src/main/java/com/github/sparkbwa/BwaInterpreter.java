@@ -35,7 +35,6 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.sql.Encoders;
 import scala.Tuple2;
-import scala.Tuple;
 
 import java.io.BufferedReader;
 import java.io.IOException;
