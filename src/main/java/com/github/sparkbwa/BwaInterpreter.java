@@ -34,6 +34,7 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.storage.StorageLevel;
 import scala.Tuple2;
+import scala.Tuple;
 
 import java.io.BufferedReader;
 import java.io.IOException;
