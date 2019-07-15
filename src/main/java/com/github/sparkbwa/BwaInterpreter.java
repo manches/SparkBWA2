@@ -33,6 +33,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.storage.StorageLevel;
+import org.apache.spark.sql.Encoders;
 import scala.Tuple2;
 import scala.Tuple;
 
