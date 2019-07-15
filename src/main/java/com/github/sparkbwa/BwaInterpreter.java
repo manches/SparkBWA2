@@ -363,7 +363,7 @@ public class BwaInterpreter {
 	//private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 	private List<String> MapPairedBwa(Bwa bwa, Dataframe readsRDD) {		
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-		return 
+		return readsRDD.toJavaRDD()
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.toJavaRDD().context(), bwa), true)
 			.collect();
 	}
