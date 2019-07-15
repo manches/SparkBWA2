@@ -443,6 +443,3 @@ public class BwaInterpreter {
 		//ContextCleaner cleaner = this.ctx.sc().cleaner().get();
 	}
 }
-
-    © 2019 GitHub, Inc.
-    Terms
