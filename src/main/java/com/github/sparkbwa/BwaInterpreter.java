@@ -252,14 +252,13 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
-
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			//readsRDD = pairedReadsRDD.sortByKey().values();
-			Dataset<Row> readsDSAux =  this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF();
+			Dataset<Row> readsDSAux =  this.ctx.createDataset(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF();
 			readsDS = readsDSAux.values();
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
@@ -269,7 +268,7 @@ public class BwaInterpreter {
 			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
 			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
-			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
+			readsDS = this.ctx.createDataset(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
 					.repartitionAndSortWithinPartitions(options.getPartitionNumber())
 					.values();
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
@@ -335,7 +334,7 @@ public class BwaInterpreter {
 			*/
 			//-----------------------------------------------------------------------------
 			
-			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
+			readsDS = this.ctx.createDataset(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
 					.repartition(options.getPartitionNumber())
 					.values();
 			//readsRDD = pairedReadsRDD
