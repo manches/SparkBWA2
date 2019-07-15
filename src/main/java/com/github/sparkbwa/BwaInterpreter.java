@@ -259,20 +259,19 @@ public class BwaInterpreter {
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			//readsRDD = pairedReadsRDD.sortByKey().values();
-			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
-					.values();
-			
-			
-			
+			Dataset<Row> readsDSAux =  this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF();
+			readsDS = readsDSAux.values();
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
 		// Sort in memory with partitioning
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
 			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
-			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());		
-			Dataset<Row> readsDSAux =  this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD.sortByKey()), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF();
-			readsDS = readsDSAux.values();
+			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
+			
+			readsDS = this.ctx.createDataFrame(JavaPairRDD.toRDD(pairedReadsRDD), Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(), Encoders.LONG()) )).toDF()
+					.repartitionAndSortWithinPartitions(options.getPartitionNumber())
+					.values();
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
 
