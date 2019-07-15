@@ -239,7 +239,7 @@ public class BwaInterpreter {
 	
 		datasetTmp1.foreach(rdd -> {
 		        System.out.println("sort = " + rdd);
-				LOG.info("[ ] :: MANCHES1.1: " + data);
+				LOG.info("[ ] :: MANCHES1.1: " + rdd);
 
 		    });
 		
