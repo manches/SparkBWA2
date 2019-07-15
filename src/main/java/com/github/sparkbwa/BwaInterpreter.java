@@ -236,9 +236,34 @@ public class BwaInterpreter {
 
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
+	
+		datasetTmp1.foreach(data -> {
+			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES1.1: " + data._1());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES1.2: " + data._2());
+			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
+		}
+	
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
+		
+		datasetTmp2.foreach(data -> {
+			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES2.1: " + data._1());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES2.2: " + data._2());
+			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
+		}
+		
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 
+		pairedReadsRDD.foreach(data -> {
+			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.1: " + data._1());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.2: " + data._2());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.3: " + data._3());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES3.4: " + data._4());
+			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
+		}
+		
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 
@@ -289,6 +314,17 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 
+		
+		readsRDD.foreach(data -> {
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.1: " + data._1());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.2: " + data._2());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.3: " + data._3());
+			LOG.info("["+this.getClass().getName()+"] :: MANCHES4.4: " + data._4());
+			LOG.info("["+this.getClass().getName()+"] :: ----------------------------------------- " );
+
+
+	    }); 
+		
 		return readsRDD;
 	}
 
