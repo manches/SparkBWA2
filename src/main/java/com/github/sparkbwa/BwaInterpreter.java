@@ -236,19 +236,7 @@ public class BwaInterpreter {
 
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
-	
-		datasetTmp1.foreach(rdd -> {
-		        System.out.println("sort = " + rdd);
-				LOG.info("[ ] :: MANCHES1.1: " + rdd);
-
-		    });
-		
-
-		
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
-
-
-		
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 
 		
@@ -302,9 +290,16 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 
+		readsRDD.foreach(rdd -> {
+	        System.out.println("sort = " + rdd);
+			LOG.info("[ ] :: MANCHES1.1: " + rdd);
 
+	    });
 
 		return readsRDD;
+		
+		
+		
 	}
 
 	/**
