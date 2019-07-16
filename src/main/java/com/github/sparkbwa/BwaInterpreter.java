@@ -292,7 +292,8 @@ public class BwaInterpreter {
 
 		readsRDD.foreach(rdd -> {
 	        System.out.println("sort = " + rdd);
-			LOG.info("[ ] :: MANCHES1.1: " + rdd);
+			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
+			LOG.info("[ ] :: -------------------------------------------: " + rdd);
 
 	    });
 
