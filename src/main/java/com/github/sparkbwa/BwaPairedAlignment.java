@@ -20,6 +20,7 @@ package com.github.sparkbwa;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.function.Function2;
 import scala.Tuple2;
+import org.apache.spark.sql.SparkSession;
 
 import java.io.*;
 import java.util.ArrayList;
