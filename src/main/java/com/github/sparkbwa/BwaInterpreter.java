@@ -294,6 +294,10 @@ public class BwaInterpreter {
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
 			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
 			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
+			
+			Dataset dfAux = df.repartition(options.getPartitionNumber());
+			dfFinal = dfAux.orderBy("_1");
+			
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
 
@@ -323,6 +327,8 @@ public class BwaInterpreter {
 				.repartition(options.getPartitionNumber())
 				.values();
 				//.persist(StorageLevel.MEMORY_ONLY());
+			
+			dfFinal = df.repartition(options.getPartitionNumber());
 		}
 
 		long endTime = System.nanoTime();
@@ -330,6 +336,7 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: End of sorting. Timing: " + endTime);
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
+		
 		LOG.info("[ ] :: -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
