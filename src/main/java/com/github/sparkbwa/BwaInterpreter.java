@@ -388,7 +388,7 @@ public class BwaInterpreter {
 			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
 			returnedValues = MapPairedBwa(bwa, readsRDD);
 			System.out.println("----------------------------------------------------------------");
-			System.out.println(Arrays.toString(returnedValues.toArray()));
+			returnedValues.forEach(System.out::println);
 
 		}
 		else {
