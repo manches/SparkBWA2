@@ -356,9 +356,13 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 	    });
 	    */
-		return readsRDD
+		/*return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
-			.collect();
+			.collect();*/
+		return readsRDD
+				.mapPartitions(new BwaPairedAlignment(readsRDD.context(), bwa), true)
+				.collect();
+
 	}
 
 	/**
