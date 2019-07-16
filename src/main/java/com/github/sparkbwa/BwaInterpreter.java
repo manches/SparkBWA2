@@ -362,8 +362,9 @@ public class BwaInterpreter {
 	    });
 	    */
 		LOG.info("[ ] :: MANCHES 1 -------------------------------------------: ");
-
-		JavaRDD<Tuple2<String, String>> readsRDD = null;
+		readsDS.show(1,false);
+		readsDS.printSchema();
+		JavaRDD readsRDD = null;
 		LOG.info("[ ] :: MANCHES 2 -------------------------------------------: ");
 		LOG.info("[ ] :: " + readsDS.count());
 		LOG.info("[ ] :: MANCHES 3.1 -------------------------------------------: ");
