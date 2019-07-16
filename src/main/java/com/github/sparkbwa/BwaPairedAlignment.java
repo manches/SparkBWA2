@@ -20,7 +20,6 @@ package com.github.sparkbwa;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.function.Function2;
 import scala.Tuple2;
-import org.apache.spark.sql.SparkSession;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -38,8 +37,8 @@ public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<In
 	 * @param context The Spark context
 	 * @param bwaInterpreter The BWA interpreter object to use
 	 */
-	public BwaPairedAlignment(SparkSession context, Bwa bwaInterpreter) {
-		super(context.sparkContext(), bwaInterpreter);
+	public BwaPairedAlignment(SparkContext context, Bwa bwaInterpreter) {
+		super(context, bwaInterpreter);
   }
 
 	/**

@@ -366,7 +366,7 @@ public class BwaInterpreter {
 		
 		return readsDS
 				.javaRDD()
-				.mapPartitions(new BwaPairedAlignment(readsDS.sparkSession(), bwa), true)
+				.mapPartitions(new BwaPairedAlignment(readsDS.sparkSession().sparkContext(), bwa), true)
 				.collect();
 
 	}
