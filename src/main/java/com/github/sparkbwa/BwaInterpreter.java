@@ -360,7 +360,7 @@ public class BwaInterpreter {
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();*/
 		return readsRDD
-				.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
+				.mapPartitions(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 				.collect();
 
 	}
