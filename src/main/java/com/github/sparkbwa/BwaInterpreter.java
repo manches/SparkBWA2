@@ -360,15 +360,19 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 	    });
 	    */
-		/*return readsRDD
+		JavaRDD<Tuple2<String, String>> readsRDD = null;
+		readsRDD = readsDS.javaRDD();
+		return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
-			.collect();*/
+			.collect();
 		
-		return readsDS
+		
+		
+		/*return readsDS
 				.javaRDD()
 				.mapPartitions(new BwaPairedAlignment(readsDS.sparkSession().sparkContext(), bwa), true)
 				.collect();
-
+		*/
 	}
 
 	/**
