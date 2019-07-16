@@ -19,6 +19,7 @@ package com.github.sparkbwa;
 //import org.apache.hadoop.io.Text;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.function.Function1;
+import org.apache.spark.api.java.function.Function2;
 import scala.Tuple2;
 
 import java.io.*;
@@ -30,7 +31,7 @@ import java.util.Iterator;
  *
  * @author José M. Abuín
  */
-public class BwaPairedAlignment extends BwaAlignmentBase implements Function1< Iterator<Tuple2<String, String>>, Iterator<String>> {
+public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<Integer, Iterator<Tuple2<String, String>>, Iterator<String>> {
 
 	/**
 	 * Constructor
