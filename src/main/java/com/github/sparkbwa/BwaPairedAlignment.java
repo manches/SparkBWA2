@@ -18,7 +18,7 @@ package com.github.sparkbwa;
 
 //import org.apache.hadoop.io.Text;
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.Function1;
 import scala.Tuple2;
 
 import java.io.*;
