@@ -343,7 +343,7 @@ public class BwaInterpreter {
 
 	    });
 		Dataset dfF = dfFinal.select("_2");
-		dfF.show(20,false);
+		dfF.show(1,false);
 		dfF.printSchema();
 		 
 		return readsRDD;
