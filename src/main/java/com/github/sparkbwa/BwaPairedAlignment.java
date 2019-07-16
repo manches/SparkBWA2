@@ -19,7 +19,7 @@ package com.github.sparkbwa;
 //import org.apache.hadoop.io.Text;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.function.Function1;
-import org.apache.spark.api.java.function.Function2;
+//import org.apache.spark.api.java.function.Function2;
 import scala.Tuple2;
 
 import java.io.*;
@@ -31,7 +31,7 @@ import java.util.Iterator;
  *
  * @author José M. Abuín
  */
-public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<Integer, Iterator<Tuple2<String, String>>, Iterator<String>> {
+public class BwaPairedAlignment extends BwaAlignmentBase implements Function1<Iterator<Tuple2<String, String>>, Iterator<String>> {
 
 	/**
 	 * Constructor
@@ -46,11 +46,11 @@ public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<In
 	 * Code to run in each one of the mappers. This is, the alignment with the corresponding entry
 	 * data The entry data has to be written into the local filesystem
 	 * @param arg0 The RDD Id
-	 * @param arg1 An iterator containing the values in this RDD
+	 * @param arg0 An iterator containing the values in this RDD
 	 * @return An iterator containing the sam file name generated
 	 * @throws Exception
 	 */
-	public Iterator<String> call(Integer arg0, Iterator<Tuple2<String, String>> arg1) throws Exception {
+	public Iterator<String> call(Iterator<Tuple2<String, String>> arg0) throws Exception {
 
 		// STEP 1: Input fastq reads tmp file creation
 		LOG.info("["+this.getClass().getName()+"] :: Tmp dir: " + this.tmpDir);
@@ -59,12 +59,12 @@ public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<In
 		String fastqFileName2;
 
 		if(this.tmpDir.lastIndexOf("/") == this.tmpDir.length()-1) {
-			fastqFileName1 = this.tmpDir + this.appId + "-RDD" + arg0 + "_1";
-			fastqFileName2 = this.tmpDir + this.appId + "-RDD" + arg0 + "_2";
+			fastqFileName1 = this.tmpDir + this.appId + "-RDD"  + "_1";
+			fastqFileName2 = this.tmpDir + this.appId + "-RDD"  + "_2";
 		}
 		else {
-			fastqFileName1 = this.tmpDir + "/" + this.appId + "-RDD" + arg0 + "_1";
-			fastqFileName2 = this.tmpDir + "/" + this.appId + "-RDD" + arg0 + "_2";
+			fastqFileName1 = this.tmpDir + "/" + this.appId + "-RDD"  + "_1";
+			fastqFileName2 = this.tmpDir + "/" + this.appId + "-RDD"  + "_2";
 		}
 
 
@@ -92,8 +92,8 @@ public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<In
 
 			Tuple2<String, String> newFastqRead;
 
-			while (arg1.hasNext()) {
-				newFastqRead = arg1.next();
+			while (arg0.hasNext()) {
+				newFastqRead = arg0.next();
 
 				bw1.write(newFastqRead._1);
 				bw1.newLine();
@@ -105,10 +105,10 @@ public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<In
 			bw1.close();
 			bw2.close();
 
-			arg1 = null;
+			arg0 = null;
 
 			// This is where the actual local alignment takes place
-			returnedValues = this.runAlignmentProcess(arg0, fastqFileName1, fastqFileName2);
+			returnedValues = this.runAlignmentProcess(1, fastqFileName1, fastqFileName2);
 
 			// Delete temporary files, as they have now been copied to the output directory
 			LOG.info("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName1);
