@@ -360,10 +360,17 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 	    });
 	    */
+		LOG.info("[ ] :: MANCHES 1 -------------------------------------------: ");
+
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
+		LOG.info("[ ] :: MANCHES 2 -------------------------------------------: ");
+		LOG.info("[ ] :: " + readsDS.count());
+		LOG.info("[ ] :: MANCHES 3.1 -------------------------------------------: ");
+		LOG.info("[ ] :: " + readsDS.columns());
+		LOG.info("[ ] :: MANCHES 3 -------------------------------------------: ");
 		readsRDD = readsDS.javaRDD();
 		
-		LOG.info("[ ] :: -------------------------------------------: ");
+		LOG.info("[ ] :: MANCHES 4 -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHES - MapPairedBwa : " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
