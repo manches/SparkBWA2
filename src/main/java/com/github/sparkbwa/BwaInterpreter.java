@@ -47,7 +47,8 @@ public class BwaInterpreter {
 
 	private static final Log 				LOG = LogFactory.getLog(BwaInterpreter.class); // The LOG
 	private SparkConf 						sparkConf; 								// The Spark Configuration to use
-	private JavaSparkContext 				ctx;									// The Java Spark Context
+	private SparkSession 					sparkSession; 								// The Spark Session to use
+		private JavaSparkContext 				ctx;									// The Java Spark Context
 	private Configuration 					conf;									// Global Configuration
 	private JavaRDD<Tuple2<String, String>> dataRDD;
 	private long 							totalInputLength;
@@ -435,6 +436,12 @@ public class BwaInterpreter {
 			//The ctx is created from scratch
 			this.ctx = new JavaSparkContext(this.sparkConf);
 
+			this.sparkSession = SparkSession
+					.builder()
+					.config(this.sparkConf)
+					.getOrCreate();
+			
+			
 		}
 		//Otherwise, the procedure is being called from the Spark shell
 		else {
