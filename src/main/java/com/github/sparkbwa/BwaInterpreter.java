@@ -351,10 +351,11 @@ public class BwaInterpreter {
 	 */
 	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-		readsRDD.foreach(rdd -> {
+		/*readsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
 	    });
+	    */
 		return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();
@@ -387,8 +388,10 @@ public class BwaInterpreter {
 		if (bwa.isPairedReads()) {
 			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
 			returnedValues = MapPairedBwa(bwa, readsRDD);
-			System.out.println("----------------------------------------------------------------");
+			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			returnedValues.forEach(System.out::println);
+			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
 
 		}
 		else {
