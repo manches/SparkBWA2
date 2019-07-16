@@ -16,6 +16,7 @@
  */
 package com.github.sparkbwa;
 
+import java.util.Array;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -366,7 +367,7 @@ public class BwaInterpreter {
 		LOG.info("[ ] :: MANCHES 2 -------------------------------------------: ");
 		LOG.info("[ ] :: " + readsDS.count());
 		LOG.info("[ ] :: MANCHES 3.1 -------------------------------------------: ");
-		LOG.info("[ ] :: " + readsDS.columns());
+		LOG.info("[ ] :: " + Arrays.toString(readsDS.columns()) );
 		LOG.info("[ ] :: MANCHES 3 -------------------------------------------: ");
 		readsRDD = readsDS.javaRDD();
 		
@@ -376,6 +377,7 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
+		LOG.info("[ ] :: MANCHES 5 -------------------------------------------: ");
 		
 		return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
