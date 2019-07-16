@@ -33,7 +33,9 @@ import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-
+import org.apache.spark.sql.types.Metadata;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import org.apache.spark.storage.StorageLevel;
 import scala.Tuple2;
 
@@ -246,7 +248,18 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
-		df = sqlContext.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
+		
+		StructType schema = new StructType(new StructField[] {
+						new StructField("id", DataTypes.LongType, false, Metadata.empty()),
+						new StructType(new StructField[] {
+							new StructField("String1", DataTypes.StringType, false, Metadata.empty()),
+							new StructField("String2", DataTypes.StringType, false, Metadata.empty())
+							})
+		});
+
+		
+		
+		//df = sqlContext.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
 		
 		LOG.info("[ ] :: -------------------------------------------: ");
 		pairedReadsRDD.foreach(rdd -> {
