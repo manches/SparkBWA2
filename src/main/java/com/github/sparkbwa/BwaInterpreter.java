@@ -342,9 +342,10 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
-		dfFinal.show(20);
-		dfFinal.printSchema();
-		
+		Dataset dfF = dfFinal.select("_2");
+		dfF.show(20);
+		dfF.printSchema();
+		 
 		return readsRDD;
 		
 		
