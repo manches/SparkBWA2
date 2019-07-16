@@ -351,7 +351,7 @@ public class BwaInterpreter {
 	 */
 	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-		readsRDD.foreach(readsRDD -> {
+		readsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
 	    });
