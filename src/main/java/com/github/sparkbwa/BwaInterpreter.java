@@ -272,19 +272,19 @@ public class BwaInterpreter {
 	
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
-		pairedReadsRDD.unpersist();
+		//pairedReadsRDD.unpersist();
 
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
-			//readsRDD = pairedReadsRDD.sortByKey().values();
+			readsRDD = pairedReadsRDD.sortByKey().values();
 			dfFinal = df.orderBy("_1").select("_2");
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
 		// Sort in memory with partitioning
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
-			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
-			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
+			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
+			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
 			Dataset dfAux = df.repartition(options.getPartitionNumber());
 			dfFinal = dfAux.orderBy("_1").select("_2");
@@ -314,11 +314,11 @@ public class BwaInterpreter {
 				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort");
 			}
 			
-			/*readsRDD = pairedReadsRDD
+			readsRDD = pairedReadsRDD
 				.repartition(options.getPartitionNumber())
 				.values();
 				//.persist(StorageLevel.MEMORY_ONLY());
-			*/
+			
 			dfFinal = df.repartition(options.getPartitionNumber()).select("_2");
 		}
 
@@ -327,17 +327,17 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: End of sorting. Timing: " + endTime);
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
-		/*
+		
 		LOG.info("[ ] :: -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
-			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
+			LOG.info("[ ] :: MANCHES - handlePairedReadsSorting : " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
-		Dataset dfF = dfFinal.select("_2");
-		dfF.show(1,false);
-		dfF.printSchema();
-	    */
+		//Dataset dfF = dfFinal.select("_2");
+		//dfF.show(1,false);
+		//dfF.printSchema();
+	    
 		 
 		return dfFinal;
 		//return readsRDD;
@@ -362,6 +362,14 @@ public class BwaInterpreter {
 	    */
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
 		readsRDD = readsDS.javaRDD();
+		
+		LOG.info("[ ] :: -------------------------------------------: ");
+		readsRDD.foreach(rdd -> {
+			LOG.info("[ ] :: MANCHES - MapPairedBwa : " + rdd);
+			LOG.info("[ ] :: -------------------------------------------: ");
+
+	    });
+		
 		return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();
@@ -403,6 +411,7 @@ public class BwaInterpreter {
 			Dataset readsDS = handlePairedReadsSorting();
 			//JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
 			returnedValues = MapPairedBwa(bwa, readsDS);
+			
 			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			returnedValues.forEach(System.out::println);
 			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
