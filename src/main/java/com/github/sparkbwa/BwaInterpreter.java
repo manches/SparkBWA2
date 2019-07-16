@@ -29,7 +29,9 @@ import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.SparkSession;
+
 import org.apache.spark.storage.StorageLevel;
 import scala.Tuple2;
 
@@ -49,7 +51,8 @@ public class BwaInterpreter {
 	private static final Log 				LOG = LogFactory.getLog(BwaInterpreter.class); // The LOG
 	private SparkConf 						sparkConf; 								// The Spark Configuration to use
 	private SparkSession 					sparkSession; 								// The Spark Session to use
-		private JavaSparkContext 				ctx;									// The Java Spark Context
+	private SQLContext						sqlContext;
+	private JavaSparkContext 				ctx;									// The Java Spark Context
 	private Configuration 					conf;									// Global Configuration
 	private JavaRDD<Tuple2<String, String>> dataRDD;
 	private long 							totalInputLength;
@@ -240,6 +243,9 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
+		
+		DataFrame df = sqlContext.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
+		
 		LOG.info("[ ] :: -------------------------------------------: ");
 		pairedReadsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHESBEFORE: " + rdd);
@@ -445,6 +451,8 @@ public class BwaInterpreter {
 					.builder()
 					.config(this.sparkConf)
 					.getOrCreate();
+			
+			sqlContext = new SQLContext(this.ctx);
 			
 			
 		}
