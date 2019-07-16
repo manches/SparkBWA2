@@ -350,7 +350,7 @@ public class BwaInterpreter {
 	//private List<String> MapPairedBwa(Bwa bwa, Dataset readsDS) {
 	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-		LOG.info("["+this.getClass().getName()+"] :: End of sorting. Timing: " + endTime);
+		LOG.info("["+this.getClass().getName()+"] :: MapPairedBwa : Beginnig " );
 		return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();
