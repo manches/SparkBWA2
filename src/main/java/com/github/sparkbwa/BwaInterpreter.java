@@ -238,7 +238,7 @@ public class BwaInterpreter {
 	 */
 	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
-		DataFrame df = null;
+		//DataFrame df = null;
 		long startTime = System.nanoTime();
 
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
@@ -248,7 +248,7 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
-		
+		/*
 		StructType schema = new StructType(new StructField[] {
 						new StructField("id", DataTypes.LongType, false, Metadata.empty()),
 						new StructType(new StructField[] {
@@ -257,7 +257,7 @@ public class BwaInterpreter {
 							})
 		});
 
-		
+		*/
 		
 		//df = sqlContext.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
 		
