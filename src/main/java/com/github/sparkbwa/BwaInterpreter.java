@@ -390,8 +390,8 @@ public class BwaInterpreter {
 		else {
 			//TODO
 			LOG.info("["+this.getClass().getName()+"] :: Implementing");
-			//JavaRDD<String> readsRDD = handleSingleReadsSorting();
-			//returnedValues = MapSingleBwa(bwa, readsRDD);
+			JavaRDD<String> readsRDD = handleSingleReadsSorting();
+			returnedValues = MapSingleBwa(bwa, readsRDD);
 			System.exit(1);
 		}
 
