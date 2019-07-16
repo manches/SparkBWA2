@@ -285,7 +285,7 @@ public class BwaInterpreter {
 			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
 			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
-			Dataset dfAux = df.repartition(options.getPartitionNumber())
+			Dataset dfAux = df.repartition(options.getPartitionNumber());
 			dfFinal = dfAux.orderBy("_1").select("_2");
 			
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
