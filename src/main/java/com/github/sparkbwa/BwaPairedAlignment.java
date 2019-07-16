@@ -30,7 +30,7 @@ import java.util.Iterator;
  *
  * @author José M. Abuín
  */
-public class BwaPairedAlignment extends BwaAlignmentBase implements Function2<Integer, Iterator<Tuple2<String, String>>, Iterator<String>> {
+public class BwaPairedAlignment extends BwaAlignmentBase implements Function1< Iterator<Tuple2<String, String>>, Iterator<String>> {
 
 	/**
 	 * Constructor
