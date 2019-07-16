@@ -18,8 +18,7 @@ package com.github.sparkbwa;
 
 //import org.apache.hadoop.io.Text;
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.function.Function1;
-//import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.Function;
 import scala.Tuple2;
 
 import java.io.*;
@@ -31,7 +30,7 @@ import java.util.Iterator;
  *
  * @author José M. Abuín
  */
-public class BwaPairedAlignment extends BwaAlignmentBase implements Function1<Iterator<Tuple2<String, String>>, Iterator<String>> {
+public class BwaPairedAlignment extends BwaAlignmentBase implements Function< Iterator<Tuple2<String, String>>, Iterator<String>> {
 
 	/**
 	 * Constructor
@@ -50,7 +49,7 @@ public class BwaPairedAlignment extends BwaAlignmentBase implements Function1<It
 	 * @return An iterator containing the sam file name generated
 	 * @throws Exception
 	 */
-	public Iterator<String> call(Iterator<Tuple2<String, String>> arg0) throws Exception {
+	public Iterator<String> call( Iterator<Tuple2<String, String>> arg0) throws Exception {
 
 		// STEP 1: Input fastq reads tmp file creation
 		LOG.info("["+this.getClass().getName()+"] :: Tmp dir: " + this.tmpDir);
