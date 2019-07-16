@@ -240,7 +240,12 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
+		LOG.info("[ ] :: -------------------------------------------: ");
+		pairedReadsRDD.foreach(rdd -> {
+			LOG.info("[ ] :: MANCHESBEFORE: " + rdd);
+			LOG.info("[ ] :: -------------------------------------------: ");
 
+	    });
 		
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
@@ -293,7 +298,6 @@ public class BwaInterpreter {
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 		LOG.info("[ ] :: -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
-	        System.out.println("sort = " + rdd);
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
 
