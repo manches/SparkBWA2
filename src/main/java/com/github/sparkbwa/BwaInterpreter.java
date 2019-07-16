@@ -242,6 +242,7 @@ public class BwaInterpreter {
 	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
 		Dataset df = null;
+		Dataset dfFinal = null;
 		long startTime = System.nanoTime();
 
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
@@ -285,6 +286,7 @@ public class BwaInterpreter {
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			readsRDD = pairedReadsRDD.sortByKey().values();
+			dfFinal = df.orderBy(asc("_1"));
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
