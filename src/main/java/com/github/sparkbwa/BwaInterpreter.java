@@ -370,7 +370,9 @@ public class BwaInterpreter {
 		LOG.info("[ ] :: " + Arrays.toString(readsDS.columns()) );
 		LOG.info("[ ] :: MANCHES 3 -------------------------------------------: ");
 		readsRDD = readsDS.javaRDD();
-		
+		LOG.info("[ ] :: MANCHES 4.1 -------------------------------------------: ");
+		LOG.info("[ ] :: " + readsRDD.count() );
+
 		LOG.info("[ ] :: MANCHES 4 -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHES - MapPairedBwa : " + rdd);
