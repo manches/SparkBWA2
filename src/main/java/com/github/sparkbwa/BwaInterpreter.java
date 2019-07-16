@@ -239,7 +239,7 @@ public class BwaInterpreter {
 	 */
 	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
-		//DataFrame df = null;
+		Dataset df = null;
 		long startTime = System.nanoTime();
 
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
@@ -260,7 +260,7 @@ public class BwaInterpreter {
 
 		*/
 		
-		//df = sqlContext.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
+		df = sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
 		
 		LOG.info("[ ] :: -------------------------------------------: ");
 		pairedReadsRDD.foreach(rdd -> {
