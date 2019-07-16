@@ -289,11 +289,11 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: End of sorting. Timing: " + endTime);
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
-
+		LOG.info("[ ] :: -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
 	        System.out.println("sort = " + rdd);
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
-			LOG.info("[ ] :: -------------------------------------------: " + rdd);
+			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
 
