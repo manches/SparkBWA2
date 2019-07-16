@@ -396,8 +396,9 @@ public class BwaInterpreter {
 
 		List<String> returnedValues;
 		if (bwa.isPairedReads()) {
-			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
-			returnedValues = MapPairedBwa(bwa, readsRDD);
+			Dataset readsDS = handlePairedReadsSorting();
+			//JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
+			returnedValues = MapPairedBwa(bwa, readsDS);
 			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			returnedValues.forEach(System.out::println);
 			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -407,6 +408,7 @@ public class BwaInterpreter {
 		else {
 			JavaRDD<String> readsRDD = handleSingleReadsSorting();
 			returnedValues = MapSingleBwa(bwa, readsRDD);
+			
 		}
 
 		// In the case of use a reducer the final output has to be stored in just one file
