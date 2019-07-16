@@ -325,13 +325,14 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: End of sorting. Timing: " + endTime);
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
-		
+		/*
 		LOG.info("[ ] :: -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
+	    */
 		Dataset dfF = dfFinal.select("_2");
 		dfF.show(1,false);
 		dfF.printSchema();
@@ -350,6 +351,10 @@ public class BwaInterpreter {
 	 */
 	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
+		readsRDD.foreach(readsRDD -> {
+			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
+			LOG.info("[ ] :: -------------------------------------------: ");
+	    });
 		return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();
@@ -382,6 +387,9 @@ public class BwaInterpreter {
 		if (bwa.isPairedReads()) {
 			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
 			returnedValues = MapPairedBwa(bwa, readsRDD);
+			System.out.println("----------------------------------------------------------------");
+			System.out.println(Arrays.toString(returnedValues.toArray()));
+
 		}
 		else {
 			JavaRDD<String> readsRDD = handleSingleReadsSorting();
