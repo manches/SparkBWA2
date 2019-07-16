@@ -239,7 +239,6 @@ public class BwaInterpreter {
 	 * Method to perform and handle the paired reads sorting
 	 * @return A JavaRDD containing grouped reads from the paired FASTQ files
 	 */
-	//private Dataset handlePairedReadsSorting() {
 	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
 		Dataset df = null;
@@ -275,15 +274,15 @@ public class BwaInterpreter {
 
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
-			//readsRDD = pairedReadsRDD.sortByKey().values();
+			readsRDD = pairedReadsRDD.sortByKey().values();
 			dfFinal = df.orderBy("_1").select("_2");
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
 		// Sort in memory with partitioning
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
-			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
-			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
+			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
+			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
 			Dataset dfAux = df.repartition(options.getPartitionNumber());
 			dfFinal = dfAux.orderBy("_1").select("_2");
@@ -312,12 +311,12 @@ public class BwaInterpreter {
 			else {
 				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort");
 			}
-			/*
+			
 			readsRDD = pairedReadsRDD
 				.repartition(options.getPartitionNumber())
 				.values();
 				//.persist(StorageLevel.MEMORY_ONLY());
-			*/
+			
 			dfFinal = df.repartition(options.getPartitionNumber()).select("_2");
 		}
 
@@ -327,14 +326,16 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 		
-		/*
+		LOG.info("[ ] :: -------------------------------------------: ");
 		readsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
+
 	    });
-		 */
+		Dataset dfF = dfFinal.select("_2");
+		dfF.show(1,false);
+		dfF.printSchema();
 		 
-		// return dfFinal;
 		return readsRDD;
 		
 		
@@ -347,10 +348,8 @@ public class BwaInterpreter {
 	 * @param readsRDD The RDD containing the paired reads
 	 * @return A list of strings containing the resulting sam files where the output alignments are stored
 	 */
-	//private List<String> MapPairedBwa(Bwa bwa, Dataset readsDS) {
 	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-		LOG.info("["+this.getClass().getName()+"] :: MapPairedBwa : Beginnig " );
 		return readsRDD
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();
@@ -383,16 +382,10 @@ public class BwaInterpreter {
 		if (bwa.isPairedReads()) {
 			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
 			returnedValues = MapPairedBwa(bwa, readsRDD);
-			//Dataset readsDS = handlePairedReadsSorting();
-			//returnedValues = MapPairedBwa(bwa, readsDS);
-
 		}
 		else {
-			//TODO
-			LOG.info("["+this.getClass().getName()+"] :: Implementing");
 			JavaRDD<String> readsRDD = handleSingleReadsSorting();
 			returnedValues = MapSingleBwa(bwa, readsRDD);
-			System.exit(1);
 		}
 
 		// In the case of use a reducer the final output has to be stored in just one file
