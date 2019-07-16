@@ -342,8 +342,9 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
-		dfFinal.printSchema();
 		dfFinal.show(20);
+		dfFinal.printSchema();
+		
 		return readsRDD;
 		
 		
