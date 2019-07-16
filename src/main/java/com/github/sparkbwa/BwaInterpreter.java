@@ -269,15 +269,16 @@ public class BwaInterpreter {
 		Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()));
 		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
 		df = this.sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),encoder2).toDF();
+		df.printSchema();
+		df.show(20);
 		
-		
-		LOG.info("[ ] :: -------------------------------------------: ");
+		/*LOG.info("[ ] :: -------------------------------------------: ");
 		pairedReadsRDD.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHESBEFORE: " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
-		
+		*/
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 
