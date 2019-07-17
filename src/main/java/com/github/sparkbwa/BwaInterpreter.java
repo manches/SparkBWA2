@@ -272,18 +272,20 @@ public class BwaInterpreter {
 		
 		//df = sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
 		
-		Encoder<Tuple2<Long, Tuple2<String,String>>> encoder2 =
-		Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()));
+		//Encoder<Tuple2<Long, Tuple2<String,String>>> encoderf =
+		//Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()));
 		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
-		df = this.sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),encoder2).toDF();
-	
-		df1 = this.sparkSession.createDataset(this.sparkSession.sparkContext().textFile(options.getInputPath()).sliding(4, 4).map {
-		  case Array(id, seq, _, qual) => (id, seq, aux, qual)
-		}).toDF("identifier", "sequence", "aux", "quality");
+		//df = this.sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),encoderf).toDF();
+		
+		Encoder<Tuple2<Long, String>> encoder1 =
+		Encoders.tuple(Encoders.LONG(), Encoders.STRING());
+		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
+		df1 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp1),encoder1).toDF();
 
-		df2 = this.sparkSession.createDataset(this.sparkSession.sparkContext().textFile(options.getInputPath2()).sliding(4, 4).map {
-		  case Array(id, seq, _, qual) => (id, seq, aux, qual)
-		}).toDF("identifier", "sequence", "aux", "quality");
+		Encoder<Tuple2<Long, Tuple2<String,String>>> encoder2 =
+		Encoders.tuple(Encoders.LONG(), Encoders.STRING());
+		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
+		df2 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp2),encoder2).toDF();
 		
 				df1.show(1,false);
 				df1.printSchema();
