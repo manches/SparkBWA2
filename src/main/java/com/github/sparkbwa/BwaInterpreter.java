@@ -366,6 +366,7 @@ public class BwaInterpreter {
 	    
 		 
 		//return dfFinal;
+		System.exit(1);
 		return readsRDD;
 		
 		
