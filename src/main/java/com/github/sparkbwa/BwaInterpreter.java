@@ -262,8 +262,9 @@ public class BwaInterpreter {
 		
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
-		RDD<Object> r1 = RDDFunctions.fromRDD(pairedReadsRDD.rdd(), pairedReadsRDD.classTag()).sliding(4,4);
-		RDD<Object> r2 = RDDFunctions.fromRDD(pairedReadsRDD.rdd(), pairedReadsRDD.classTag()).sliding(4,4);
+		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
+		//RDD<Object> r1 = RDDFunctions.fromRDD(, pairedReadsRDD.classTag()).sliding(4,4);
+		//RDD<Object> r2 = RDDFunctions.fromRDD(pairedReadsRDD.rdd(), pairedReadsRDD.classTag()).sliding(4,4);
 		//RDD<Object> r = RDDFunctions.fromRDD(pairedReadsRDD.rdd(), pairedReadsRDD.classTag()).sliding(7);
 		//df = sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
 		
