@@ -270,7 +270,7 @@ public class BwaInterpreter {
 		
 		
 		
-		JavaRDD<String> x = JavaRDD.fromRDD(r1, rdd.classTag()); 
+		JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
 		
 		//Read the input file and store as Row RDD
