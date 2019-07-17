@@ -100,6 +100,8 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			while (arg0.hasNext()) {
 				
 				newFastqRead = arg0.next();
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: " + newFastqRead.getString(0));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: " + newFastqRead.getString(1));
 
 				bw1.write(newFastqRead.getString(0));
 				bw1.newLine();
@@ -107,11 +109,8 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 				bw2.write(newFastqRead.getString(1));
 				bw2.newLine();
 				
-			
 			}
 			
-			
-
 			bw1.close();
 			bw2.close();
 

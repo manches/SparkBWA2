@@ -286,11 +286,16 @@ public class BwaInterpreter {
 		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
 		df2 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp2),encoder2).toDF();
 		
-				df1.show(1,false);
-				df1.printSchema();
-				df2.show(1,false);
-				df2.printSchema();
+				//df1.show(1,false);
+				//df1.printSchema();
+				//df2.show(1,false);
+				//df2.printSchema();
 		
+		df = df1.join(df2,df1.col("_2").equalTo(df2.col("_2")));		
+		df.show(1,false);
+		df.printSchema();
+				
+				
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 		//pairedReadsRDD.unpersist();
@@ -298,7 +303,7 @@ public class BwaInterpreter {
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			readsRDD = pairedReadsRDD.sortByKey().values();
-			dfFinal = df.orderBy("_1").select("_2");
+			//dfFinal = df.orderBy("_1").select("_2");
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
@@ -307,8 +312,8 @@ public class BwaInterpreter {
 			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
 			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
-			Dataset dfAux = df.repartition(options.getPartitionNumber());
-			dfFinal = dfAux.orderBy("_1").select("_2");
+			//Dataset dfAux = df.repartition(options.getPartitionNumber());
+			//dfFinal = dfAux.orderBy("_1").select("_2");
 			
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
@@ -340,7 +345,7 @@ public class BwaInterpreter {
 				.values();
 				//.persist(StorageLevel.MEMORY_ONLY());
 			
-			dfFinal = df.repartition(options.getPartitionNumber()).select("_2");
+			//dfFinal = df.repartition(options.getPartitionNumber()).select("_2");
 		}
 
 		long endTime = System.nanoTime();
@@ -349,12 +354,12 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 		
-		LOG.info("[ ] :: -------------------------------------------: ");
-		readsRDD.foreach(rdd -> {
-			LOG.info("[ ] :: MANCHES - handlePairedReadsSorting : " + rdd);
-			LOG.info("[ ] :: -------------------------------------------: ");
-
-	    });
+//		LOG.info("[ ] :: -------------------------------------------: ");
+		//readsRDD.foreach(rdd -> {
+		//	LOG.info("[ ] :: MANCHES - handlePairedReadsSorting : " + rdd);
+	//		LOG.info("[ ] :: -------------------------------------------: ");
+//
+//	    });
 		//Dataset dfF = dfFinal.select("_2");
 		//dfF.show(1,false);
 		//dfF.printSchema();
