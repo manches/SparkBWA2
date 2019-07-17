@@ -40,7 +40,7 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.storage.StorageLevel;
-import org.apache.spark.mllib.rdd.RDDFunctions._
+import org.apache.spark.mllib.rdd.RDDFunctions;
 
 import scala.Tuple2;
 
@@ -279,11 +279,11 @@ public class BwaInterpreter {
 	
 		df1 = this.sparkSession.createDataset(this.sparkSession.sparkContext().textFile(options.getInputPath()).sliding(4, 4).map {
 		  case Array(id, seq, _, qual) => (id, seq, aux, qual)
-		}).toDF("identifier", "sequence", "aux", "quality")
+		}).toDF("identifier", "sequence", "aux", "quality");
 
 		df2 = this.sparkSession.createDataset(this.sparkSession.sparkContext().textFile(options.getInputPath2()).sliding(4, 4).map {
 		  case Array(id, seq, _, qual) => (id, seq, aux, qual)
-		}).toDF("identifier", "sequence", "aux", "quality")
+		}).toDF("identifier", "sequence", "aux", "quality");
 		
 				df1.show(1,false);
 				df1.printSchema();
