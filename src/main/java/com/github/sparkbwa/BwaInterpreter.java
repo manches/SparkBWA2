@@ -286,15 +286,18 @@ public class BwaInterpreter {
 		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
 		df2 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp2),encoder2).toDF();
 		
-				//df1.show(1,false);
-				//df1.printSchema();
-				//df2.show(1,false);
-				//df2.printSchema();
+				df1.show(1,false);
+				df1.printSchema();
+				df2.show(1,false);
+				df2.printSchema();
 		
 		df = df1.join(df2,df1.col("_2").equalTo(df2.col("_2")));		
 		df.show(1000,false);
 		df.printSchema();
-				
+
+		dfFinal = df1.join(df2);		
+		dfFinal.show(1000,false);
+		dfFinal.printSchema();
 				
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
