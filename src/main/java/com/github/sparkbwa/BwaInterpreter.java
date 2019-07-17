@@ -261,7 +261,7 @@ public class BwaInterpreter {
 		
 		dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath())).sliding(4, 4).map{
 		 case Array(id, seq, _, qual) => (id, seq, qual)
-		}).toDF("identifier", "sequence", "quality")
+		}).toDF("identifier", "sequence", "quality");
 		
 		
 		//df = sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
