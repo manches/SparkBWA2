@@ -55,7 +55,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 		// STEP 1: Input fastq reads tmp file creation
 		LOG.info("["+this.getClass().getName()+"] :: Tmp dir: " + this.tmpDir);
 		TaskContext tc = TaskContext.get();
-		long taskID = tc.taskAttemptId();
+		int taskID = (int) tc.taskAttemptId();
 		LOG.info("["+this.getClass().getName()+"] :: TaskID: " + taskID);
 
 		String fastqFileName1;
@@ -96,7 +96,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			Tuple2<String, String> newFastqRead;
 
 			while (arg0.hasNext()) {
-				newFastqRead = arg1.next();
+				newFastqRead = arg0.next();
 
 				bw1.write(newFastqRead._1);
 				bw1.newLine();
@@ -108,7 +108,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			bw1.close();
 			bw2.close();
 
-			arg1 = null;
+			arg0 = null;
 
 			// This is where the actual local alignment takes place
 			returnedValues = this.runAlignmentProcess(taskID, fastqFileName1, fastqFileName2);
