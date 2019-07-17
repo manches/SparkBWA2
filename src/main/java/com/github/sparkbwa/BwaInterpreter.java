@@ -295,13 +295,16 @@ public class BwaInterpreter {
 		df.show(1000,false);
 		df.printSchema();
 
-		dfFinal = df1.join(df2);		
-		dfFinal.show(1000,false);
-		dfFinal.printSchema();
-				
+						
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 		//pairedReadsRDD.unpersist();
+		LOG.info("[ ] :: -------------------------------------------: ");
+		pairedReadsRDD.foreach(rdd -> {
+		LOG.info("[ ] :: MANCHES ANTES - handlePairedReadsSorting : " + rdd);
+		LOG.info("[ ] :: -------------------------------------------: ");
+
+    });
 
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
@@ -357,12 +360,12 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 		
-//		LOG.info("[ ] :: -------------------------------------------: ");
-		//readsRDD.foreach(rdd -> {
-		//	LOG.info("[ ] :: MANCHES - handlePairedReadsSorting : " + rdd);
-	//		LOG.info("[ ] :: -------------------------------------------: ");
-//
-//	    });
+		LOG.info("[ ] :: -------------------------------------------: ");
+			readsRDD.foreach(rdd -> {
+			LOG.info("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
+			LOG.info("[ ] :: -------------------------------------------: ");
+
+	    });
 		//Dataset dfF = dfFinal.select("_2");
 		//dfF.show(1,false);
 		//dfF.printSchema();
