@@ -275,7 +275,7 @@ public class BwaInterpreter {
 				return Arrays.toString((Object[])arg0);
 			}
 		});
-		LOG.info("[ ] :: -------------------------------------------: "  );
+		LOG.info("[ ] :: -------------------------------------------: "  + result.getClass() );
 		result.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHES result RDD - handlePairedReadsSorting : " + rdd);
 		LOG.info("[ ] :: -------------------------------------------: ");
