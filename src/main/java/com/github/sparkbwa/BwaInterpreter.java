@@ -263,9 +263,9 @@ public class BwaInterpreter {
 		
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
-		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
-		RDD<Object> r1 = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
-				.sliding(4,4)	;
+		//JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
+		//RDD<Object> r1 = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
+		//		.sliding(4,4)	;
 		//JavaRDD<Object> x = new JavaRDD<>(r1, r1.elementClassTag());
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
 		/*
@@ -283,7 +283,7 @@ public class BwaInterpreter {
 */
 		
 		//Read the input file and store as Row RDD
-		JavaRDD<Row> dataRDD = r1.map( line -> {
+		JavaRDD<Row> dataRDD = this.ctx.textFile(options.getInputPath()).sliding(4,4).toJavaRDD().map( line -> {
 										String[] parts = line.split(" ");
 														
 										return RowFactory.create(parts[0],parts[1],parts[2],parts[3]);
