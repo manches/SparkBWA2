@@ -259,15 +259,10 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
-		/*
-		StructType schema = new StructType(new StructField[] {
-						new StructField("id", DataTypes.LongType, false, Metadata.empty()),
-						new StructType(new StructField[] {
-							new StructField("String1", DataTypes.StringType, false, Metadata.empty()),
-							new StructField("String2", DataTypes.StringType, false, Metadata.empty())
-							})
-		});
-		*/
+		dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath())).sliding(4, 4).map{
+		 case Array(id, seq, _, qual) => (id, seq, qual)
+		}).toDF("identifier", "sequence", "quality")
+		
 		
 		//df = sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
 		
