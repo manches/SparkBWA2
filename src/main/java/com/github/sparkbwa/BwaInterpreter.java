@@ -40,6 +40,7 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.storage.StorageLevel;
+import org.apache.spark.mllib.rdd.RDDFunctions._
 
 import scala.Tuple2;
 
@@ -167,6 +168,9 @@ public class BwaInterpreter {
 		// Group group the lines which belongs to the same record, and concatinate them into a record.
 		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
 	}
+	
+
+
 
 	/**
 	 * Method to perform and handle the single reads sorting
@@ -243,6 +247,8 @@ public class BwaInterpreter {
 	private Dataset handlePairedReadsSorting() {
 //	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
+		Dataset df1 = null;
+		Dataset df2 = null;
 		Dataset df = null;
 		Dataset dfFinal = null;
 		long startTime = System.nanoTime();
@@ -271,6 +277,19 @@ public class BwaInterpreter {
 		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
 		df = this.sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),encoder2).toDF();
 	
+		df1 = this.sparkSession.createDataset(this.sparkSession.sparkContext().textFile(options.getInputPath()).sliding(4, 4).map {
+		  case Array(id, seq, _, qual) => (id, seq, aux, qual)
+		}).toDF("identifier", "sequence", "aux", "quality")
+
+		df2 = this.sparkSession.createDataset(this.sparkSession.sparkContext().textFile(options.getInputPath2()).sliding(4, 4).map {
+		  case Array(id, seq, _, qual) => (id, seq, aux, qual)
+		}).toDF("identifier", "sequence", "aux", "quality")
+		
+				df1.show(1,false);
+				df1.printSchema();
+				df2.show(1,false);
+				df2.printSchema();
+		
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 		//pairedReadsRDD.unpersist();
@@ -360,7 +379,7 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
 			LOG.info("[ ] :: -------------------------------------------: ");
 	    });
-	    */
+	   */
 		LOG.info("[ ] :: MANCHES 1 -------------------------------------------: ");
 		readsDS.show(1,false);
 		readsDS.printSchema();
@@ -386,11 +405,12 @@ public class BwaInterpreter {
 			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 			.collect();
 		
+		 /*
+		SparkContext contextAux = readsDS.sparkSession().sparkContext()
 		
-		
-		/*return readsDS
+		return readsDS
 				.javaRDD()
-				.mapPartitions(new BwaPairedAlignment(readsDS.sparkSession().sparkContext(), bwa), true)
+				.mapPartitions(new BwaPairedAlignment(contextAux, bwa), true)
 				.collect();
 		*/
 	}
