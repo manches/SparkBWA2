@@ -269,7 +269,9 @@ public class BwaInterpreter {
 		LOG.info("[ ] :: -------------------------------------------: ");
 		r1.foreach(rdd -> {
 		LOG.info("[ ] :: MANCHES R1 RDD - handlePairedReadsSorting : " + rdd);
-		LOG.info("[ ] :: -	
+		LOG.info("[ ] :: -	"
+	    });
+
 				//.map {
 		 // case Array(id, seq, _, qual) -> (id, seq, qual)
 	//	}).toDF("identifier", "sequence", "quality");
@@ -310,8 +312,7 @@ public class BwaInterpreter {
 		pairedReadsRDD.foreach(rdd -> {
 		LOG.info("[ ] :: MANCHES ANTES - handlePairedReadsSorting : " + rdd);
 		LOG.info("[ ] :: -------------------------------------------: ");
-
-    });
+		});
 
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
