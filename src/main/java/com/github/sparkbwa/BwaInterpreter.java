@@ -269,8 +269,9 @@ public class BwaInterpreter {
 		LOG.info("[ ] :: -------------------------------------------: ");
 		r1.foreach(rdd -> {
 		LOG.info("[ ] :: MANCHES R1 RDD - handlePairedReadsSorting : " + rdd);
-		LOG.info("[ ] :: -	"
-	    });
+		LOG.info("[ ] :: -------------------------------------------: ");
+		});
+
 
 				//.map {
 		 // case Array(id, seq, _, qual) -> (id, seq, qual)
