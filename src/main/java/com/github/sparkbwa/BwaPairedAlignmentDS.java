@@ -33,7 +33,7 @@ import java.util.Iterator;
  *
  * @author José M. Abuín
  */
-public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartitionsFunction<String, String> {
+public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartitionsFunction<Row, String> {
 
 	/**
 	 * Constructor
