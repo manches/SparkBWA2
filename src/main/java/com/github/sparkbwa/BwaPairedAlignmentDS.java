@@ -55,7 +55,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 		// STEP 1: Input fastq reads tmp file creation
 		LOG.info("["+this.getClass().getName()+"] :: Tmp dir: " + this.tmpDir);
 		TaskContext tc = TaskContext.get();
-		long taskID = tc.attemptID();
+		long taskID = tc.taskAttemptId();
 		LOG.info("["+this.getClass().getName()+"] :: TaskID: " + taskID);
 
 		String fastqFileName1;
