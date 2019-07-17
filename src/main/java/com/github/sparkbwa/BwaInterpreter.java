@@ -263,12 +263,12 @@ public class BwaInterpreter {
 		
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
-		//JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
-		//RDD<Object> r1 = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
-		//		.sliding(4,4)	;
-		//JavaRDD<Object> x = new JavaRDD<>(r1, r1.elementClassTag());
+		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
+		RDD<Object> r1 = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
+				.sliding(4,4)	;
+		JavaRDD<Object> x = new JavaRDD<>(r1, r1.elementClassTag());
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
-		/*
+		
 		JavaRDD<String> result = x.map(new Function<Object,String>() {
 			@Override
 			public String call(Object arg0) throws Exception {
@@ -280,34 +280,6 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: MANCHES result RDD - handlePairedReadsSorting : " + rdd);
 		LOG.info("[ ] :: -------------------------------------------: ");
 		});
-*/
-		
-		//Read the input file and store as Row RDD
-		JavaRDD<Row> dataRDD = this.ctx.textFile(options.getInputPath()).sliding(4,4).toJavaRDD().map( line -> {
-										String[] parts = line.split(" ");
-														
-										return RowFactory.create(parts[0],parts[1],parts[2],parts[3]);
-					  				 }
-							   );
-		
-		
-		//Define the schema of the data  
-		StructType schema = new StructType( new StructField[] 
-							{
-								new StructField("identifier", DataTypes.StringType, false, Metadata.empty()),
-								new StructField("sequence", DataTypes.StringType, false, Metadata.empty()),
-								new StructField("aux", DataTypes.StringType, false, Metadata.empty()),
-								new StructField("quality", DataTypes.StringType, false, Metadata.empty())
-							}
-						  );
-		
-		//Create a DataSet using data and schema
-		Dataset<Row> df = spark.createDataFrame(dataRDD, schema);
-		
-		//use this statement when only required for testing.
-		df.show();
-		
-		
 		
 		
 		
