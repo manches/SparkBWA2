@@ -20,6 +20,8 @@ package com.github.sparkbwa;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.function.MapPartitionsFunction;
 import org.apache.spark.TaskContext;
+import org.apache.spark.sql.Row;
+
 import scala.Tuple2;
 
 import java.io.*;
@@ -50,7 +52,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 	 * @return An iterator containing the sam file name generated
 	 * @throws Exception
 	 */
-	public Iterator<String> call(Iterator<String> arg0) throws Exception {
+	public Iterator<String> call(Iterator<Row> arg0) throws Exception {
 
 		// STEP 1: Input fastq reads tmp file creation
 		LOG.info("["+this.getClass().getName()+"] :: Tmp dir: " + this.tmpDir);
@@ -93,17 +95,22 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			bw1 = new BufferedWriter(new OutputStreamWriter(fos1));
 			bw2 = new BufferedWriter(new OutputStreamWriter(fos2));
 
-			Tuple2<String, String> newFastqRead;
+			Row newFastqRead;
 
 			while (arg0.hasNext()) {
+				
 				newFastqRead = arg0.next();
 
-				bw1.write(newFastqRead._1);
+				bw1.write(newFastqRead.getString(0));
 				bw1.newLine();
 
-				bw2.write(newFastqRead._2);
+				bw2.write(newFastqRead.getString(1));
 				bw2.newLine();
+				
+			
 			}
+			
+			
 
 			bw1.close();
 			bw2.close();
