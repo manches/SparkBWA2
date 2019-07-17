@@ -43,6 +43,7 @@ import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.mllib.rdd.RDDFunctions;
 import org.apache.spark.rdd.RDD;
 import scala.Tuple2;
+import org.apache.spark.api.java.function.Function;
 
 import java.io.BufferedReader;
 import java.io.IOException;
