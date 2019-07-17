@@ -268,7 +268,7 @@ public class BwaInterpreter {
 		JavaRDD<Object> x = new JavaRDD<>(r1, r1.elementClassTag());
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
 		LOG.info("[ ] :: -------------------------------------------: ");
-		r1.foreach(rdd -> {
+		x.foreach(rdd -> {
 		LOG.info("[ ] :: MANCHES R1 RDD - handlePairedReadsSorting : " + rdd);
 		LOG.info("[ ] :: -------------------------------------------: ");
 		});
