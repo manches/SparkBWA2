@@ -264,9 +264,12 @@ public class BwaInterpreter {
 		//		.toDF("identifier", "sequence", "quality");
 		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
 		RDD<Object> r1 = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
-				.sliding(4,4).map(case Array(id, seq, _, qual) -> (id, seq, qual));
+				.sliding(4,4)	;
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
-				
+		LOG.info("[ ] :: -------------------------------------------: ");
+		r1.foreach(rdd -> {
+		LOG.info("[ ] :: MANCHES R1 RDD - handlePairedReadsSorting : " + rdd);
+		LOG.info("[ ] :: -	
 				//.map {
 		 // case Array(id, seq, _, qual) -> (id, seq, qual)
 	//	}).toDF("identifier", "sequence", "quality");
