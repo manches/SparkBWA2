@@ -1,4 +1,4 @@
-**
+/**
  * Copyright 2016 José Manuel Abuín Mosquera <josemanuel.abuin@usc.es>
  *
  * <p>This file is part of SparkBWA.
