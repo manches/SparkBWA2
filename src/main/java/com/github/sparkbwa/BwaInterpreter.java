@@ -447,7 +447,7 @@ public class BwaInterpreter {
 		if (bwa.isPairedReads()) {
 			//Dataset readsDS = handlePairedReadsSorting();
 			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
-			returnedValues = MapPairedBwa(bwa, readsDS);
+			returnedValues = MapPairedBwa(bwa, readsRDD);
 			
 			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			returnedValues.forEach(System.out::println);
