@@ -292,7 +292,7 @@ public class BwaInterpreter {
 				//df2.printSchema();
 		
 		df = df1.join(df2,df1.col("_2").equalTo(df2.col("_2")));		
-		df.show(1,false);
+		df.show(1000,false);
 		df.printSchema();
 				
 				
