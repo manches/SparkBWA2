@@ -268,7 +268,8 @@ public class BwaInterpreter {
 				.sliding(4,4)	;
 		JavaRDD<Object> x = new JavaRDD<>(r1, r1.elementClassTag());
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
-		
+		LOG.info("[ ] :: -------------------------------------------: "  + x.getClass() );
+
 		JavaRDD<String> result = x.map(new Function<Object,String>() {
 			@Override
 			public String call(Object arg0) throws Exception {
