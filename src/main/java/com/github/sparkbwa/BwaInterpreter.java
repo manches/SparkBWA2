@@ -282,8 +282,8 @@ public class BwaInterpreter {
 		StructType schema = new StructType( new StructField[] 
 							{
 								new StructField("identifier", DataTypes.StringType, false, Metadata.empty()),
-								new StructField("sequence", DataTypes.StringType, false, Metadata.empty())
-								new StructField("aux", DataTypes.StringType, false, Metadata.empty())
+								new StructField("sequence", DataTypes.StringType, false, Metadata.empty()),
+								new StructField("aux", DataTypes.StringType, false, Metadata.empty()),
 								new StructField("quality", DataTypes.StringType, false, Metadata.empty())
 							}
 						  );
