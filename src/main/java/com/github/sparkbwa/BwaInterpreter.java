@@ -365,10 +365,10 @@ public class BwaInterpreter {
 		readsDS.show(1,false);
 		readsDS.printSchema();
 		JavaRDD readsRDD = null;
-		LOG.info("[ ] :: MANCHES 2 -------------------------------------------: ");
+		LOG.info("[ ] :: 	 -------------------------------------------: ");
 		LOG.info("[ ] :: " + readsDS.count());
 		LOG.info("[ ] :: MANCHES 3.1 -------------------------------------------: ");
-		LOG.info("[ ] :: " + Arrays.toString(readsDS.columns()) );
+		LOG.info("[ ] :: " + Arrays.toString(readsDS.dtypes()) );
 		LOG.info("[ ] :: MANCHES 3 -------------------------------------------: ");
 		readsRDD = readsDS.javaRDD();
 		LOG.info("[ ] :: MANCHES 4.1 -------------------------------------------: ");
