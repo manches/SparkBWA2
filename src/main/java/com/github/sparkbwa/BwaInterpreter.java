@@ -266,22 +266,42 @@ public class BwaInterpreter {
 		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
 		RDD<Object> r1 = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
 				.sliding(4,4)	;
-		JavaRDD<Object> x = new JavaRDD<>(r1, r1.elementClassTag());
+		JavaRDD<String> x = r1.toJavaRDD(); 
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
-		LOG.info("[ ] :: -------------------------------------------: "  + x.getClass() );
-
-		JavaRDD<String> result = x.map(new Function<Object,String>() {
-			@Override
-			public String call(Object arg0) throws Exception {
-				return Arrays.toString((Object[])arg0);
-			}
-		});
-		LOG.info("[ ] :: -------------------------------------------: "  + result.getClass() );
+		
+		//Read the input file and store as Row RDD
+		JavaRDD<Row> dataRDD = x.map( line -> {
+										String[] parts = line.split(" ");
+														
+										return RowFactory.create(parts[0],parts[1],parts[1],parts[3]);
+					  				 }
+							   );
+		
+		
+		//Define the schema of the data  
+		StructType schema = new StructType( new StructField[] 
+							{
+								new StructField("identifier", DataTypes.StringType, false, Metadata.empty()),
+								new StructField("sequence", DataTypes.StringType, false, Metadata.empty())
+								new StructField("aux", DataTypes.StringType, false, Metadata.empty())
+								new StructField("quality", DataTypes.StringType, false, Metadata.empty())
+							}
+						  );
+		
+		//Create a DataSet using data and schema
+		Dataset<Row> df = spark.createDataFrame(dataRDD, schema);
+		
+		//use this statement when only required for testing.
+		df.show();
+		
+		
+		/*
+		 LOG.info("[ ] :: -------------------------------------------: "  + result.getClass() );
 		result.foreach(rdd -> {
 			LOG.info("[ ] :: MANCHES result RDD - handlePairedReadsSorting : " + rdd);
 		LOG.info("[ ] :: -------------------------------------------: ");
 		});
-		
+		 */
 		
 		
 		
