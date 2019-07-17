@@ -262,15 +262,15 @@ public class BwaInterpreter {
 		
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
-		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
-		JavaRDD<String> r1 = JavaRDD.toRDD(rAUX1.rdd(), rAUX1.classTag())
-				.sliding(4,4)	;
+		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath()).sliding(4,4);
+		//JavaRDD<String> r1 = JavaRDD.toRDD(rAUX1.rdd(), rAUX1.classTag())
+		//		.sliding(4,4)	;
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
-		LOG.info("[ ] :: -------------------------------------------: ");
-		r1.foreach(rdd -> {
-		LOG.info("[ ] :: MANCHES R1 RDD - handlePairedReadsSorting : " + rdd);
-		LOG.info("[ ] :: -------------------------------------------: ");
-		});
+		//LOG.info("[ ] :: -------------------------------------------: ");
+		//r1.foreach(rdd -> {
+		//LOG.info("[ ] :: MANCHES R1 RDD - handlePairedReadsSorting : " + rdd);
+		//LOG.info("[ ] :: -------------------------------------------: ");
+		//});
 
 
 				//.map {
