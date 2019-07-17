@@ -260,7 +260,7 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
-		dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4,4))
+		dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 				.toDF("identifier", "sequence", "quality");
 		
 		//RDD<Object> r = RDDFunctions.fromRDD(pairedReadsRDD.rdd(), pairedReadsRDD.classTag()).sliding(7);
