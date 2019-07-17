@@ -281,7 +281,7 @@ public class BwaInterpreter {
 		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
 		df1 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp1),encoder1).toDF();
 
-		Encoder<Tuple2<Long, Tuple2<String,String>>> encoder2 =
+		Encoder<Tuple2<Long, String>> encoder2 =
 		Encoders.tuple(Encoders.LONG(), Encoders.STRING());
 		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
 		df2 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp2),encoder2).toDF();
