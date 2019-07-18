@@ -323,11 +323,11 @@ public class BwaInterpreter {
         
         StructType schemata = DataTypes.createStructType(
                 new StructField[]{
-                        createStructField("NUM_VALUE", IntegerType, false),
-                        createStructField("identifier", StringType, false),
-                        createStructField("sequence", StringType, false),
-                        createStructField("aux", StringType, false),
-                        createStructField("quality", StringType, false),
+                        createStructField("NUM_VALUE", DataTypes.IntegerType, false),
+                        createStructField("identifier", DataTypes.StringType, false),
+                        createStructField("sequence", DataTypes.StringType, false),
+                        createStructField("aux", DataTypes.StringType, false),
+                        createStructField("quality", DataTypes.StringType, false),
                 });
         
         
