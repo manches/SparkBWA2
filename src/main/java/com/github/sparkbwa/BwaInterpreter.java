@@ -18,6 +18,7 @@ package com.github.sparkbwa;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.io.BufferedReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -269,8 +270,12 @@ public class BwaInterpreter {
 				.sliding(4,4);
 		
 		ArrayList<String> result = new ArrayList<>();
-
-
+		 
+		try (BufferedReader br = new BufferedReader(new FileReader(options.getInputPath()))) {
+		    while (br.ready()) {
+		        result.add(br.readLine());
+		    }
+		}
 		
 		
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
