@@ -47,6 +47,10 @@ import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.mllib.rdd.RDDFunctions;
 import org.apache.spark.rdd.RDD;
 import scala.Tuple2;
+import org.apache.spark.sql.types.StringType;
+import org.apache.spark.sql.types.DataTypes;
+
+
 import org.apache.spark.api.java.function.Function;
 import java.util.AbstractCollection;
 import java.io.Serializable;
@@ -275,20 +279,21 @@ public class BwaInterpreter {
 		
 		BufferedReader br = null;
         FileReader fr = null;
+        String line1;
+        String line2;
+        String line3;
+        String line4;
+        int i = 0;
+        Row r = null;
+        List<Row> rowList =  new ArrayList<Row>();
 
+        
         try {
 
             fr = new FileReader(options.getInputPath());
             br = new BufferedReader(fr);
 
             // read line by line
-            String line1;
-            String line2;
-            String line3;
-            String line4;
-            int i = 0;
-            Row r = null;
-            List<Row> rowList =  new ArrayList<Row>();
             while ((line1 = br.readLine()) != null) {
                 line2 = br.readLine();
                 line3 = br.readLine();
