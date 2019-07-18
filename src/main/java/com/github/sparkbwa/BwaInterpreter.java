@@ -265,7 +265,7 @@ public class BwaInterpreter {
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
 		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
-		RDD<Object> r1  = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
+		RDD<Object,Object,Object,Object> r1  = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
 				.sliding(4,4);
 		
 		ArrayList<String> result = new ArrayList<>();
