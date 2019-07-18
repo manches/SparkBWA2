@@ -50,7 +50,7 @@ import scala.Tuple2;
 import org.apache.spark.api.java.function.Function;
 import java.util.AbstractCollection;
 import java.io.Serializable;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList; 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -286,18 +286,17 @@ public class BwaInterpreter {
             String line2;
             String line3;
             String line4;
-            int i = 1;
+            int i = 0;
             Row r = null;
-            List<Row> rowList = null;
+            List<Row> rowList =  new ArrayList<Row>();
             while ((line1 = br.readLine()) != null) {
-                System.out.println(line1);
                 line2 = br.readLine();
                 line3 = br.readLine();
                 line4 = br.readLine();
                 i = i + 1;
                 
-        		r = RowFactory.create(line1,line2,line3,line4);
-                rowList = ImmutableList.of(i, r);
+        		r = RowFactory.create(i,line1,line2,line3,line4);
+        		rowList.add(r);
                 r = null;
                 
             }
