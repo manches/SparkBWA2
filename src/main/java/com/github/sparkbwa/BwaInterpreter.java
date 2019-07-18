@@ -318,19 +318,6 @@ public class BwaInterpreter {
         
 		
 		
-		StructType schema = DataTypes.createStructType{
-			new StructField[]{		
-			        createStructField("NUM_VALUE", IntegerType, false),
-			        createStructField("identifier", StringType, false),
-			        createStructField("sequence", StringType, false),
-			        createStructField("aux", StringType, false),
-			        createStructField("quality", StringType, false),	
-				});
-		
-		
-		Dataset<Row> data = this.sqlContext.createDataFrame(rowList, schemata);
-		
-		
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
 		/*
