@@ -276,7 +276,9 @@ public class BwaInterpreter {
 		    while (br.ready()) {
 		        result.add(br.readLine());
 		    }
-		}
+		}catch (IOException e) {
+            System.err.format("IOException: %s%n", e);
+        }
 		
 		
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
