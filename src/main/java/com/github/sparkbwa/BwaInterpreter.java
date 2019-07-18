@@ -39,6 +39,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
@@ -47,6 +48,8 @@ import org.apache.spark.mllib.rdd.RDDFunctions;
 import org.apache.spark.rdd.RDD;
 import scala.Tuple2;
 import org.apache.spark.api.java.function.Function;
+import java.util.AbstractCollection;
+import java.io.Serializable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -315,7 +318,17 @@ public class BwaInterpreter {
         
 		
 		
-
+		StructType schema = DataTypes.createStructType{
+			new StructField[]{		
+			        createStructField("NUM_VALUE", IntegerType, false),
+			        createStructField("identifier", StringType, false),
+			        createStructField("sequence", StringType, false),
+			        createStructField("aux", StringType, false),
+			        createStructField("quality", StringType, false),	
+				});
+		
+		
+		Dataset<Row> data = this.sqlContext.createDataFrame(rowList, schemata);
 		
 		
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
