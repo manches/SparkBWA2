@@ -266,19 +266,66 @@ public class BwaInterpreter {
 		
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
-		JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
-		RDD<Object> r1  = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
-				.sliding(4,4);
+		//JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
+		//RDD<Object> r1  = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
+		//		.sliding(4,4);
 		
-		ArrayList<String> result = new ArrayList<>();
-		 
-		try (BufferedReader br = new BufferedReader(new FileReader(options.getInputPath()))) {
-		    while (br.ready()) {
-		        result.add(br.readLine());
-		    }
-		}catch (IOException e) {
+		BufferedReader br = null;
+        FileReader fr = null;
+
+        try {
+
+            fr = new FileReader(options.getInputPath());
+            br = new BufferedReader(fr);
+
+            // read line by line
+            String line1;
+            String line2;
+            String line3;
+            String line4;
+            int i = 1;
+            Row r = null;
+            List<Row> rowList = null;
+            while ((line1 = br.readLine()) != null) {
+                System.out.println(line1);
+                line2 = br.readLine();
+                line3 = br.readLine();
+                line4 = br.readLine();
+                i = i + 1;
+                
+        		r = RowFactory.create(line1,line2,line3,line4);
+                rowList = ImmutableList.of(i, r);
+                r = null;
+                
+            }
+
+        } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                System.err.format("IOException: %s%n", ex);
+            }
         }
+        
+		
+		
+		StructType schema = DataTypes.createStructType{
+			new StructField[]{		
+			        createStructField("NUM_VALUE", IntegerType, false),
+			        createStructField("identifier", StringType, false),
+			        createStructField("sequence", StringType, false),
+			        createStructField("aux", StringType, false),
+			        createStructField("quality", StringType, false)
+				});
+		
+		
+		Dataset<Row> data = this.sqlContext.createDataFrame(rowList, schemata);
 		
 		
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
