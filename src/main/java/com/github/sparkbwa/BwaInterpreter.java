@@ -453,7 +453,7 @@ public class BwaInterpreter {
 		
 		
 		return readsDS
-				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),R owEncoder.apply(readsDS.schema()) )
+				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),RowEncoder.apply(readsDS.schema()) )
 				.collect();
 		
 	/*	
