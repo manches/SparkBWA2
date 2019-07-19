@@ -301,7 +301,11 @@ public class BwaInterpreter {
                 line3 = br.readLine();
                 line4 = br.readLine();
                 i = i + 1;
-                
+                System.out.println(line1));
+                System.out.println(line2));
+                System.out.println(line3));
+                System.out.println(line4));
+                System.out.println("----------------------------------------------------------------------------));
         		r = RowFactory.create(i,line1,line2,line3,line4);
         		rowList.add(r);
                 r = null;
@@ -337,7 +341,8 @@ public class BwaInterpreter {
         Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
         data.show();
 
-		
+		System.exit(1);
+
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
 		/*
@@ -485,7 +490,6 @@ public class BwaInterpreter {
 	    
 		 
 		//return dfFinal;
-		System.exit(1);
 		return readsRDD;
 		
 		
