@@ -306,7 +306,7 @@ public class BwaInterpreter {
                 System.out.println(line2));
                 System.out.println(line3));
                 System.out.println(line4));
-                System.out.println("----------------------------------------------------------------------------));
+                System.out.println("----------------------------------------------------------------------------");
         		r = RowFactory.create(i,line1,line2,line3,line4);
         		rowList.add(r);
                 r = null;
