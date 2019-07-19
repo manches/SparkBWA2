@@ -178,6 +178,14 @@ public class BwaInterpreter {
 	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
+		
+		LOG.info("[ ] :: -------------------------------------------: ");
+		fastqLines.zipWithIndex().foreach(rdd -> {
+		LOG.info("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
+		LOG.info("[ ] :: -------------------------------------------: ");
+
+    });
+		
 		// Determine which FASTQ record the line belongs to.
 		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
 
@@ -326,12 +334,9 @@ public class BwaInterpreter {
 	 * Method to perform and handle the paired reads sorting
 	 * @return A JavaRDD containing grouped reads from the paired FASTQ files
 	 */
-//	private Dataset handlePairedReadsSorting() {
+//	private Dataset<Row> handlePairedReadsSorting() {
 	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
-		Dataset df1 = null;
-		Dataset df2 = null;
-		Dataset df = null;
 		Dataset<Row> dfFinal = null;
 		long startTime = System.nanoTime();
 
@@ -345,25 +350,14 @@ public class BwaInterpreter {
 		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sqlContext, options.getInputPath(),1);
 		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2(),2);
 		
-		datasettmpDS1.show(false);
-		datasettmpDS2.show(false);		
+		//datasettmpDS1.show(false);
+		//datasettmpDS2.show(false);		
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"identifier");
-		joined.show(false);		
-		
-
-		
-
-						
+		joined.show(2,false);		
+								
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
-		//pairedReadsRDD.unpersist();
-		/*
-		LOG.info("[ ] :: -------------------------------------------: ");
-		pairedReadsRDD.foreach(rdd -> {
-		LOG.info("[ ] :: MANCHES ANTES - handlePairedReadsSorting : " + rdd);
-		LOG.info("[ ] :: -------------------------------------------: ");
-		});
-		 */
+		
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			readsRDD = pairedReadsRDD.sortByKey().values();
@@ -424,7 +418,7 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
- 		dfFinal.show(1,false);
+ 		dfFinal.show(10,false);
 		dfFinal.printSchema();
 	    
 		 
@@ -441,51 +435,19 @@ public class BwaInterpreter {
 	 * @param readsRDD The RDD containing the paired reads
 	 * @return A list of strings containing the resulting sam files where the output alignments are stored
 	 */
-	//private List<String> MapPairedBwa(Bwa bwa, Dataset readsDS) {
+	//private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsDS) {
 	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-		/*readsRDD.foreach(rdd -> {
-			LOG.info("[ ] :: MANCHESFINAL: " + rdd);
-			LOG.info("[ ] :: -------------------------------------------: ");
-	    });
-	   
-		LOG.info("[ ] :: MANCHES 1 -------------------------------------------: ");
-		readsDS.show(1,false);
-		readsDS.printSchema();
-		JavaRDD readsRDD = null;
-		LOG.info("[ ] :: 	 -------------------------------------------: ");
-		LOG.info("[ ] :: " + readsDS.count());
-		LOG.info("[ ] :: MANCHES 3.1 -------------------------------------------: ");
-		LOG.info("[ ] :: " + Arrays.toString(readsDS.dtypes()) );
-		LOG.info("[ ] :: MANCHES 3 -------------------------------------------: ");
-		readsRDD = readsDS.javaRDD();
-		LOG.info("[ ] :: MANCHES 4.1 -------------------------------------------: ");
-		LOG.info("[ ] :: " + readsRDD.count() );
-
-		LOG.info("[ ] :: MANCHES 4 -------------------------------------------: ");
-		readsRDD.foreach(rdd -> {
-			LOG.info("[ ] :: MANCHES - MapPairedBwa : " + rdd);
-			LOG.info("[ ] :: -------------------------------------------: ");
-
-	    });
-		LOG.info("[ ] :: MANCHES 5 -------------------------------------------: ");
-		
-		return readsRDD
-			.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
-			.collect();
-		
-		
-		SparkContext contextAux = readsDS.sparkSession().sparkContext()
-		
+	/*
 		return readsDS
-				.javaRDD()
-				.mapPartitions(new BwaPairedAlignment(contextAux, bwa), true)
+				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa), true)
 				.collect();
-		*/
+	*/	
 		
 		return readsRDD
 				.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 				.collect();
+		
 	}
 
 	/**
@@ -513,8 +475,9 @@ public class BwaInterpreter {
 
 		List<String> returnedValues;
 		if (bwa.isPairedReads()) {
-			//Dataset readsDS = handlePairedReadsSorting();
+			//Dataset<Row> readsDS = handlePairedReadsSorting();
 			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
+			//returnedValues = MapPairedBwa(bwa, readsDS);
 			returnedValues = MapPairedBwa(bwa, readsRDD);
 			
 			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
