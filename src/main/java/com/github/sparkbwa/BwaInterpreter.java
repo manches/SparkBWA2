@@ -289,9 +289,10 @@ public class BwaInterpreter {
         Row r = null;
         List<Row> rowList =  new ArrayList<Row>();
 
-        
-        try {
+		LOG.info("["+this.getClass().getName()+"] ::Manches FILE: " + options.getInputPath());
 
+        try {
+        	
             fr = new FileReader(options.getInputPath());
             br = new BufferedReader(fr);
 
