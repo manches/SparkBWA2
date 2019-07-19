@@ -50,6 +50,10 @@ import org.apache.spark.mllib.rdd.RDDFunctions;
 import org.apache.spark.rdd.RDD;
 import scala.Tuple2;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 
 import org.apache.spark.api.java.function.Function;
 import java.util.AbstractCollection;
@@ -280,6 +284,8 @@ public class BwaInterpreter {
 		//		.sliding(4,4);
 		
 		BufferedReader br = null;
+		  FileSystem fs = null;
+		  Path pt=null;
         FileReader fr = null;
         String line1 = null;
         String line2 = null;
@@ -289,13 +295,15 @@ public class BwaInterpreter {
         Row r = null;
         List<Row> rowList =  new ArrayList<Row>();
 
-		LOG.info("["+this.getClass().getName()+"] ::Manches FILE: " + options.getInputPath());
+		LOG.info("["+this.getClass().getName()+"] :: Manches FILE: " + options.getInputPath());
 
         try {
-        	
-            fr = new FileReader(options.getInputPath());
-            br = new BufferedReader(fr);
-
+        
+           
+             pt = new Path(options.getInputPath());
+             fs = FileSystem.get(new Configuration());
+             br = new BufferedReader(new InputStreamReader(fileSystem.open(path)));
+            
             // read line by line
             while ((line1 = br.readLine()) != null) {
                 line2 = br.readLine();
