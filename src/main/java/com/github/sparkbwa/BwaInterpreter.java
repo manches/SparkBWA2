@@ -283,8 +283,8 @@ public class BwaInterpreter {
 		//		.sliding(4,4);
 		
 		BufferedReader br = null;
-		  FileSystem fs = null;
-		  Path pt=null;
+		FileSystem fs = null;
+		Path pt = null;
         FileReader fr = null;
         String line1 = null;
         String line2 = null;
