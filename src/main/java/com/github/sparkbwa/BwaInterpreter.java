@@ -335,7 +335,7 @@ public class BwaInterpreter {
         
         
         Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
-        data.show()
+        data.show();
 
 		
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
