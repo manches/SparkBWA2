@@ -191,7 +191,7 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static Dataset<Row> loadFastqtoDS(sqlContext sc, String pathToFastq) {
+	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq) {
 
 		BufferedReader br = null;
 		FileSystem fs = null;
@@ -210,7 +210,7 @@ public class BwaInterpreter {
         try {
         
            
-             pt = new Path(options.getInputPath());
+             pt = new Path(pathToFastq);
              fs = FileSystem.get(new Configuration());
              br = new BufferedReader(new InputStreamReader(fs.open(pt)));
             
@@ -250,7 +250,7 @@ public class BwaInterpreter {
         //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
         //data.show(false);
 
-		return sqlContext.createDataFrame(rowList, schema);
+		return sc.createDataFrame(rowList, schema);
 	}
 
 
