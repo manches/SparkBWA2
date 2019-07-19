@@ -81,7 +81,8 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 
 		FileOutputStream fos1;
 		FileOutputStream fos2;
-
+		StringWriter sw1 = null;
+		StringWriter sw2 = null;
 		BufferedWriter bw1;
 		BufferedWriter bw2;
 
@@ -100,30 +101,30 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			while (arg0.hasNext()) {
 				
 				newFastqRead = arg0.next();
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier" + newFastqRead.getAs("identifier"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence1" + newFastqRead.getAs("sequence1"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux1" + newFastqRead.getAs("aux1"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality1" + newFastqRead.getAs("quality1"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence2" + newFastqRead.getAs("sequence2"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux2" + newFastqRead.getAs("aux2"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality2" + newFastqRead.getAs("quality2"));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier" + newFastqRead.<String>getAs("identifier"));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence1" + newFastqRead.<String>getAs("sequence1"));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux1" + newFastqRead.<String>getAs("aux1"));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality1" + newFastqRead.<String>getAs("quality1"));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence2" + newFastqRead.<String>getAs("sequence2"));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux2" + newFastqRead.<String>getAs("aux2"));
+				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality2" + newFastqRead.<String>getAs("quality2"));
 
-				bw1.write(newFastqRead.getAs("identifier"));
+				bw1.write(newFastqRead.<String>getAs("identifier"));
 				bw1.newLine();
-				bw1.write(newFastqRead.getAs("sequence1"));
+				bw1.write(newFastqRead.<String>getAs("sequence1"));
 				bw1.newLine();
-				bw1.write(newFastqRead.getAs("aux1"));
+				bw1.write(newFastqRead.<String>getAs("aux1"));
 				bw1.newLine();
-				bw1.write(newFastqRead.getAs("quality1"));
+				bw1.write(newFastqRead.<String>getAs("quality1"));
 				bw1.newLine();
 				
-				bw2.write(newFastqRead.getAs("identifier"));
+				bw2.write(newFastqRead.<String>getAs("identifier"));
 				bw2.newLine();
-				bw2.write(newFastqRead.getAs("sequence2"));
+				bw2.write(newFastqRead.<String>getAs("sequence2"));
 				bw2.newLine();
-				bw2.write(newFastqRead.getAs("aux2"));
+				bw2.write(newFastqRead.<String>getAs("aux2"));
 				bw2.newLine();
-				bw2.write(newFastqRead.getAs("quality2"));
+				bw2.write(newFastqRead.<String>getAs("quality2"));
 				bw2.newLine();
 				
 			}
