@@ -346,9 +346,9 @@ public class BwaInterpreter {
 		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2());
 		
 		datasettmpDS1.show(false);
-		datasettmpDS.show(false);		
+		datasettmpDS2.show(false);		
 		
-		
+		System.exit(1);
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
 		//JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
