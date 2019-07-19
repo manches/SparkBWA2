@@ -438,8 +438,23 @@ public class BwaInterpreter {
 	private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsDS) {
 	//private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
-			return readsDS
-				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa), true)
+
+		StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
+        StructField field2 = DataTypes.createStructField("identifier1", DataTypes.StringType, true);
+        StructField field3 = DataTypes.createStructField("sequence1", DataTypes.StringType, true);
+        StructField field4 = DataTypes.createStructField("aux1", DataTypes.StringType, true);
+        StructField field5 = DataTypes.createStructField("quality1", DataTypes.StringType, true);
+        StructField field6 = DataTypes.createStructField("identifier2", DataTypes.StringType, true);
+        StructField field7 = DataTypes.createStructField("sequence2", DataTypes.StringType, true);
+        StructField field8 = DataTypes.createStructField("aux2", DataTypes.StringType, true);
+        StructField field9 = DataTypes.createStructField("quality2", DataTypes.StringType, true);
+        StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5, field6, field7, field8, field9));
+		
+		
+		
+		ExpressionEncoder<Row> encoder = RowEncoder.apply(schema);
+		return readsDS
+				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa))
 				.collect();
 		
 	/*	
