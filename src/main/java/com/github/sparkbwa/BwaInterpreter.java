@@ -281,10 +281,10 @@ public class BwaInterpreter {
 		
 		BufferedReader br = null;
         FileReader fr = null;
-        String line1;
-        String line2;
-        String line3;
-        String line4;
+        String line1 = null;
+        String line2 = null;
+        String line3 = null;
+        String line4 = null;
         int i = 0;
         Row r = null;
         List<Row> rowList =  new ArrayList<Row>();
