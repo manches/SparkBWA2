@@ -248,8 +248,8 @@ public class BwaInterpreter {
         }        
 
         
-        StructField field1 = DataTypes.createStructField("index"+index, DataTypes.IntegerType, true);
-        StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
+        StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
+        StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
         StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
         StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
         StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
@@ -352,7 +352,7 @@ public class BwaInterpreter {
 		
 		//datasettmpDS1.show(false);
 		//datasettmpDS2.show(false);		
-		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"identifier");
+		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		joined.show(2,false);		
 								
 		datasetTmp1.unpersist();
@@ -361,7 +361,7 @@ public class BwaInterpreter {
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			readsRDD = pairedReadsRDD.sortByKey().values();
-			dfFinal = joined.orderBy("idetifier");
+			dfFinal = joined.orderBy("index");
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
@@ -371,7 +371,7 @@ public class BwaInterpreter {
 			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
 			Dataset<Row> dfAux = joined.repartition(options.getPartitionNumber());
-			dfFinal = joined.orderBy("idetifier");
+			dfFinal = joined.orderBy("index");
 			
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
