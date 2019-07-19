@@ -332,7 +332,7 @@ public class BwaInterpreter {
 		Dataset df1 = null;
 		Dataset df2 = null;
 		Dataset df = null;
-		Dataset dfFinal = null;
+		Dataset<Row> dfFinal = null;
 		long startTime = System.nanoTime();
 
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
@@ -351,23 +351,23 @@ public class BwaInterpreter {
 		joined.show(false);		
 		
 
-		System.exit(1);
 		
 
 						
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 		//pairedReadsRDD.unpersist();
+		/*
 		LOG.info("[ ] :: -------------------------------------------: ");
 		pairedReadsRDD.foreach(rdd -> {
 		LOG.info("[ ] :: MANCHES ANTES - handlePairedReadsSorting : " + rdd);
 		LOG.info("[ ] :: -------------------------------------------: ");
 		});
-
+		 */
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			readsRDD = pairedReadsRDD.sortByKey().values();
-			//dfFinal = df.orderBy("_1").select("_2");
+			dfFinal = joined.orderBy("idetifier");
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
@@ -376,8 +376,8 @@ public class BwaInterpreter {
 			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
 			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
-			//Dataset dfAux = df.repartition(options.getPartitionNumber());
-			//dfFinal = dfAux.orderBy("_1").select("_2");
+			Dataset<Row> dfAux = joined.repartition(options.getPartitionNumber());
+			dfFinal = joined.orderBy("idetifier");
 			
 			LOG.info("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
@@ -409,7 +409,7 @@ public class BwaInterpreter {
 				.values();
 				//.persist(StorageLevel.MEMORY_ONLY());
 			
-			//dfFinal = df.repartition(options.getPartitionNumber()).select("_2");
+			dfFinal = joined.repartition(options.getPartitionNumber());
 		}
 
 		long endTime = System.nanoTime();
@@ -424,9 +424,8 @@ public class BwaInterpreter {
 			LOG.info("[ ] :: -------------------------------------------: ");
 
 	    });
-		//Dataset dfF = dfFinal.select("_2");
-		//dfF.show(1,false);
-		//dfF.printSchema();
+ 		dfFinal.show(1,false);
+		dfFinal.printSchema();
 	    
 		 
 		//return dfFinal;
