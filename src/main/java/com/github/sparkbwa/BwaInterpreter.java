@@ -454,7 +454,7 @@ public class BwaInterpreter {
 		
 		ExpressionEncoder<Row> encoder = RowEncoder.apply(schema);
 		return readsDS
-				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa))
+				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),encoder)
 				.collect();
 		
 	/*	
