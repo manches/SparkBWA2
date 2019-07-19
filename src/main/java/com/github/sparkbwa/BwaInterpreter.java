@@ -41,6 +41,7 @@ import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
@@ -451,10 +452,8 @@ public class BwaInterpreter {
         StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5, field6, field7, field8, field9));
 		
 		
-		
-		ExpressionEncoder<Row> encoder = RowEncoder.apply(schema);
 		return readsDS
-				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),encoder)
+				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),R owEncoder.apply(readsDS.schema()) )
 				.collect();
 		
 	/*	
