@@ -54,6 +54,8 @@ import scala.Tuple2;
 import org.apache.spark.api.java.function.Function;
 import java.util.AbstractCollection;
 import java.io.Serializable;
+import com.google.common.collect.Lists;
+
 import com.google.common.collect.ImmutableList; 
 import java.io.BufferedReader;
 import java.io.IOException;
