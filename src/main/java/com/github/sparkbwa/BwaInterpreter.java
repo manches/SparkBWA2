@@ -191,7 +191,7 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq) {
+	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {
 
 		BufferedReader br = null;
 		FileSystem fs = null;
@@ -240,11 +240,11 @@ public class BwaInterpreter {
         }        
 
         
-        StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
+        StructField field1 = DataTypes.createStructField("index"+index, DataTypes.IntegerType, true);
         StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
-        StructField field3 = DataTypes.createStructField("sequence", DataTypes.StringType, true);
-        StructField field4 = DataTypes.createStructField("aux", DataTypes.StringType, true);
-        StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
+        StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
+        StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
+        StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
         StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
 
         //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
@@ -342,8 +342,8 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
-		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sqlContext, options.getInputPath());
-		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2());
+		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sqlContext, options.getInputPath(),1);
+		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2(),2);
 		
 		datasettmpDS1.show(false);
 		datasettmpDS2.show(false);		
