@@ -185,7 +185,73 @@ public class BwaInterpreter {
 		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
 	}
 	
+	/**
+	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
+	 * @param ctx The JavaSparkContext to use
+	 * @param pathToFastq The path to the FASTQ file
+	 * @return A JavaPairRDD containing <Long Read ID, String Read>
+	 */
+	public static Dataset<Row> loadFastqtoDS(sqlContext sc, String pathToFastq) {
 
+		BufferedReader br = null;
+		FileSystem fs = null;
+		Path pt = null;
+        FileReader fr = null;
+        String line1 = null;
+        String line2 = null;
+        String line3 = null;
+        String line4 = null;
+        int i = 0;
+        Row r = null;
+        List<Row> rowList =  new ArrayList<Row>();
+
+		//LOG.info("["+this.getClass().getName()+"] :: Manches FILE: " + options.getInputPath());
+
+        try {
+        
+           
+             pt = new Path(options.getInputPath());
+             fs = FileSystem.get(new Configuration());
+             br = new BufferedReader(new InputStreamReader(fs.open(pt)));
+            
+            // read line by line
+            while ((line1 = br.readLine()) != null) {
+                line2 = br.readLine();
+                line3 = br.readLine();
+                line4 = br.readLine();
+                i = i + 1;
+        		r = RowFactory.create(i,line1,line2,line3,line4);
+        		rowList.add(r);
+                r = null;                
+            }
+
+        } catch (IOException e) {
+            System.err.format("IOException: %s%n", e);
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                System.err.format("IOException: %s%n", ex);
+            }
+        }        
+
+        
+        StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
+        StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
+        StructField field3 = DataTypes.createStructField("sequence", DataTypes.StringType, true);
+        StructField field4 = DataTypes.createStructField("aux", DataTypes.StringType, true);
+        StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
+        StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
+
+        //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
+        //data.show(false);
+
+		return sqlContext.createDataFrame(rowList, schema);
+	}
 
 
 	/**
@@ -276,80 +342,20 @@ public class BwaInterpreter {
 		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
+		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sqlContext, options.getInputPath());
+		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2());
+		
+		datasettmpDS1.show(false);
+		datasettmpDS.show(false);		
+		
+		
 		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
 		//		.toDF("identifier", "sequence", "quality");
 		//JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
 		//RDD<Object> r1  = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
 		//		.sliding(4,4);
 		
-		BufferedReader br = null;
-		FileSystem fs = null;
-		Path pt = null;
-        FileReader fr = null;
-        String line1 = null;
-        String line2 = null;
-        String line3 = null;
-        String line4 = null;
-        int i = 0;
-        Row r = null;
-        List<Row> rowList =  new ArrayList<Row>();
-
-		LOG.info("["+this.getClass().getName()+"] :: Manches FILE: " + options.getInputPath());
-
-        try {
-        
-           
-             pt = new Path(options.getInputPath());
-             fs = FileSystem.get(new Configuration());
-             br = new BufferedReader(new InputStreamReader(fs.open(pt)));
-            
-            // read line by line
-            while ((line1 = br.readLine()) != null) {
-                line2 = br.readLine();
-                line3 = br.readLine();
-                line4 = br.readLine();
-                i = i + 1;
-                System.out.println(line1);
-                System.out.println(line2);
-                System.out.println(line3);
-                System.out.println(line4);
-                System.out.println("----------------------------------------------------------------------------");
-        		r = RowFactory.create(i,line1,line2,line3,line4);
-        		rowList.add(r);
-                r = null;
-                
-            }
-
-        } catch (IOException e) {
-            System.err.format("IOException: %s%n", e);
-        } finally {
-            try {
-                if (br != null)
-                    br.close();
-
-                if (fr != null)
-                    fr.close();
-            } catch (IOException ex) {
-                System.err.format("IOException: %s%n", ex);
-            }
-        }
-        
-        
-
-        
-        StructField field1 = DataTypes.createStructField("NUM_VALUE", DataTypes.IntegerType, true);
-        StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
-        StructField field3 = DataTypes.createStructField("sequence", DataTypes.StringType, true);
-        StructField field4 = DataTypes.createStructField("aux", DataTypes.StringType, true);
-        StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
-        StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
-
-        
-        
-        Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
-        data.show();
-
-		System.exit(1);
+		
 
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
 		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
