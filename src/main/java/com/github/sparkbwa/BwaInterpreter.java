@@ -347,86 +347,11 @@ public class BwaInterpreter {
 		
 		datasettmpDS1.show(false);
 		datasettmpDS2.show(false);		
-		
+		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,datasettmpDS2("identifier"));
+		joined.show(false);		
+
 		System.exit(1);
-		//dfFinal = this.sparkSession.createDataset(this.ctx.textFile(options.getInputPath()).sliding(4))
-		//		.toDF("identifier", "sequence", "quality");
-		//JavaRDD<String> rAUX1 = this.ctx.textFile(options.getInputPath());
-		//RDD<Object> r1  = RDDFunctions.fromRDD(rAUX1.rdd(), rAUX1.classTag())
-		//		.sliding(4,4);
 		
-		
-
-		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
-		//dfFinal = this.sparkSession.createDataset( rAUX1.rdd().sliding(4,4)).toDF();
-		/*
-		//Read the input file and store as Row RDD
-		JavaRDD<Row> dataRDD = r1.map( line -> {
-										String[] parts = line.split(" ");
-														
-										return RowFactory.create(parts[0],parts[1],parts[1],parts[3]);
-					  				 }
-							   );
-		
-		
-		//Define the schema of the data  
-		StructType schema = new StructType( new StructField[] 
-							{
-								new StructField("identifier", DataTypes.StringType, false, Metadata.empty()),
-								new StructField("sequence", DataTypes.StringType, false, Metadata.empty()),
-								new StructField("aux", DataTypes.StringType, false, Metadata.empty()),
-								new StructField("quality", DataTypes.StringType, false, Metadata.empty())
-							}
-						  );
-		
-		//Create a DataSet using data and schema
-		Dataset<Row> df = spark.createDataFrame(dataRDD, schema);
-		
-		//use this statement when only required for testing.
-		df.show();
-		*/
-		
-		/*
-		 LOG.info("[ ] :: -------------------------------------------: "  + result.getClass() );
-		result.foreach(rdd -> {
-			LOG.info("[ ] :: MANCHES result RDD - handlePairedReadsSorting : " + rdd);
-		LOG.info("[ ] :: -------------------------------------------: ");
-		});
-		 */
-		
-		
-		
-				//.map {
-		 // case Array(id, seq, _, qual) -> (id, seq, qual)
-	//	}).toDF("identifier", "sequence", "quality");
-
-		//RDD<Object> r2 = RDDFunctions.fromRDD(pairedReadsRDD.rdd(), pairedReadsRDD.classTag()).sliding(4,4);
-		//RDD<Object> r = RDDFunctions.fromRDD(pairedReadsRDD.rdd(), pairedReadsRDD.classTag()).sliding(7);
-		//df = sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()) )  ).toDF();
-		
-		//Encoder<Tuple2<Long, Tuple2<String,String>>> encoderf =
-		//Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.STRING()));
-		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
-		//df = this.sparkSession.createDataset(JavaPairRDD.toRDD(pairedReadsRDD),encoderf).toDF();
-		
-		Encoder<Tuple2<Long, String>> encoder1 =
-		Encoders.tuple(Encoders.LONG(), Encoders.STRING());
-		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
-		df1 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp1),encoder1).toDF();
-
-		Encoder<Tuple2<Long, String>> encoder2 =
-		Encoders.tuple(Encoders.LONG(), Encoders.STRING());
-		//Dataset<Row> userViolationsDetails = spark.createDataset(JavaPairRDD.toRDD(MY_RDD),encoder2).toDF("value1","value2");
-		df2 = this.sparkSession.createDataset(JavaPairRDD.toRDD(datasetTmp2),encoder2).toDF();
-		
-				df1.show(1,false);
-				df1.printSchema();
-				df2.show(1,false);
-				df2.printSchema();
-		
-		df = df1.join(df2,df1.col("_2").equalTo(df2.col("_2")));		
-		df.show(1000,false);
-		df.printSchema();
 
 						
 		datasetTmp1.unpersist();
