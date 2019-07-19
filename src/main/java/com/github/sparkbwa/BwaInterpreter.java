@@ -320,17 +320,18 @@ public class BwaInterpreter {
         }
         
         
-        StructType schemata = DataTypes.createStructType(
-                new StructField[]{
-                        createStructField("NUM_VALUE", DataTypes.IntegerType, false),
-                        createStructField("identifier", DataTypes.StringType, false),
-                        createStructField("sequence", DataTypes.StringType, false),
-                        createStructField("aux", DataTypes.StringType, false),
-                        createStructField("quality", DataTypes.StringType, false),
-                });
+
+        
+        StructField field1 = DataTypes.createStructField("NUM_VALUE", DataTypes.IntegerType, true);
+        StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
+        StructField field3 = DataTypes.createStructField("sequence", DataTypes.StringType, true);
+        StructField field4 = DataTypes.createStructField("aux", DataTypes.StringType, true);
+        StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
+        StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
+
         
         
-        Dataset<Row> data = sqlContext.createDataFrame(rowList, schemata);
+        Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
 
 		
 		//JavaRDD<String> x = JavaRDD.fromRDD(r1, r1.classTag()); 
