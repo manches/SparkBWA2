@@ -347,7 +347,7 @@ public class BwaInterpreter {
 		
 		datasettmpDS1.show(false);
 		datasettmpDS2.show(false);		
-		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,datasettmpDS2("identifier"));
+		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,datasettmpDS2.col("identifier"));
 		joined.show(false);		
 		
 
