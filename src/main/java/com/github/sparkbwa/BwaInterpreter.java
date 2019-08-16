@@ -456,6 +456,7 @@ public class BwaInterpreter {
 				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() )
 				.collect();
 		
+		
 	/*	
 		return readsRDD
 				.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
