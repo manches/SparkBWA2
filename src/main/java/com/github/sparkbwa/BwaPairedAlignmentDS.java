@@ -101,14 +101,14 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			while (arg0.hasNext()) {
 				
 				newFastqRead = arg0.next();
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier1" + newFastqRead.<String>getAs("identifier1"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence1" + newFastqRead.<String>getAs("sequence1"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux1" + newFastqRead.<String>getAs("aux1"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality1" + newFastqRead.<String>getAs("quality1"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier2" + newFastqRead.<String>getAs("identifier2"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence2" + newFastqRead.<String>getAs("sequence2"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux2" + newFastqRead.<String>getAs("aux2"));
-				LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality2" + newFastqRead.<String>getAs("quality2"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier1 " + newFastqRead.<String>getAs("identifier1"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence1 " + newFastqRead.<String>getAs("sequence1"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux1 " + newFastqRead.<String>getAs("aux1"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality1 " + newFastqRead.<String>getAs("quality1"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier2 " + newFastqRead.<String>getAs("identifier2"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence2 " + newFastqRead.<String>getAs("sequence2"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux2 " + newFastqRead.<String>getAs("aux2"));
+				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality2 " + newFastqRead.<String>getAs("quality2"));
 
 				bw1.write(newFastqRead.<String>getAs("identifier1"));
 				bw1.newLine();

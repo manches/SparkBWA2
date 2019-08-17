@@ -180,12 +180,12 @@ public class BwaInterpreter {
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		
-		LOG.info("[ ] :: -------------------------------------------: ");
-		fastqLines.zipWithIndex().foreach(rdd -> {
-		LOG.info("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
-		LOG.info("[ ] :: -------------------------------------------: ");
+		//LOG.info("[ ] :: -------------------------------------------: ");
+		//fastqLines.zipWithIndex().foreach(rdd -> {
+		//LOG.info("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
+		//LOG.info("[ ] :: -------------------------------------------: ");
 
-    });
+    //});
 		
 		// Determine which FASTQ record the line belongs to.
 		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
@@ -541,7 +541,7 @@ public class BwaInterpreter {
 			//System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			//returnedValues.forEach(System.out::println);
 			//handlePairedReadsSorting
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			//System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 
 		}
