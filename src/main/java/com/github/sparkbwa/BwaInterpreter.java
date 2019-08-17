@@ -417,6 +417,7 @@ public class BwaInterpreter {
 		//	readsRDD.foreach(rdd -> {
 		//	LOG.info("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
 		//	LOG.info("[ ] :: -------------------------------------------: ");
+		// });
 /*
  * 
  * 
@@ -438,7 +439,7 @@ public class BwaInterpreter {
  * 
  * 
  */
-	    });
+	
  		dfFinal.show(10,false);
 		dfFinal.printSchema();
 	    
