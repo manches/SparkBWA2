@@ -413,15 +413,58 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 		
-		LOG.info("[ ] :: -------------------------------------------: ");
-			readsRDD.foreach(rdd -> {
-			LOG.info("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
-			LOG.info("[ ] :: -------------------------------------------: ");
+		//LOG.info("[ ] :: -------------------------------------------: ");
+		//	readsRDD.foreach(rdd -> {
+		//	LOG.info("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
+		//	LOG.info("[ ] :: -------------------------------------------: ");
+/*
+ * 
+ * 
+ 19/08/17 11:21:18 INFO sparkbwa.BwaInterpreter: [ ] :: MANCHES FINAL - handlePairedReadsSorting : 
+(
+	@rotavirus_128_641_2:0:0_1:0:0_563
+	TATTTTCATTTACTTTCTTCGCATTTTGTACCCAAGTATTGTATTTCTCATTAACCCTCTGTTTTAGTGA
+	+
+	2222222222222222222222222222222222222222222222222222222222222222222222
+,
+	@rotavirus_128_641_2:0:0_1:0:0_563
+	ATTCAATATGATTACAATGCAGTATTTACCAGAGTTAAAAGTAAAATTGATTATGTGATGGATGACTCTG
+	+
+	2222222222222222222222222222222222222222222222222222222222222222222222
+)
 
+ * 
+ * 
+ * 
+ * 
+ */
 	    });
  		dfFinal.show(10,false);
 		dfFinal.printSchema();
 	    
+		/*root
+		 |-- index: integer (nullable = true)
+		 |-- identifier1: string (nullable = true)
+		 |-- sequence1: string (nullable = true)
+		 |-- aux1: string (nullable = true)
+		 |-- quality1: string (nullable = true)
+		 |-- identifier2: string (nullable = true)
+		 |-- sequence2: string (nullable = true)
+		 |-- aux2: string (nullable = true)
+		 |-- quality2: string (nullable = true)
+		 
+		 index			|1295 
+		 identifier1	|@rotavirus_352_829_2:0:0_1:0:0_50e 
+		 sequence1		|TGAATTTAACTGCTGTTCAAAGTCATTCTTTACATCATCTGGTAATTCCATAGACCTTAGATACCACTCA
+		 aux1			|+   
+		 quality1		|2222222222222222222222222222222222222222222222222222222222222222222222
+		 identifier2	|@rotavirus_352_829_2:0:0_1:0:0_50e 
+		 sequence2		|TTCTAAAGGGATCGACCAAAAGATGAGAGTACTTAATGCATGTTTTAGTGTAAAAAGAATACCAGGAACA
+		 aux2			|+   
+		 quality2		|2222222222222222222222222222222222222222222222222222222222222222222222
+		 
+		 *
+		 */
 		 
 		return dfFinal;
 		//return readsRDD;
@@ -494,8 +537,9 @@ public class BwaInterpreter {
 			returnedValues = MapPairedBwa(bwa, readsDS);
 			//returnedValues = MapPairedBwa(bwa, readsRDD);
 			
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			returnedValues.forEach(System.out::println);
+			//System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			//returnedValues.forEach(System.out::println);
+			//handlePairedReadsSorting
 			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 
