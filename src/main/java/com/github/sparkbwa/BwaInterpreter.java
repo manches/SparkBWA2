@@ -344,9 +344,9 @@ public class BwaInterpreter {
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
 
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
-		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
-		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
-		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
+		//JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
+		//JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
+		//JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
 		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sqlContext, options.getInputPath(),1);
 		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2(),2);
@@ -354,22 +354,22 @@ public class BwaInterpreter {
 		//datasettmpDS1.show(false);
 		//datasettmpDS2.show(false);		
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
-		joined.show(2,false);		
+		//joined.show(2,false);		
 								
 		datasetTmp1.unpersist();
 		datasetTmp2.unpersist();
 		
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
-			readsRDD = pairedReadsRDD.sortByKey().values();
+			//readsRDD = pairedReadsRDD.sortByKey().values();
 			dfFinal = joined.orderBy("index");
 			LOG.info("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
 		// Sort in memory with partitioning
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
-			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
-			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
+			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
+			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
 			Dataset<Row> dfAux = joined.repartition(options.getPartitionNumber());
 			dfFinal = joined.orderBy("index");
@@ -399,10 +399,10 @@ public class BwaInterpreter {
 				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort");
 			}
 			
-			readsRDD = pairedReadsRDD
-				.repartition(options.getPartitionNumber())
-				.values();
-				//.persist(StorageLevel.MEMORY_ONLY());
+			//readsRDD = pairedReadsRDD
+			//	.repartition(options.getPartitionNumber())
+			//	.values();
+				//NO ES EL CASO -> .persist(StorageLevel.MEMORY_ONLY());
 			
 			dfFinal = joined.repartition(options.getPartitionNumber());
 		}
@@ -440,8 +440,8 @@ public class BwaInterpreter {
  * 
  */
 	
- 		dfFinal.show(10,false);
-		dfFinal.printSchema();
+ 		//dfFinal.show(10,false);
+		//dfFinal.printSchema();
 	    
 		/*root
 		 |-- index: integer (nullable = true)
