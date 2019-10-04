@@ -356,8 +356,8 @@ public class BwaInterpreter {
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		//joined.show(2,false);		
 								
-		datasetTmp1.unpersist();
-		datasetTmp2.unpersist();
+		//datasetTmp1.unpersist();
+		//datasetTmp2.unpersist();
 		
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
