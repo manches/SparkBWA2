@@ -27,6 +27,7 @@ import java.util.ArrayList;
  *
  * @author José M. Abuín
  * @brief This class is where the actual communication with BWA is performed.
+ * 
  */
 public class Bwa implements Serializable {
 
