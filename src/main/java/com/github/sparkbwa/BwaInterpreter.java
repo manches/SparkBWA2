@@ -388,7 +388,7 @@ public class BwaInterpreter {
 			//int numPartitions = pairedReadsRDD.partitions().size();  
 			int numPartitions = joined.rdd().getNumPartitions();   
 			/*
-			 * As in previous cases, the coalesce operation is not suitable
+			 * As in previous cases, the coalesce operation is not suitable 
 			 * if we want to achieve the maximum speedup, so, repartition
 			 * is used.
 			 */
