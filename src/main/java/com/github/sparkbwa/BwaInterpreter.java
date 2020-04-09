@@ -385,7 +385,7 @@ public class BwaInterpreter {
 		// No Sort with partitioning
 		else {
 			LOG.info("["+this.getClass().getName()+"] :: No sort with partitioning");
-			//int numPartitions = pairedReadsRDD.partitions().size();
+			//int numPartitions = pairedReadsRDD.partitions().size();  
 			int numPartitions = joined.rdd().getNumPartitions();
 			/*
 			 * As in previous cases, the coalesce operation is not suitable
