@@ -393,10 +393,10 @@ public class BwaInterpreter {
 			 * is used.
 			 */
 			if ((numPartitions) <= options.getPartitionNumber()) {
-				LOG.info("["+this.getClass().getName()+"] :: Repartition with no sort");
+				LOG.info("["+this.getClass().getName()+"] :: Repartition with no sort"+"["+numPartitions+"]"+"["+options.getPartitionNumber()+"]");
 			}
 			else {
-				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort");
+				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort"+"["+numPartitions+"]"+"["+options.getPartitionNumber()+"]");
 			}
 			
 			//readsRDD = pairedReadsRDD
