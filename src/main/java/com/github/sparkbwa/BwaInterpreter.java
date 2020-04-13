@@ -357,7 +357,7 @@ public class BwaInterpreter {
 		//datasettmpDS1.show(false);
 		//datasettmpDS2.show(false);		
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
-		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined");
+		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
 		//joined.show(2,false);		
 								
 		//datasetTmp1.unpersist();
