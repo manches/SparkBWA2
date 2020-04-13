@@ -349,11 +349,15 @@ public class BwaInterpreter {
 		//JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
 		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sqlContext, options.getInputPath(),1);
+		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
+
 		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2(),2);
+		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1");
 		
 		//datasettmpDS1.show(false);
 		//datasettmpDS2.show(false);		
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
+		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined");
 		//joined.show(2,false);		
 								
 		//datasetTmp1.unpersist();
