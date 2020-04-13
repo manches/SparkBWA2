@@ -309,10 +309,10 @@ public class BwaInterpreter {
 			 * is used.
 			 */
 			if ((numPartitions) <= options.getPartitionNumber()) {
-				LOG.info("["+this.getClass().getName()+"] :: Repartition with no sort");
+				LOG.info("["+this.getClass().getName()+"] :: Repartition with no sort"+"["+numPartitions+"]");
 			}
 			else {
-				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort");
+				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort"+"["+numPartitions+"]");
 			}
 
 			readsRDD = singleReadsKeyVal
@@ -392,15 +392,15 @@ public class BwaInterpreter {
 			//int numPartitions = pairedReadsRDD.partitions().size();  
 			int numPartitions = joined.rdd().getNumPartitions();   
 			/*
-			 * As in previous cases, the coalesce operation is not suitable
+			 * As in previous cases, the coalesce operation is not suitable 
 			 * if we want to achieve the maximum speedup, so, repartition
 			 * is used.
 			 */
 			if ((numPartitions) <= options.getPartitionNumber()) {
-				LOG.info("["+this.getClass().getName()+"] :: Repartition with no sort");
+				LOG.info("["+this.getClass().getName()+"] :: Repartition with no sort"+"["+numPartitions+"]"+"["+options.getPartitionNumber()+"]");
 			}
 			else {
-				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort");
+				LOG.info("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort"+"["+numPartitions+"]"+"["+options.getPartitionNumber()+"]");
 			}
 			
 			//readsRDD = pairedReadsRDD
