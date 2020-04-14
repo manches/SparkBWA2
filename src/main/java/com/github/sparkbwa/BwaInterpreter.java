@@ -214,7 +214,7 @@ public class BwaInterpreter {
         Row r = null;
         List<Row> rowList =  new ArrayList<Row>();
 
-		//LOG.info("["+this.getClass().getName()+"] :: Manches FILE: " + options.getInputPath());
+		LOG.info("["+this.getClass().getName()+"] :: Manches FILE: " + options.getInputPath());
 
         try {
         
@@ -225,9 +225,13 @@ public class BwaInterpreter {
             
             // read line by line
             while ((line1 = br.readLine()) != null) {
+            	LOG.info("["+this.getClass().getName()+"] :: Manches FILE: line1" + line1);
                 line2 = br.readLine();
+            	LOG.info("["+this.getClass().getName()+"] :: Manches FILE: line2" + line2);
                 line3 = br.readLine();
+            	LOG.info("["+this.getClass().getName()+"] :: Manches FILE: line3" + line3);
                 line4 = br.readLine();
+            	LOG.info("["+this.getClass().getName()+"] :: Manches FILE: line4" + line4);
                 i = i + 1;
         		r = RowFactory.create(i,line1,line2,line3,line4);
         		rowList.add(r);
