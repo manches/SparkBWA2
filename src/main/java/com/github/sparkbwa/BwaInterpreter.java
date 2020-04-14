@@ -214,7 +214,7 @@ public class BwaInterpreter {
         Row r = null;
         List<Row> rowList =  new ArrayList<Row>();
 
-		LOG.info("["+this.getClass().getName()+"] :: Manches FILE: " + options.getInputPath());
+		LOG.info("["+this.getClass().getName()+"] :: Manches FILE:  " + options.getInputPath());
 
         try {
         
