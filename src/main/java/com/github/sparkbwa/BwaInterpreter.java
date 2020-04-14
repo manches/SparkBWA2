@@ -214,7 +214,7 @@ public class BwaInterpreter {
         Row r = null;
         List<Row> rowList =  new ArrayList<Row>();
 
-		LOG.info("[loadFastqtoDS] :: Manches FILE:  " + options.getInputPath());
+		LOG.info("[loadFastqtoDS] :: Manches FILE:  START" );
 
         try {
         
