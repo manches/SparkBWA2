@@ -1,0 +1,12 @@
+com/github/sparkbwa/BwaPairedAlignmentDS.class
+com/github/sparkbwa/BwaAlignmentBase.class
+com/github/sparkbwa/BwaSingleAlignment.class
+com/github/sparkbwa/SparkBWA.class
+com/github/sparkbwa/BwaInterpreter.class
+com/github/sparkbwa/BwaOptions.class
+com/github/sparkbwa/BwaSeq.class
+com/github/sparkbwa/FASTQRecordGrouper.class
+com/github/sparkbwa/BwaJni.class
+com/github/sparkbwa/Bwa.class
+com/github/sparkbwa/BwaPairedAlignment.class
+com/github/sparkbwa/FASTQRecordCreator.class

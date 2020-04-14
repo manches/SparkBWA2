@@ -1,0 +1,12 @@
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/FASTQRecordGrouper.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaOptions.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/Bwa.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaInterpreter.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaAlignmentBase.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaPairedAlignmentDS.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaJni.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaSeq.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaPairedAlignment.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/FASTQRecordCreator.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/SparkBWA.java
+/var/tmp/sparkBWAManches/src/main/java/com/github/sparkbwa/BwaSingleAlignment.java
