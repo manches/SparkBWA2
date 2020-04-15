@@ -219,8 +219,8 @@ public class BwaInterpreter {
 			
 		JavaRDD<String> fastqLines = sc.textFile(pathToFastq);		
 		Dataset<Row> rowList = sc.createDataset(sc.textFile(pathToFastq).sliding(4, 4).map {
-		  case Array(id, seq, aux, qual) => (id, seq, aux, qual),schema
-		});
+		  case Array(id, seq, aux, qual) => (id, seq, aux, qual)
+		},schema);
 		
 				
 	    //DataFrame df = sqlContext.createDataFrame(rowRDD, schema);
