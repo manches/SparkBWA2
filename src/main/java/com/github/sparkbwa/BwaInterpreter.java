@@ -170,29 +170,34 @@ public class BwaInterpreter {
 		}
 	}
 
-	/**
-	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
-	 * @param ctx The JavaSparkContext to use
-	 * @param pathToFastq The path to the FASTQ file
-	 * @return A JavaPairRDD containing <Long Read ID, String Read>
-	 */
-	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
-		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+	public static Dataset<Row> zipWithIndex(Dataset<Row> df, Long offset, String indexName) {
+        Dataset<Row> dfWithPartitionId = df
+                .withColumn("partition_id", spark_partition_id())
+                .withColumn("inc_id", monotonically_increasing_id());
 
-		
-		//LOG.info("[ ] :: -------------------------------------------: ");
-		//fastqLines.zipWithIndex().foreach(rdd -> {
-		//LOG.info("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
-		//LOG.info("[ ] :: -------------------------------------------: ");
+        Object partitionOffsetsObject = dfWithPartitionId
+                .groupBy("partition_id")
+                .agg(count(lit(1)).alias("cnt"), first("inc_id").alias("inc_id"))
+                .orderBy("partition_id")
+                .select(col("partition_id"), sum("cnt").over(Window.orderBy("partition_id")).minus(col("cnt")).minus(col("inc_id")).plus(lit(offset).alias("cnt")))
+                .collect();
+        Row[] partitionOffsetsArray = ((Row[]) partitionOffsetsObject);
+        Map<Integer, Long> partitionOffsets = new HashMap<>();
+        for (int i = 0; i < partitionOffsetsArray.length; i++) {
+            partitionOffsets.put(partitionOffsetsArray[i].getInt(0), partitionOffsetsArray[i].getLong(1));
+        }
 
-    //});
-		
-		// Determine which FASTQ record the line belongs to.
-		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
+        UserDefinedFunction getPartitionOffset = udf(
+                (partitionId) -> partitionOffsets.get((Integer) partitionId), DataTypes.LongType
+        );
 
-		// Group group the lines which belongs to the same record, and concatinate them into a record.
-		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
-	}
+        return dfWithPartitionId
+                .withColumn("partition_offset", getPartitionOffset.apply(col("partition_id")))
+                .withColumn(indexName, col("partition_offset").plus(col("inc_id")))
+                .drop("partition_id", "partition_offset", "inc_id");
+    }
+	
+	
 	
 	/**
 	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
@@ -200,7 +205,43 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
+	//public static JavaPairRDD<Long, String> loadFastqtoDS(JavaSparkContext ctx, String pathToFastq) {
 	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {
+
+			
+	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
+	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
+	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
+	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList(field2, field3, field4, field5));
+
+	    //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);	
+			
+		JavaRDD<String> fastqLines = sc.textFile(pathToFastq);		
+		Dataset<Row> rowList = sc.createDataset(sc.textFile(pathToFastq).sliding(4, 4).map {
+		  case Array(id, seq, aux, qual) => (id, seq, aux, qual),schema
+		});
+		
+				
+	    //DataFrame df = sqlContext.createDataFrame(rowRDD, schema);
+		return rowList.zipWithIndex(rowList,1,"index");
+
+		//LOG.info("[ ] :: -------------------------------------------: ");
+		//fastqLines.zipWithIndex().foreach(rdd -> {
+		//LOG.info("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
+		//LOG.info("[ ] :: -------------------------------------------: ");
+
+    //});
+		
+		}
+	
+	/**
+	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
+	 * @param ctx The JavaSparkContext to use
+	 * @param pathToFastq The path to the FASTQ file
+	 * @return A JavaPairRDD containing <Long Read ID, String Read>
+	 */
+	public static Dataset<Row> loadFastqtoDS2(SQLContext sc, String pathToFastq, int index) {			
 
 		BufferedReader br = null;
 		FileSystem fs = null;
@@ -212,10 +253,12 @@ public class BwaInterpreter {
         String line4 = null;
         int i = 0;
         Row r = null;
+        Dataset<Row> 
         List<Row> rowList =  new ArrayList<Row>();
 
 		LOG.info("[loadFastqtoDS] :: Manches FILE:  START" );
-
+		
+		
         try {
         
            
@@ -264,6 +307,7 @@ public class BwaInterpreter {
         //data.show(false);
 
 		return sc.createDataFrame(rowList, schema);
+		
 	}
 
 
