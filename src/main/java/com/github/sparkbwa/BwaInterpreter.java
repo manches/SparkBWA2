@@ -224,7 +224,7 @@ public class BwaInterpreter {
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
 	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {
-		Dataset<Row> df = sc.read().load(pathToFastq);
+		Dataset<Row> df = sc.read().textFile(pathToFastq);
 		
 		LOG.info("[ ] :: -------------------------------------------: ");
 		df.printSchema();
