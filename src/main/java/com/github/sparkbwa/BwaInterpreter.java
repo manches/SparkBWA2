@@ -226,7 +226,9 @@ public class BwaInterpreter {
 	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {
 		Dataset<Row> df = sc.read().load(pathToFastq);
 		
+		LOG.info("[ ] :: -------------------------------------------: ");
 		df.printSchema();
+		LOG.info("[ ] :: -------------------------------------------: ");
 			  
 
 		// Determine which FASTQ record the line belongs to.
