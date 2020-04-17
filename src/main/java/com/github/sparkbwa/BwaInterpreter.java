@@ -50,6 +50,8 @@ import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.mllib.rdd.RDDFunctions;
 import org.apache.spark.rdd.RDD;
 import scala.Tuple2;
+import static org.apache.spark.sql.functions.*;
+import org.apache.spark.sql.*;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -197,6 +199,24 @@ public class BwaInterpreter {
                 .drop("partition_id", "partition_offset", "inc_id");
     }
 	
+	/**
+	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
+	 * @param ctx The JavaSparkContext to use
+	 * @param pathToFastq The path to the FASTQ file
+	 * @return A JavaPairRDD containing <Long Read ID, String Read>
+	 */
+	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {
+		Dataset<Row> df = sc.read().load(pathToFastq);
+		
+		df.printSchema();
+			  
+
+		// Determine which FASTQ record the line belongs to.
+		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
+
+		// Group group the lines which belongs to the same record, and concatinate them into a record.
+		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
+	}	
 	
 	
 	/**
@@ -206,7 +226,7 @@ public class BwaInterpreter {
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
 	//public static JavaPairRDD<Long, String> loadFastqtoDS(JavaSparkContext ctx, String pathToFastq) {
-	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {
+	public static Dataset<Row> loadFastqtoDS3(SQLContext sc, String pathToFastq, int index) {
 
 			
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
@@ -218,10 +238,11 @@ public class BwaInterpreter {
 	    //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);	
 			
 		JavaRDD<String> fastqLines = sc.textFile(pathToFastq);		
-		Dataset<Row> rowList = sc.createDataset(sc.textFile(pathToFastq).sliding(4, 4).map {
+		Dataset<Row> rowList = sc.createDataset(sc.textFile(pathToFastq).sliding(4, 4).map()
 		  case Array(id, seq, aux, qual) => (id, seq, aux, qual)
-		},schema);
-		
+		),schema);
+		Dataset<Row> years = file8Data.map((MapFunction<Row, Integer>) row -> row.<Integer>getAs("YEAR"), Encoders.INT());
+
 				
 	    //DataFrame df = sqlContext.createDataFrame(rowRDD, schema);
 		return rowList.zipWithIndex(rowList,1,"index");
@@ -232,6 +253,25 @@ public class BwaInterpreter {
 		//LOG.info("[ ] :: -------------------------------------------: ");
 
     //});
+		
+		
+		/*
+		 
+	public static Dataset<Row> zipWithIndex(Dataset<Row> df, String name) {
+    JavaRDD<Row> rdd = df.javaRDD().zipWithIndex().map(t -> {
+        Row r = t._1;
+        Long index = t._2 + 1;
+        ArrayList<Object> list = new ArrayList<>();
+        r.toSeq().iterator().foreach(x -> list.add(x));
+        list.add(index);
+        return RowFactory.create(list);
+    });
+    StructType newSchema = df.schema()
+            .add(new StructField(name, DataTypes.LongType, true, null));
+    return df.sparkSession().createDataFrame(rdd, newSchema);
+}
+
+		 */
 		
 		}
 	
