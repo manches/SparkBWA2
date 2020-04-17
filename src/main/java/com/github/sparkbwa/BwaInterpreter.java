@@ -171,7 +171,8 @@ public class BwaInterpreter {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/*
 	public static Dataset<Row> zipWithIndex(Dataset<Row> df, Long offset, String indexName) {
         Dataset<Row> dfWithPartitionId = df
                 .withColumn("partition_id", spark_partition_id())
@@ -198,6 +199,8 @@ public class BwaInterpreter {
                 .withColumn(indexName, col("partition_offset").plus(col("inc_id")))
                 .drop("partition_id", "partition_offset", "inc_id");
     }
+	*/
+	
 	
 	/**
 	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
