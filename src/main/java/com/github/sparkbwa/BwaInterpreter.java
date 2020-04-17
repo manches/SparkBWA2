@@ -224,7 +224,7 @@ public class BwaInterpreter {
 	 * @param ctx The JavaSparkContext to use
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
-	 */
+
 	//public static JavaPairRDD<Long, String> loadFastqtoDS(JavaSparkContext ctx, String pathToFastq) {
 	public static Dataset<Row> loadFastqtoDS3(SQLContext sc, String pathToFastq, int index) {
 
@@ -271,10 +271,13 @@ public class BwaInterpreter {
     return df.sparkSession().createDataFrame(rdd, newSchema);
 }
 
-		 */
+		 
 		
 		}
-	
+	*/
+		
+		
+		
 	/**
 	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
 	 * @param ctx The JavaSparkContext to use
