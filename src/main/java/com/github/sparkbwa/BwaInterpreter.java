@@ -296,7 +296,7 @@ public class BwaInterpreter {
         String line4 = null;
         int i = 0;
         Row r = null;
-        Dataset<Row> 
+        //Dataset<Row> 
         List<Row> rowList =  new ArrayList<Row>();
 
 		LOG.info("[loadFastqtoDS] :: Manches FILE:  START" );
