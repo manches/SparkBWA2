@@ -306,7 +306,8 @@ public class BwaInterpreter {
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
-	    Dataset<Row> dataset_aux = sparkSession.createDataFrame(rowList, structure);
+	    Dataset<Row> dataset_aux = this.sparkSession.createDataFrame(rowList, structure);
+	    Dataset<Row> dataset_final = null;
 
 		
         try {
@@ -328,10 +329,10 @@ public class BwaInterpreter {
                 i = i + 1;
         		r = RowFactory.create(i,line1,line2,line3,line4);
         		rowList.add(r);
-        	    Dataset<Row> dataset_temp = sparkSession.createDataFrame(rowList, structure);
+        	    Dataset<Row> dataset_temp = this.sparkSession.createDataFrame(rowList, structure);
         	    rowList.clear();
                 r = null;
-                dataset_final= dataset_aux.union(dataset_temp);
+                dataset_final = dataset_aux.union(dataset_temp);
             }
 
         } catch (IOException e) {
