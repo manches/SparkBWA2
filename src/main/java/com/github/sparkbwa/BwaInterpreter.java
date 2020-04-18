@@ -223,7 +223,7 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {
+	public static Dataset<Row> loadFastqtoDS2(SQLContext sc, String pathToFastq, int index) {
 		Dataset<Row> df = sc.read().textFile(pathToFastq);
 		
 		LOG.info("[ ] :: -------------------------------------------: ");
@@ -305,7 +305,7 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static Dataset<Row> loadFastqtoDS2(SQLContext sc, String pathToFastq, int index) {			
+	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {			
 
 		BufferedReader br = null;
 		FileSystem fs = null;
@@ -317,11 +317,18 @@ public class BwaInterpreter {
         String line4 = null;
         int i = 0;
         Row r = null;
-        //Dataset<Row> 
+
         List<Row> rowList =  new ArrayList<Row>();
 
 		LOG.info("[loadFastqtoDS] :: Manches FILE:  START" );
-		
+	    StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
+	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
+	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
+	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
+	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
+	    Dataset<Row> dataset_aux = sparkSession.createDataFrame(rowList, structure);
+
 		
         try {
         
@@ -342,7 +349,10 @@ public class BwaInterpreter {
                 i = i + 1;
         		r = RowFactory.create(i,line1,line2,line3,line4);
         		rowList.add(r);
-                r = null;                
+        	    Dataset<Row> dataset_temp = sparkSession.createDataFrame(rowList, structure);
+        	    rowList.clear();
+                r = null;
+                dataset_final= dataset_aux.union(dataset_temp);
             }
 
         } catch (IOException e) {
@@ -360,18 +370,11 @@ public class BwaInterpreter {
         }        
 
         
-        StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
-        StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
-        StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
-        StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
-        StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
-        StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
-
+  
         //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
         //data.show(false);
 
-		return sc.createDataFrame(rowList, schema);
-		
+		return dataset_final;
 	}
 
 
