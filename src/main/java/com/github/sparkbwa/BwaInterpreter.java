@@ -299,7 +299,6 @@ public class BwaInterpreter {
 
         List<Row> rowList =  new ArrayList<Row>();
 
-		LOG.info("[loadFastqtoDS] :: Manches FILE:  START" );
 	    StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
@@ -319,13 +318,9 @@ public class BwaInterpreter {
             
             // read line by line
             while ((line1 = br.readLine()) != null) {
-            	LOG.info("[loadFastqtoDS] :: Manches FILE: line1" + line1);
                 line2 = br.readLine();
-            	LOG.info("[loadFastqtoDS] :: Manches FILE: line2" + line2);
                 line3 = br.readLine();
-            	LOG.info("[loadFastqtoDS] :: Manches FILE: line3" + line3);
                 line4 = br.readLine();
-            	LOG.info("[loadFastqtoDS] :: Manches FILE: line4" + line4);
                 i = i + 1;
         		r = RowFactory.create(i,line1,line2,line3,line4);
         		rowList.add(r);
