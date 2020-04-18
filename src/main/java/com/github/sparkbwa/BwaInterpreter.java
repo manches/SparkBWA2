@@ -284,7 +284,7 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static Dataset<Row> loadFastqtoDS(SQLContext sc, String pathToFastq, int index) {			
+	public static Dataset<Row> loadFastqtoDS(SparkSession ss, String pathToFastq, int index) {			
 
 		BufferedReader br = null;
 		FileSystem fs = null;
@@ -306,7 +306,7 @@ public class BwaInterpreter {
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
-	    Dataset<Row> dataset_aux = this.sparkSession.createDataFrame(rowList, structure);
+	    Dataset<Row> dataset_aux = ss.createDataFrame(rowList, schema);
 	    Dataset<Row> dataset_final = null;
 
 		
@@ -329,7 +329,7 @@ public class BwaInterpreter {
                 i = i + 1;
         		r = RowFactory.create(i,line1,line2,line3,line4);
         		rowList.add(r);
-        	    Dataset<Row> dataset_temp = this.sparkSession.createDataFrame(rowList, structure);
+        	    Dataset<Row> dataset_temp = ss.createDataFrame(rowList, schema);
         	    rowList.clear();
                 r = null;
                 dataset_final = dataset_aux.union(dataset_temp);
@@ -443,10 +443,10 @@ public class BwaInterpreter {
 		//JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		//JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		
-		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sqlContext, options.getInputPath(),1);
+		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
 
-		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sqlContext, options.getInputPath2(),2);
+		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sparkSession, options.getInputPath2(),2);
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1");
 		
 		//datasettmpDS1.show(false);
