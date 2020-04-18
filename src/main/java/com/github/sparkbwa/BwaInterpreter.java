@@ -596,7 +596,7 @@ public class BwaInterpreter {
 		
 		
 	/*	
-		return readsRDD
+		return readsRDD 
 				.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 				.collect();
 	*/	
