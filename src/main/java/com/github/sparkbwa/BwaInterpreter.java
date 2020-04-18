@@ -217,27 +217,6 @@ public class BwaInterpreter {
 		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
 	}
 	
-	/**
-	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
-	 * @param ctx The JavaSparkContext to use
-	 * @param pathToFastq The path to the FASTQ file
-	 * @return A JavaPairRDD containing <Long Read ID, String Read>
-	 */
-	public static Dataset<Row> loadFastqtoDS2(SQLContext sc, String pathToFastq, int index) {
-		Dataset<Row> df = sc.read().textFile(pathToFastq);
-		
-		LOG.info("[ ] :: -------------------------------------------: ");
-		df.printSchema();
-		LOG.info("[ ] :: -------------------------------------------: ");
-			  
-
-		// Determine which FASTQ record the line belongs to.
-		//JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
-
-		// Group group the lines which belongs to the same record, and concatinate them into a record.
-		//return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
-		return null;
-	}	
 	
 	
 	/**
