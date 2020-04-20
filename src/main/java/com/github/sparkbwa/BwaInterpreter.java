@@ -316,7 +316,7 @@ public class BwaInterpreter {
              fs = FileSystem.get(new Configuration());
              br = new BufferedReader(new InputStreamReader(fs.open(pt)));
             
-            // read line by line
+            // read line by line 
             while ((line1 = br.readLine()) != null) {
                 line2 = br.readLine();
                 line3 = br.readLine();
