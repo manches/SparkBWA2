@@ -65,14 +65,18 @@ public abstract class BwaAlignmentBase implements Serializable {
 
 			this.tmpDir = bwaInterpreter.getTmpDir();
 		}
+		this.LOG.info("["+this.getClass().getName()+"] :: MANCHESMANCHES - " + this.tmpDir);
+
 		
 		if (this.tmpDir == null || this.tmpDir == "null") {
 			this.tmpDir = context.hadoopConfiguration().get("hadoop.tmp.dir");
 		}
+		this.LOG.info("["+this.getClass().getName()+"] :: MANCHESMANCHES - " + this.tmpDir);
 
 		if (this.tmpDir.startsWith("file:")) {
 			this.tmpDir = this.tmpDir.replaceFirst("file:", "");
 		}
+		this.LOG.info("["+this.getClass().getName()+"] :: MANCHESMANCHES - " + this.tmpDir);
 
 		File tmpFileDir = new File(this.tmpDir);
 
