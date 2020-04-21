@@ -52,6 +52,10 @@ import org.apache.spark.rdd.RDD;
 import scala.Tuple2;
 import static org.apache.spark.sql.functions.*;
 import org.apache.spark.sql.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -594,7 +598,7 @@ public class BwaInterpreter {
 
 		FileSystem fs = FileSystem.get(this.conf);
 		InputStream is = fs.open(new Path("hdfs:/user/hdadmin/hg38.fna"));
-		OutputStream os = new BufferedOutputStream(new FileOutputStream("/tmp/hg38.fna)); // Data set is getting copied into local path in the file sysetm through buffer mechanism
+		OutputStream os = new BufferedOutputStream(new FileOutputStream("/tmp/hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
 		IOUtils.copyBytes(is, os, conf);
         
 		return listOne;
