@@ -614,7 +614,7 @@ public class BwaInterpreter {
         try {
         	FileSystem fs = FileSystem.get(this.conf);
         	InputStream is = fs.open(new Path("hdfs:/user/hdadmin/hg38.fna"));
-    		OutputStream os = new BufferedOutputStream(new FileOutputStream("/tmp/hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
+    		OutputStream os = new BufferedOutputStream(new FileOutputStream("hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
     		IOUtils.copyBytes(is, os, conf);
         } catch (FileNotFoundException e) {
 			e.printStackTrace();
