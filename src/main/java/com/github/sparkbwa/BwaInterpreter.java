@@ -610,10 +610,21 @@ public class BwaInterpreter {
         List<String> listOne = readsDS
 				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
 
-		FileSystem fs = FileSystem.get(this.conf);
-		InputStream is = fs.open(new Path("hdfs:/user/hdadmin/hg38.fna"));
-		OutputStream os = new BufferedOutputStream(new FileOutputStream("/tmp/hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
-		IOUtils.copyBytes(is, os, conf);
+        try {
+        	FileSystem fs = FileSystem.get(this.conf);
+        	InputStream is = fs.open(new Path("hdfs:/user/hdadmin/hg38.fna"));
+    		OutputStream os = new BufferedOutputStream(new FileOutputStream("/tmp/hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
+    		IOUtils.copyBytes(is, os, conf);
+        } catch (FileNotFoundException e) {
+			e.printStackTrace();
+			LOG.error("["+this.getClass().getName()+"] "+e.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+			LOG.error("["+this.getClass().getName()+"] "+e.toString());
+		} 
+
+        
+	
         
 		return listOne;
 		
