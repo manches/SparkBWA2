@@ -17,8 +17,8 @@ BUILD_DIR = build
 #SPARK_PACKAGE = spark-1.6.1-bin-hadoop2.6.tgz
 
 # JAVA variables #######
-ifndef JAVA_HOME
-JAVA_HOME = /usr/lib/jvm/java
+#ifndef JAVA_HOME
+#JAVA_HOME = /usr/lib/jvm/java
 JAVA_HOME_INCLUDES = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 else
 JAVA_HOME_INCLUDES = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
