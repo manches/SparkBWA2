@@ -71,7 +71,6 @@ import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import java.io.FileNotFoundException;
-import java.nio.file;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -613,18 +612,17 @@ public class BwaInterpreter {
 
         File curDir = new File(".");
   
-        File[] filesList = curDir.listFiles();
-        for(File f : filesList){
-            if(f.isDirectory())
-                System.out.println(f.getName());
-            if(f.isFile()){
-                System.out.println(f.getName());
-            }
-        }
-        String userDirectory = Paths.get("")
-                .toAbsolutePath()
-                .toString(); 
+        String userDirectory = System.getProperty("user.dir");
+
         System.out.println(userDirectory);
+
+        // current directory
+        File dir = new File (".");
+        String[] strs = dir.list();
+
+        for (int i = 0; i < strs.length; i++) {
+          System.out.println (strs[i]);
+        }
         
         try {
         	FileSystem fs = FileSystem.get(this.conf);
