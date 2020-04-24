@@ -623,7 +623,7 @@ public class BwaInterpreter {
         }
         String userDirectory = Paths.get("")
                 .toAbsolutePath()
-                .toString();
+                .toString(); 
         System.out.println(userDirectory);
         
         try {
