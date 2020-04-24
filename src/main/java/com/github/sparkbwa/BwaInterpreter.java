@@ -74,6 +74,7 @@ import java.io.FileNotFoundException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import java.io.File;
 
 import org.apache.spark.api.java.function.Function;
 import java.util.AbstractCollection;
