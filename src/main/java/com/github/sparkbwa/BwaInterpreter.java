@@ -71,7 +71,7 @@ import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import java.io.FileNotFoundException;
-
+import java.nio.file
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -611,6 +611,21 @@ public class BwaInterpreter {
         List<String> listOne = readsDS
 				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
 
+        File curDir = new File(".");
+  
+        File[] filesList = curDir.listFiles();
+        for(File f : filesList){
+            if(f.isDirectory())
+                System.out.println(f.getName());
+            if(f.isFile()){
+                System.out.println(f.getName());
+            }
+        }
+        String userDirectory = Paths.get("")
+                .toAbsolutePath()
+                .toString();
+        System.out.println(userDirectory);
+        
         try {
         	FileSystem fs = FileSystem.get(this.conf);
         	InputStream is = fs.open(new Path("hdfs:/user/hdadmin/hg38.fna"));
