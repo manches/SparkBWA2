@@ -160,6 +160,7 @@ public class BwaInterpreter {
 			fs.close();
 		} catch (IOException e) {
 			LOG.error(e.toString());
+			
 			e.printStackTrace();
 		}
 	}

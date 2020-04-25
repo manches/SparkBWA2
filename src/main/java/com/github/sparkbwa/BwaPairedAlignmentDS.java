@@ -67,25 +67,22 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
         System.out.println("JAVA");
         System.out.println(userDirectory);
 
-        // current directory
-        File dir = new File (".");
-        String[] strs = dir.list();
 
-        for (int i = 0; i < strs.length; i++) {
-          System.out.println("JAVA");
-          System.out.println (strs[i]);
-        }
 		
 		String fastqFileName1;
 		String fastqFileName2;
 
 		if(this.tmpDir.lastIndexOf("/") == this.tmpDir.length()-1) {
-			fastqFileName1 = this.tmpDir + this.appId + "-DF" + taskID + "_1";
-			fastqFileName2 = this.tmpDir + this.appId + "-DF" + taskID + "_2";
+			//fastqFileName1 = this.tmpDir + this.appId + "-DF" + taskID + "_1";
+			//fastqFileName2 = this.tmpDir + this.appId + "-DF" + taskID + "_2";
+			fastqFileName1 = userDirectory + this.appId + "-DF" + taskID + "_1";
+			fastqFileName2 = userDirectory + this.appId + "-DF" + taskID + "_2";
 		}
 		else {
-			fastqFileName1 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_1";
-			fastqFileName2 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_2";
+			//fastqFileName1 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_1";
+			//fastqFileName2 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_2";
+			fastqFileName1 = userDirectory + "/" + this.appId + "-DF" + taskID + "_1";
+			fastqFileName2 = userDirectory + "/" + this.appId + "-DF" + taskID + "_2";
 		}
 
 
@@ -160,7 +157,15 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 
 			LOG.info("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName2);
 			FastqFile2.delete();
+	        // current directory
+	        File dir = new File (".");
+	        String[] strs = dir.list();
 
+	        for (int i = 0; i < strs.length; i++) {
+	          System.out.println("JAVA");
+	          System.out.println (strs[i]);
+	        }
+	        
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			LOG.error("["+this.getClass().getName()+"] "+e.toString());
