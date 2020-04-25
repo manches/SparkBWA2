@@ -611,19 +611,7 @@ public class BwaInterpreter {
         List<String> listOne = readsDS
 				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
 
-        File curDir = new File(".");
-  
-        String userDirectory = System.getProperty("user.dir");
 
-        System.out.println(userDirectory);
-
-        // current directory
-        File dir = new File (".");
-        String[] strs = dir.list();
-
-        for (int i = 0; i < strs.length; i++) {
-          System.out.println (strs[i]);
-        }
         
         try {
         	FileSystem fs = FileSystem.get(this.conf);

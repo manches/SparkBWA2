@@ -27,7 +27,7 @@ import scala.Tuple2;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-
+import java.io.File;
 /**
  * Class to perform the alignment over a split from the RDD of paired reads
  *
@@ -60,6 +60,20 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 		int taskID = (int) tc.taskAttemptId();
 		LOG.info("["+this.getClass().getName()+"] :: TaskID: " + taskID);
 
+        File curDir = new File(".");
+        
+        String userDirectory = System.getProperty("user.dir");
+
+        System.out.println(userDirectory);
+
+        // current directory
+        File dir = new File (".");
+        String[] strs = dir.list();
+
+        for (int i = 0; i < strs.length; i++) {
+          System.out.println (strs[i]);
+        }
+		
 		String fastqFileName1;
 		String fastqFileName2;
 
