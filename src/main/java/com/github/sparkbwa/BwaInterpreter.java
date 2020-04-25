@@ -457,17 +457,22 @@ public class BwaInterpreter {
 		//JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
 		//JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
 		//JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
-		
+        System.out.println("datasettmpDS1");
 		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
+        System.out.println("datasettmpDS2");
 
 		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sparkSession, options.getInputPath2(),2);
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1");
 		
 		//datasettmpDS1.show(false);
-		//datasettmpDS2.show(false);		
+		//datasettmpDS2.show(false);	
+        System.out.println("join");
+
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.info("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
+        System.out.println("complete");
+
 		//joined.show(2,false);		
 								
 		//datasetTmp1.unpersist();
