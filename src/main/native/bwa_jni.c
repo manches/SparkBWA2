@@ -68,7 +68,8 @@ JNIEXPORT jint JNICALL Java_com_github_sparkbwa_BwaJni_bwa_1jni (JNIEnv *env, jo
     		{
         	while ((dir = readdir(d)) != NULL)
         		{
-        		printf("%s\n", dir->d_name);
+     			fprintf(stderr, "[%s] DIRECTORY '%s'\n",__func__,dir->d_name);
+
         		}
         	closedir(d);
     		}

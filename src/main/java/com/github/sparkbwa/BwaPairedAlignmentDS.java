@@ -64,6 +64,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
         
         String userDirectory = System.getProperty("user.dir");
 
+        System.out.println("JAVA");
         System.out.println(userDirectory);
 
         // current directory
@@ -71,6 +72,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
         String[] strs = dir.list();
 
         for (int i = 0; i < strs.length; i++) {
+          System.out.println("JAVA");
           System.out.println (strs[i]);
         }
 		
