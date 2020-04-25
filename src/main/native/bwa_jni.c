@@ -63,7 +63,7 @@ JNIEXPORT jint JNICALL Java_com_github_sparkbwa_BwaJni_bwa_1jni (JNIEnv *env, jo
         	}
         DIR *d;
     	struct dirent *dir;
-    	d = opendir(".");
+    	d = opendir("./tmp");
     	if (d)
     		{
         	while ((dir = readdir(d)) != NULL)
