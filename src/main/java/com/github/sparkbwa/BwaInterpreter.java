@@ -476,7 +476,6 @@ public class BwaInterpreter {
 
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
-        System.out.println("complete");
 
 		//joined.show(2,false);		
 								
@@ -618,12 +617,10 @@ public class BwaInterpreter {
         StructField field8 = DataTypes.createStructField("aux2", DataTypes.StringType, true);
         StructField field9 = DataTypes.createStructField("quality2", DataTypes.StringType, true);
         StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5, field6, field7, field8, field9));
-        System.out.println("Pair");
 
         List<String> listOne = readsDS
 				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
 
-        System.out.println("hdfs");
 
      /*   
         try {
@@ -642,7 +639,6 @@ public class BwaInterpreter {
 		} 
 
         */
-        System.out.println("afterhdfs");
 
         
 		return listOne;
