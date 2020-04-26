@@ -333,7 +333,9 @@ public class BwaInterpreter {
         
            
              pt = new Path(pathToFastq);
-             fs = FileSystem.get(new Configuration());
+             Configuration conf = new Configuration();
+             conf.setBoolean("fs.hdfs.impl.disable.cache", true);
+             fs = FileSystem.get(conf);
              br = new BufferedReader(new InputStreamReader(fs.open(pt)));
             
             // read line by line  
@@ -411,7 +413,7 @@ public class BwaInterpreter {
 		// No Sort with partitioning
 		else {
 			LOG.error("["+this.getClass().getName()+"] :: No sort with partitioning");
-			int numPartitions = 0;
+			int numPartitions = singleReadsKeyVal.partitions().size();
 
 			/*
 			 * As in previous cases, the coalesce operation is not suitable
