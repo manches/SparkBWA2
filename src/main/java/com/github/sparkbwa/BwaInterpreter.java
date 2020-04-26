@@ -328,12 +328,13 @@ public class BwaInterpreter {
 	    Dataset<Row> dataset_aux = ss.createDataFrame(rowList, schema);
 	    Dataset<Row> dataset_final = null;
 
+	    Configuration conf2 = this.conf;
 		
         try {
         
            
              pt = new Path(pathToFastq);
-             fs = FileSystem.get(this.conf);
+             fs = FileSystem.get(conf2);
              br = new BufferedReader(new InputStreamReader(fs.open(pt)));
             
             // read line by line  
