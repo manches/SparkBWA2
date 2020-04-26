@@ -411,7 +411,7 @@ public class BwaInterpreter {
 		// No Sort with partitioning
 		else {
 			LOG.error("["+this.getClass().getName()+"] :: No sort with partitioning");
-			int numPartitions = singleReadsKeyVal.partitions().size();
+			int numPartitions = 0;
 
 			/*
 			 * As in previous cases, the coalesce operation is not suitable
