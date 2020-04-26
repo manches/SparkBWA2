@@ -55,10 +55,10 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 	public Iterator<String> call(Iterator<Row> arg0) throws Exception {
 
 		// STEP 1: Input fastq reads tmp file creation
-		LOG.info("["+this.getClass().getName()+"] :: Tmp dir: " + this.tmpDir);
+		LOG.error("["+this.getClass().getName()+"] :: Tmp dir: " + this.tmpDir);
 		TaskContext tc = TaskContext.get();
 		int taskID = (int) tc.taskAttemptId();
-		LOG.info("["+this.getClass().getName()+"] :: TaskID: " + taskID);
+		LOG.error("["+this.getClass().getName()+"] :: TaskID: " + taskID);
 
         File curDir = new File(".");
         
@@ -86,8 +86,8 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 		}
 
 
-		LOG.info("["+this.getClass().getName()+"] :: Writing file: " + fastqFileName1);
-		LOG.info("["+this.getClass().getName()+"] :: Writing file: " + fastqFileName2);
+		LOG.error("["+this.getClass().getName()+"] :: Writing file: " + fastqFileName1);
+		LOG.error("["+this.getClass().getName()+"] :: Writing file: " + fastqFileName2);
 
 		File FastqFile1 = new File(fastqFileName1);
 		File FastqFile2 = new File(fastqFileName2);
@@ -114,14 +114,14 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			while (arg0.hasNext()) {
 				
 				newFastqRead = arg0.next();
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier1 " + newFastqRead.<String>getAs("identifier1"));
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence1 " + newFastqRead.<String>getAs("sequence1"));
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux1 " + newFastqRead.<String>getAs("aux1"));
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality1 " + newFastqRead.<String>getAs("quality1"));
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: identifier2 " + newFastqRead.<String>getAs("identifier2"));
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: sequence2 " + newFastqRead.<String>getAs("sequence2"));
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: aux2 " + newFastqRead.<String>getAs("aux2"));
-				//LOG.info("["+this.getClass().getName()+"] :: newFastqRead: quality2 " + newFastqRead.<String>getAs("quality2"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: identifier1 " + newFastqRead.<String>getAs("identifier1"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: sequence1 " + newFastqRead.<String>getAs("sequence1"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: aux1 " + newFastqRead.<String>getAs("aux1"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: quality1 " + newFastqRead.<String>getAs("quality1"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: identifier2 " + newFastqRead.<String>getAs("identifier2"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: sequence2 " + newFastqRead.<String>getAs("sequence2"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: aux2 " + newFastqRead.<String>getAs("aux2"));
+				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: quality2 " + newFastqRead.<String>getAs("quality2"));
 
 				bw1.write(newFastqRead.<String>getAs("identifier1"));
 				bw1.newLine();
@@ -152,10 +152,10 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			returnedValues = this.runAlignmentProcess(taskID, fastqFileName1, fastqFileName2);
 
 			// Delete temporary files, as they have now been copied to the output directory
-			LOG.info("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName1);
+			LOG.error("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName1);
 			FastqFile1.delete();
 
-			LOG.info("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName2);
+			LOG.error("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName2);
 			FastqFile2.delete();
 	        // current directory
 	        File dir = new File (".");
