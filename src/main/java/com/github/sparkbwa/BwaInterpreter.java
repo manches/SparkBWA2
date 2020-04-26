@@ -621,7 +621,9 @@ public class BwaInterpreter {
 
         
         try {
-        	FileSystem fs = FileSystem.get(this.conf);
+            Configuration conf = new Configuration();
+            conf.setBoolean("fs.hdfs.impl.disable.cache", true);
+        	FileSystem fs = FileSystem.get(conf);
         	InputStream is = fs.open(new Path("hdfs:/user/curso105/hg38.fna"));
     		OutputStream os = new BufferedOutputStream(new FileOutputStream("hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
     		IOUtils.copyBytes(is, os, conf);
