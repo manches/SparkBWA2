@@ -162,8 +162,8 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 	          System.out.println (strs[i]);
 	        }
 	        
-	        File dir = new File (".");
-	        String[] strs = dir.list();
+	        dir = new File (".");
+	        strs = dir.list();
 
 	        for (int i = 0; i < strs.length; i++) {
 	          System.out.println("JAVAFINISH222222");
