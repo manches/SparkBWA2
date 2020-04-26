@@ -125,7 +125,6 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			while (arg0.hasNext()) {
 				
 				System.out.println("LINE");
-				System.out.println(newFastqRead.toString());
 				newFastqRead = arg0.next();
 				
 
