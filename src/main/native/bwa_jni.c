@@ -61,18 +61,18 @@ JNIEXPORT jint JNICALL Java_com_github_sparkbwa_BwaJni_bwa_1jni (JNIEnv *env, jo
         		algorithm = argvTmp[i];
         		fprintf(stderr, "[%s] Algorithm found %d '%s'\n",__func__,i, algorithm);
         	}
-        DIR *d;
-    	struct dirent *dir;
-    	d = opendir("/tmp");
-    	if (d)
-    		{
-        	while ((dir = readdir(d)) != NULL)
-        		{
-     			fprintf(stderr, "[%s] DIRECTORY '%s'\n",__func__,dir->d_name);
-
-        		}
-        	closedir(d);
-    		}
+        //DIR *d;
+    	//struct dirent *dir;
+    	//d = opendir("/tmp");
+    	//if (d)
+    	//	{
+        // 	while ((dir = readdir(d)) != NULL)
+        // 		{
+     	//		fprintf(stderr, "[%s] DIRECTORY '%s'\n",__func__,dir->d_name);
+        //
+        //		}
+        //	closedir(d);
+    	//	}
 		//If it is the mem algorithm and the -f option has been set in the previous argument, we get the output file name.
 		if(getFilename == 1){
 			//strcpy(output,argvTmp[i]);
