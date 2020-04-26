@@ -43,6 +43,7 @@ public abstract class BwaAlignmentBase implements Serializable {
 	protected String appId		= "";
 	protected String tmpDir		= "";
 	protected Bwa bwaInterpreter;
+	protected Configuration conf;
 
 	/**
 	* Constructor for this class
@@ -57,6 +58,7 @@ public abstract class BwaAlignmentBase implements Serializable {
 		this.appName		= context.appName();
 		this.tmpDir			= context.getLocalProperty("spark.local.dir");
 		this.bwaInterpreter = bwaInterpreter;
+		this.conf			= context.hadoopConfiguration();
 
 		//We set the tmp dir
 		if ((this.tmpDir == null || this.tmpDir == "null")

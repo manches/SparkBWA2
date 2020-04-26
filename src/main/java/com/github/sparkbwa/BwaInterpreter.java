@@ -333,9 +333,7 @@ public class BwaInterpreter {
         
            
              pt = new Path(pathToFastq);
-             Configuration conf = new Configuration();
-             conf.setBoolean("fs.hdfs.impl.disable.cache", true);
-             fs = FileSystem.get(conf);
+             fs = FileSystem.get(this.conf);
              br = new BufferedReader(new InputStreamReader(fs.open(pt)));
             
             // read line by line  
@@ -620,20 +618,7 @@ public class BwaInterpreter {
         System.out.println("hdfs");
 
         
-        try {
-            Configuration conf = new Configuration();
-            conf.setBoolean("fs.hdfs.impl.disable.cache", true);
-        	FileSystem fs = FileSystem.get(conf);
-        	InputStream is = fs.open(new Path("hdfs:/user/curso105/hg38.fna"));
-    		OutputStream os = new BufferedOutputStream(new FileOutputStream("hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
-    		IOUtils.copyBytes(is, os, conf);
-        } catch (FileNotFoundException e) {
-			e.printStackTrace();
-			LOG.error("["+this.getClass().getName()+"] "+e.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-			LOG.error("["+this.getClass().getName()+"] "+e.toString());
-		} 
+
 
         
         System.out.println("afterhdfs");
