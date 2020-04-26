@@ -352,7 +352,7 @@ public class BwaInterpreter {
                 dataset_final = dataset_aux.union(dataset_temp);
                 dataset_aux = dataset_final;
                 dataset_final.show();
-                System.out.println("--------------------------------------------------------------------");
+                System.out.println("--------------------------------------------------------------------------------------------------------");
                 dataset_aux.show();
           
             }
