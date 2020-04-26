@@ -350,6 +350,7 @@ public class BwaInterpreter {
         	    rowList.clear();
                 r = null;
                 dataset_final = dataset_aux.union(dataset_temp);
+                dataset_aux = dataset_final;
             }
 
         } catch (IOException e) {
