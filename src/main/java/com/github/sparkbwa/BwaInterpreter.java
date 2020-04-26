@@ -351,10 +351,10 @@ public class BwaInterpreter {
                 r = null;
                 dataset_final = dataset_aux.union(dataset_temp);
                 dataset_aux = dataset_final;
-                System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
-                dataset_final.show(20, false);
-                System.out.println("--------------------------------------------------------------------------------------------------------");
-                dataset_aux.show(20, false);
+                //System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
+                //dataset_final.show(20, false);
+                //System.out.println("--------------------------------------------------------------------------------------------------------");
+                //dataset_aux.show(20, false);
           
             }
 
