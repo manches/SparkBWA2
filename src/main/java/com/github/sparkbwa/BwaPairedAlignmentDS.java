@@ -122,8 +122,11 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			Row newFastqRead = null;
 
 			while (arg0.hasNext()) {
-				System.out.println("hasnext");
+				
 				newFastqRead = arg0.next();
+				
+				System.out.println("LINE");
+				System.out.println(newFastqRead.toString());
 				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: identifier1 " + newFastqRead.<String>getAs("identifier1"));
 				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: sequence1 " + newFastqRead.<String>getAs("sequence1"));
 				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: aux1 " + newFastqRead.<String>getAs("aux1"));
