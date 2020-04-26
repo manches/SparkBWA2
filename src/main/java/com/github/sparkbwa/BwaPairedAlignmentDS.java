@@ -153,7 +153,24 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 				
 			}
 			
-			bw1.close();
+			// current directory
+	        File dir = new File ("/tmp");
+	        String[] strs = dir.list();
+
+	        for (int i = 0; i < strs.length; i++) {
+	          System.out.println("JAVAFINISH");
+	          System.out.println (strs[i]);
+	        }
+	        
+	        File dir = new File (".");
+	        String[] strs = dir.list();
+
+	        for (int i = 0; i < strs.length; i++) {
+	          System.out.println("JAVAFINISH222222");
+	          System.out.println (strs[i]);
+	        }
+	        
+	        bw1.close();
 			bw2.close();
 
 			arg0 = null;
@@ -168,14 +185,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			LOG.error("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName2);
 			FastqFile2.delete();
 	        
-			// current directory
-	        File dir = new File ("/tmp");
-	        String[] strs = dir.list();
 
-	        for (int i = 0; i < strs.length; i++) {
-	          System.out.println("JAVAFINISH");
-	          System.out.println (strs[i]);
-	        }
 	        
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
