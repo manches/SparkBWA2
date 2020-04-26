@@ -78,22 +78,6 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
         System.out.println("JAVA");
         System.out.println(userDirectory);
 
-        try {
-        	FileSystem fs = FileSystem.get(this.conf);
-        	String infile = "hdfs:/user/curso105/hg38.fna";
-        	if (fs.exists(infile)) {
-                System.out.println("ERROR NO EXISTE");
-        	  }
-        	InputStream is = fs.open(new Path());
-    		OutputStream os = new BufferedOutputStream(new FileOutputStream("./")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
-    		IOUtils.copyBytes(is, os, conf);
-        } catch (FileNotFoundException e) {
-			e.printStackTrace();
-			LOG.error("["+this.getClass().getName()+"] "+e.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-			LOG.error("["+this.getClass().getName()+"] "+e.toString());
-		} 
 		
 		String fastqFileName1;
 		String fastqFileName2;
@@ -185,7 +169,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			FastqFile2.delete();
 	        
 			// current directory
-	        File dir = new File (".");
+	        File dir = new File ("/tmp");
 	        String[] strs = dir.list();
 
 	        for (int i = 0; i < strs.length; i++) {
