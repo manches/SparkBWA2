@@ -75,8 +75,9 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
         
         String userDirectory = System.getProperty("user.dir");
 
-        System.out.println("JAVA");
+        System.out.println("JAVA---------------------------------------------------------");
         System.out.println(userDirectory);
+        System.out.println("JAVA---------------------------------------------------------");
 
 		
 		String fastqFileName1;
@@ -123,10 +124,11 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 
 			while (arg0.hasNext()) {
 				
-				newFastqRead = arg0.next();
-				
 				System.out.println("LINE");
 				System.out.println(newFastqRead.toString());
+				newFastqRead = arg0.next();
+				
+
 				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: identifier1 " + newFastqRead.<String>getAs("identifier1"));
 				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: sequence1 " + newFastqRead.<String>getAs("sequence1"));
 				//LOG.error("["+this.getClass().getName()+"] :: newFastqRead: aux1 " + newFastqRead.<String>getAs("aux1"));
@@ -156,6 +158,15 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 				
 			}
 			
+			// current directory
+	        File dir = new File ("/tmp");
+	        String[] strs = dir.list();
+
+
+	        for (int i = 0; i < strs.length; i++) {
+	          System.out.println("JAVAFINISH222222");
+	          System.out.println (strs[i]);
+	        }
 	        
 	        bw1.close();
 			bw2.close();
