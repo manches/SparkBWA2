@@ -755,7 +755,7 @@ public class BwaInterpreter {
 		if (this.ctx == null) {
 
 			String sorting;
-
+            
 			//Check for the options to perform the sort reads
 			if (options.isSortFastqReads()) {
 				sorting = "SortSpark";
@@ -795,6 +795,7 @@ public class BwaInterpreter {
 
 		//The Hadoop configuration is obtained
 		this.conf = this.ctx.hadoopConfiguration();
+        this.conf.setBoolean("fs.hdfs.impl.disable.cache", true);
 
 		//The block size
 		this.blocksize = this.conf.getLong("dfs.blocksize", 134217728);
