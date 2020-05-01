@@ -340,26 +340,26 @@ public class BwaInterpreter {
             
             // read line by line  
             while ((line1 = br.readLine()) != null) {
-                System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. ////////////////////////////////////////////////////////////////////////////////////////////////////////" );
                 line2 = br.readLine();
                 line3 = br.readLine();
                 line4 = br.readLine();
                 i = i + 1;
-                System.out.println("CarganLienas");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. CarganLienas" );
 
         		r = RowFactory.create(i,line1,line2,line3,line4);
-                System.out.println("Create");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. Create" );
         		rowList.add(r);
-                System.out.println("Add");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. add" );
         	    Dataset<Row> dataset_temp = ss.createDataFrame(rowList, schema);
-                System.out.println("createDataFrame");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. createDataFrame" );
         	    rowList.clear();
-                System.out.println("clear");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. clear" );
                 r = null;
                 dataset_final = dataset_aux.union(dataset_temp);
-                System.out.println("union");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. union" );
                 dataset_aux = dataset_final;
-                System.out.println("==");
+        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. ==" );
                 //System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
                 //dataset_final.show(20, false);
                 //System.out.println("--------------------------------------------------------------------------------------------------------");
