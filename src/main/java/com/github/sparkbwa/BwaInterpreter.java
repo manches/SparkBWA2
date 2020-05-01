@@ -340,17 +340,26 @@ public class BwaInterpreter {
             
             // read line by line  
             while ((line1 = br.readLine()) != null) {
+                System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
                 line2 = br.readLine();
                 line3 = br.readLine();
                 line4 = br.readLine();
                 i = i + 1;
+                System.out.println("CarganLienas");
+
         		r = RowFactory.create(i,line1,line2,line3,line4);
+                System.out.println("Create");
         		rowList.add(r);
+                System.out.println("Add");
         	    Dataset<Row> dataset_temp = ss.createDataFrame(rowList, schema);
+                System.out.println("createDataFrame");
         	    rowList.clear();
+                System.out.println("clear");
                 r = null;
                 dataset_final = dataset_aux.union(dataset_temp);
+                System.out.println("union");
                 dataset_aux = dataset_final;
+                System.out.println("==");
                 //System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
                 //dataset_final.show(20, false);
                 //System.out.println("--------------------------------------------------------------------------------------------------------");
