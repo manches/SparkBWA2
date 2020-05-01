@@ -75,16 +75,12 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 		String fastqFileName2;
 
 		if(this.tmpDir.lastIndexOf("/") == this.tmpDir.length()-1) {
-			//fastqFileName1 = this.tmpDir + this.appId + "-DF" + taskID + "_1";
-			//fastqFileName2 = this.tmpDir + this.appId + "-DF" + taskID + "_2";
-			fastqFileName1 = userDirectory + this.appId + "-DF" + taskID + "_1";
-			fastqFileName2 = userDirectory + this.appId + "-DF" + taskID + "_2";
+			fastqFileName1 = this.tmpDir + this.appId + "-DF" + taskID + "_1";
+			fastqFileName2 = this.tmpDir + this.appId + "-DF" + taskID + "_2";
 		}
 		else {
-			//fastqFileName1 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_1";
-			//fastqFileName2 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_2";
-			fastqFileName1 = userDirectory + "/" + this.appId + "-DF" + taskID + "_1";
-			fastqFileName2 = userDirectory + "/" + this.appId + "-DF" + taskID + "_2";
+			fastqFileName1 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_1";
+			fastqFileName2 = this.tmpDir + "/" + this.appId + "-DF" + taskID + "_2";
 		}
 
 
