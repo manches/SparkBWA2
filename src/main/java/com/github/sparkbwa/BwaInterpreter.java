@@ -476,7 +476,6 @@ public class BwaInterpreter {
 
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
-        System.out.println("complete");
 
 		//joined.show(2,false);		
 								

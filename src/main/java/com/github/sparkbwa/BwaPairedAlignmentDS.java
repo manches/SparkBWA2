@@ -142,7 +142,7 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 				bw2.newLine();
 				
 			}
-		
+
 	        bw1.close();
 			bw2.close();
 
