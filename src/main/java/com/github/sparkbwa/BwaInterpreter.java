@@ -340,26 +340,26 @@ public class BwaInterpreter {
             
             // read line by line  
             while ((line1 = br.readLine()) != null) {
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. ////////////////////////////////////////////////////////////////////////////////////////////////////////" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. ////////////////////////////////////////////////////////////////////////////////////////////////////////" );
                 line2 = br.readLine();
                 line3 = br.readLine();
                 line4 = br.readLine();
                 i = i + 1;
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. CarganLienas" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. CarganLienas" );
 
         		r = RowFactory.create(i,line1,line2,line3,line4);
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. Create" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. Create" );
         		rowList.add(r);
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. add" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. add" );
         	    Dataset<Row> dataset_temp = ss.createDataFrame(rowList, schema);
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. createDataFrame" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. createDataFrame" );
         	    rowList.clear();
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. clear" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. clear" );
                 r = null;
                 dataset_final = dataset_aux.union(dataset_temp);
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. union" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. union" );
                 dataset_aux = dataset_final;
-        		LOG.error("["+this.getClass().getName()+"] :: MANCHES. ==" );
+        		LOG.error("[loadFastqtoDS] :: MANCHES. ==" );
                 //System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
                 //dataset_final.show(20, false);
                 //System.out.println("--------------------------------------------------------------------------------------------------------");
