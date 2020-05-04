@@ -234,7 +234,7 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
+	public static JavaPairRDD<Long, String> loadFastqDS2(JavaSparkContext ctx, String pathToFastq) {
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		// Determine which FASTQ record the line belongs to.
@@ -245,7 +245,7 @@ public class BwaInterpreter {
 	}
 	
 	
-	public static JavaPairRDD<Long, String> loadFastqDS2(JavaSparkContext ctx, String pathToFastq) {
+	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		// Determine which FASTQ record the line belongs to.
@@ -263,7 +263,7 @@ public class BwaInterpreter {
 
 			conf.set("textinputformat.record.delimiter", "@");
 		    
-		    JavaRDD<String> rdd= ctx.newAPIHadoopFile("R1.fq", 
+		    JavaRDD<String> rdd2 = ctx.newAPIHadoopFile("R1.fq", 
 		    		TextInputFormat.class, 
 		    		LongWritable.class, 
 		    		Text.class, conf).values().map(new Function<Text,String>(){
@@ -272,7 +272,10 @@ public class BwaInterpreter {
 				public String call(Text arg0) throws Exception {
 					return arg0.toString();
 				}});
-		    
+			LOG.error("[ ] :: -------------------------------------------: ");
+			rdd2.foreach(rdd -> {
+			LOG.error("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
+			LOG.error("[ ] :: -------------------------------------------: ");
 	
 		
 		
