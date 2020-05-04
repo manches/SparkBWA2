@@ -246,7 +246,6 @@ public class BwaInterpreter {
 	
 	
 	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
-		ctx.hadoopConfiguration.set("textinputformat.record.delimiter","@");
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		// Determine which FASTQ record the line belongs to.
@@ -826,6 +825,7 @@ public class BwaInterpreter {
 		//The Hadoop configuration is obtained
 		this.conf = this.ctx.hadoopConfiguration();
         this.conf.setBoolean("fs.hdfs.impl.disable.cache", true);
+		this.conf.set("textinputformat.record.delimiter","@");
 
 		//The block size
 		this.blocksize = this.conf.getLong("dfs.blocksize", 134217728);
