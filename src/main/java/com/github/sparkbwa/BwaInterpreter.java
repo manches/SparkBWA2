@@ -631,8 +631,8 @@ public class BwaInterpreter {
 	 * @param readsRDD The RDD containing the paired reads
 	 * @return A list of strings containing the resulting sam files where the output alignments are stored
 	 */
-	private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsDS) {
-	//private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
+	//private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsDS) {
+	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
 
 		StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
@@ -646,8 +646,8 @@ public class BwaInterpreter {
         StructField field9 = DataTypes.createStructField("quality2", DataTypes.StringType, true);
         StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5, field6, field7, field8, field9));
 
-        List<String> listOne = readsDS
-				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
+       // List<String> listOne = readsDS
+		//		.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
 
 
      /*   
@@ -669,14 +669,14 @@ public class BwaInterpreter {
         */
 
         
-		return listOne;
+		//return listOne;
 		
 		
-	/*	
+	
 		return readsRDD 
 				.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 				.collect();
-	*/	
+
 	}
 
 	/**
@@ -704,10 +704,10 @@ public class BwaInterpreter {
 
 		List<String> returnedValues;
 		if (bwa.isPairedReads()) {
-			Dataset<Row> readsDS = handlePairedReadsSorting();
-			//JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
-			returnedValues = MapPairedBwa(bwa, readsDS);
-			//returnedValues = MapPairedBwa(bwa, readsRDD);
+			//Dataset<Row> readsDS = handlePairedReadsSorting();
+			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
+			//returnedValues = MapPairedBwa(bwa, readsDS);
+			returnedValues = MapPairedBwa(bwa, readsRDD);
 			
 			//System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			//returnedValues.forEach(System.out::println);
