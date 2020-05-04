@@ -234,9 +234,9 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static JavaPairRDD<Long, String> loadFastq(SparkContext sc, String pathToFastq) {
+	public static JavaPairRDD<Long, String> loadFastq(sparkSession ss, String pathToFastq) {
 
-		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(sc);
+		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 		//Dataset<String> fastqLinesDS =  sqlContext.createDataset(fastqLines.rdd(), Encoder.STRING());
@@ -259,7 +259,7 @@ public class BwaInterpreter {
 	    StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
 	    
-			JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+			//JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		   
 	/*	   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
@@ -281,7 +281,7 @@ public class BwaInterpreter {
 			    });
 
 
-      Dataset<Row> mainDataset = spark.createDataFrame(cRDD, schema);     
+      Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema);     
       mainDataset.show();
 		   
 		   
