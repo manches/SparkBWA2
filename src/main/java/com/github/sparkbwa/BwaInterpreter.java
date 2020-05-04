@@ -274,10 +274,7 @@ public class BwaInterpreter {
                    });
 	*/	   
 		   JavaRDD<String> cRDD1 = ctx.textFile(pathToFastq);
-	       // collect RDD for printing
-	        for(String line:cRDD1.collect()){
-	            System.out.println("cRDD1********** "+line);
-	        }			   
+			   
 				   
 		   JavaRDD<String> filteredJavaRDD = cRDD1.filter(new
 						   Function<String,Boolean>(){
@@ -285,17 +282,14 @@ public class BwaInterpreter {
 						   return (!arg0.equals(""));
 						   }
 						   });	   
-	       // collect RDD for printing
-	        for(String line:filteredJavaRDD.collect()){
-	            System.out.println("filteredJavaRDD********** "+line);
-	        }	
+	
 		   
 		   
 		   JavaRDD<Row> cRDD = filteredJavaRDD
 				   .map((Function<String, Row>) record -> {
 			      String[] parts = record.split("\n");
 			      //return RowFactory.create(attributes[0], attributes[1].trim());
-			      return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+			      return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 			    });
 
 
