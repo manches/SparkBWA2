@@ -238,6 +238,46 @@ public class BwaInterpreter {
 	}
 	
 	
+	public static JavaPairRDD<Long, String> loadFastqDS2(JavaSparkContext ctx, String pathToFastq) {
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+
+		// Determine which FASTQ record the line belongs to.
+		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
+		
+//		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
+//				Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.LONG()));
+//		Dataset<Row> newDataSet = this. .createDataset(JavaPairRDD.toRDD(fastqLinesByRecordNum),encoder2).toDF("value1","value2");
+
+//				newDataSet.printSchema();
+		
+		
+	     // pipe character | is the record seperator
+
+			this.conf.set("textinputformat.record.delimiter", "@");
+		    
+		    JavaRDD<String> rdd= jsc.newAPIHadoopFile("R1.fq", 
+		    		TextInputFormat.class, 
+		    		LongWritable.class, 
+		    		Text.class, hadoopConf).values().map(new Function<Text,String>(){
+
+				@Override
+				public String call(Text arg0) throws Exception {
+					return arg0.toString();
+				}});
+		    
+		    rdd.foreach(new VoidFunction(){
+
+				@Override
+				public void call(String record) throws Exception {
+					System.out.println("Record==>"+record);
+					System.out.println("-----------------");
+					
+				}});
+		
+		
+		// Group group the lines which belongs to the same record, and concatinate them into a record.
+		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
+	}
 	
 	/**
 	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
