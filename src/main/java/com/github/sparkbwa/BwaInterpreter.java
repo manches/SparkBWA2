@@ -87,6 +87,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+
+import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.LongWritable;
+
 /**
  * BwaInterpreter class
  *
@@ -252,13 +257,14 @@ public class BwaInterpreter {
 		
 		
 	     // pipe character | is the record seperator
+        	Configuration conf = new Configuration();
 
-			this.conf.set("textinputformat.record.delimiter", "@");
+			conf.set("textinputformat.record.delimiter", "@");
 		    
-		    JavaRDD<String> rdd= jsc.newAPIHadoopFile("R1.fq", 
+		    JavaRDD<String> rdd= ctx.newAPIHadoopFile("R1.fq", 
 		    		TextInputFormat.class, 
 		    		LongWritable.class, 
-		    		Text.class, hadoopConf).values().map(new Function<Text,String>(){
+		    		Text.class, conf).values().map(new Function<Text,String>(){
 
 				@Override
 				public String call(Text arg0) throws Exception {
