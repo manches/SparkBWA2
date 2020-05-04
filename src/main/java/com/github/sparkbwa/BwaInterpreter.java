@@ -252,16 +252,17 @@ public class BwaInterpreter {
 	            String line4 = null;
 	        }
 		   */
-	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
-	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
-	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
-	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
+		
+	    StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
+	    StructField field3 = DataTypes.createStructField("sequence", DataTypes.StringType, true);
+	    StructField field4 = DataTypes.createStructField("aux", DataTypes.StringType, true);
+	    StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
 	    
 			JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		   
-		   JavaRDD<row> cRDD = ctx.textFile(pathToFastq)
+		   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
                    .map(new Function<String, row>() {
                           @Override
                           public row call(String line) throws Exception {
