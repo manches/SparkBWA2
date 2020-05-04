@@ -234,12 +234,51 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
-		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+	public static JavaPairRDD<Long, String> loadFastq(SparkContext sc, String pathToFastq) {
+
+		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(sc);
 		
-		   for(String line:fastqLines.collect()){
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+		//Dataset<String> fastqLinesDS =  sqlContext.createDataset(fastqLines.rdd(), Encoder.STRING());
+		
+		//Dataset<String> dataframe = spark.read().text("R1.fq").as(Encoders.STRING());
+		
+		
+		  /* for(String line:fastqLines.collect()){
 	            System.out.println("********* "+line);
+	            String line1 = null;
+	            String line2 = null;
+	            String line3 = null;
+	            String line4 = null;
 	        }
+		   */
+	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
+	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
+	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
+	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
+	    
+			JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+
+		   
+		   JavaRDD<row> cRDD = ctx.textFile(pathToFastq)
+                   .map(new Function<String, row>() {
+                          @Override
+                          public row call(String line) throws Exception {
+                                 String[] parts = line.split("\n");
+                                 Row r = null;
+                                 r = RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+                                 return r;
+                          }
+                   });
+
+
+      Dataset<Row> mainDataset = spark.createDataFrame(cRDD, schema);     
+      mainDataset.show();
+		   
+		   
+		   
+		   
 
 		// Determine which FASTQ record the line belongs to.
 		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
@@ -424,7 +463,7 @@ public class BwaInterpreter {
 		LOG.error("["+this.getClass().getName()+"] :: Not sorting in HDFS. Timing: " + startTime);
 
 		// Read the FASTQ file from HDFS using the FastqInputFormat class
-		JavaPairRDD<Long, String> singleReadsKeyVal = loadFastq(this.ctx, this.options.getInputPath());
+		JavaPairRDD<Long, String> singleReadsKeyVal = loadFastq(this.sparkSession, this.options.getInputPath());
 
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
@@ -493,8 +532,8 @@ public class BwaInterpreter {
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
 
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
-		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
-		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
+		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.sparkSession, options.getInputPath());
+		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.sparkSession, options.getInputPath2());
 		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
 		//Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
 		//LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
