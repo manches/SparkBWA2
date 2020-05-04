@@ -262,7 +262,7 @@ public class BwaInterpreter {
 			JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		   
-		   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
+	/*	   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
                    .map(new Function<String, row>() {
                           @Override
                           public row call(String line) throws Exception {
@@ -272,6 +272,13 @@ public class BwaInterpreter {
                                  return r;
                           }
                    });
+	*/	   
+		   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
+				   .map((Function<String, Row>) record -> {
+			      String[] parts = record.split("\n");
+			      //return RowFactory.create(attributes[0], attributes[1].trim());
+			      return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+			    });
 
 
       Dataset<Row> mainDataset = spark.createDataFrame(cRDD, schema);     
