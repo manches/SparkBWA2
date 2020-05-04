@@ -275,7 +275,7 @@ public class BwaInterpreter {
 	*/	   
 		   JavaRDD<String> cRDD1 = ctx.textFile(pathToFastq);
 	       // collect RDD for printing
-	        for(String line:lines.collect()){
+	        for(String line:cRDD1.collect()){
 	            System.out.println("cRDD1********** "+line);
 	        }			   
 				   
@@ -286,7 +286,7 @@ public class BwaInterpreter {
 						   }
 						   });	   
 	       // collect RDD for printing
-	        for(String line:lines.collect()){
+	        for(String line:filteredJavaRDD.collect()){
 	            System.out.println("filteredJavaRDD********** "+line);
 	        }	
 		   
