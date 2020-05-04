@@ -246,6 +246,7 @@ public class BwaInterpreter {
 	
 	
 	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
+		ctx.hadoopConfiguration.set("textinputformat.record.delimiter","@);
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		// Determine which FASTQ record the line belongs to.
@@ -259,27 +260,7 @@ public class BwaInterpreter {
 		
 		
 	     // pipe character | is the record seperator
-        	Configuration conf = new Configuration();
 
-			conf.set("textinputformat.record.delimiter", "@");
-		    
-		    JavaRDD<String> rdd2 = ctx.newAPIHadoopFile("R1.fq", 
-		    		TextInputFormat.class, 
-		    		LongWritable.class, 
-		    		Text.class, conf).values().map(new Function<Text,String>(){
-
-				@Override
-				public String call(Text arg0) throws Exception {
-					return arg0.toString();
-				}});
-			LOG.error("[ ] :: -------------------------------------------: ");
-			LOG.error("[ ] :: -------------------------------------------: ");
-			LOG.error("[ ] :: -------------------------------------------: ");
-			rdd2.foreach(rdd -> {
-			LOG.error("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
-			LOG.error("[ ] :: -------------------------------------------: ");
-			});
-		
 		
 		// Group group the lines which belongs to the same record, and concatinate them into a record.
 		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
@@ -386,26 +367,18 @@ public class BwaInterpreter {
             
             // read line by line  
             while ((line1 = br.readLine()) != null) {
-        		LOG.error("[loadFastqtoDS] :: MANCHES. ////////////////////////////////////////////////////////////////////////////////////////////////////////" );
                 line2 = br.readLine();
                 line3 = br.readLine();
                 line4 = br.readLine();
                 i = i + 1;
-        		LOG.error("[loadFastqtoDS] :: MANCHES. CarganLienas" );
 
         		r = RowFactory.create(i,line1,line2,line3,line4);
-        		LOG.error("[loadFastqtoDS] :: MANCHES. Create" );
         		rowList.add(r);
-        		LOG.error("[loadFastqtoDS] :: MANCHES. add" );
         	    Dataset<Row> dataset_temp = ss.createDataFrame(rowList, schema);
-        		LOG.error("[loadFastqtoDS] :: MANCHES. createDataFrame" );
         	    rowList.clear();
-        		LOG.error("[loadFastqtoDS] :: MANCHES. clear" );
                 r = null;
                 dataset_final = dataset_aux.union(dataset_temp);
-        		LOG.error("[loadFastqtoDS] :: MANCHES. union" );
                 dataset_aux = dataset_final;
-        		LOG.error("[loadFastqtoDS] :: MANCHES. ==" );
                 //System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
                 //dataset_final.show(20, false);
                 //System.out.println("--------------------------------------------------------------------------------------------------------");
@@ -508,8 +481,8 @@ public class BwaInterpreter {
 	 * Method to perform and handle the paired reads sorting
 	 * @return A JavaRDD containing grouped reads from the paired FASTQ files
 	 */
-	private Dataset<Row> handlePairedReadsSorting() {
-//	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
+//	private Dataset<Row> handlePairedReadsSorting() {
+	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
 		Dataset<Row> dfFinal = null;
 		long startTime = System.nanoTime();
@@ -517,40 +490,40 @@ public class BwaInterpreter {
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
 
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
-		//JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
-		//JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
-		//JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
-		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
-		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
+		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.ctx, options.getInputPath());
+		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.ctx, options.getInputPath2());
+		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
+		//Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
+		//LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
 
-		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sparkSession, options.getInputPath2(),2);
-		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1");
+		//Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sparkSession, options.getInputPath2(),2);
+		//LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");
 		
 		//datasettmpDS1.show(false);
 		//datasettmpDS2.show(false);	 a
 
-		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
-		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
+		//Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
+		//LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
 
 		//joined.show(2,false);		
 								
-		//datasetTmp1.unpersist();
-		//datasetTmp2.unpersist();
+		datasetTmp1.unpersist();
+		datasetTmp2.unpersist();
 		
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
-			//readsRDD = pairedReadsRDD.sortByKey().values();
-			dfFinal = joined.orderBy("index");
+			readsRDD = pairedReadsRDD.sortByKey().values();
+			//dfFinal = joined.orderBy("index");
 			LOG.error("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
 		// Sort in memory with partitioning
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
-			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
-			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
+			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
+			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
-			Dataset<Row> dfAux = joined.repartition(options.getPartitionNumber());
-			dfFinal = joined.orderBy("index");
+			//Dataset<Row> dfAux = joined.repartition(options.getPartitionNumber());
+			//dfFinal = joined.orderBy("index");
 			
 			LOG.error("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
@@ -563,8 +536,8 @@ public class BwaInterpreter {
 		// No Sort with partitioning
 		else {
 			LOG.error("["+this.getClass().getName()+"] :: No sort with partitioning");
-			//int numPartitions = pairedReadsRDD.partitions().size();  
-			int numPartitions = joined.rdd().getNumPartitions();   
+			int numPartitions = pairedReadsRDD.partitions().size();  
+			//int numPartitions = joined.rdd().getNumPartitions();   
 			/*
 			 * As in previous cases, the coalesce operation is not suitable 
 			 * if we want to achieve the maximum speedup, so, repartition
@@ -577,12 +550,12 @@ public class BwaInterpreter {
 				LOG.error("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort"+"["+numPartitions+"]"+"["+options.getPartitionNumber()+"]");
 			}
 			
-			//readsRDD = pairedReadsRDD
-			//	.repartition(options.getPartitionNumber())
-			//	.values();
+			readsRDD = pairedReadsRDD
+				.repartition(options.getPartitionNumber())
+				.values();
 				//NO ES EL CASO -> .persist(StorageLevel.MEMORY_ONLY());
 			
-			dfFinal = joined.repartition(options.getPartitionNumber());
+			//dfFinal = joined.repartition(options.getPartitionNumber());
 		}
 
 		long endTime = System.nanoTime();
@@ -591,11 +564,11 @@ public class BwaInterpreter {
 		LOG.error("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 		
-		//LOG.error("[ ] :: -------------------------------------------: ");
-		//	readsRDD.foreach(rdd -> {
-		//	LOG.error("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
-		//	LOG.error("[ ] :: -------------------------------------------: ");
-		// });
+		LOG.error("[ ] :: -------------------------------------------: ");
+			readsRDD.foreach(rdd -> {
+			LOG.error("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
+			LOG.error("[ ] :: -------------------------------------------: ");
+		 });
 /*
  * 
  * 
@@ -645,8 +618,8 @@ public class BwaInterpreter {
 		 *
 		 */
 		 
-		return dfFinal;
-		//return readsRDD;
+		//return dfFinal;
+		return readsRDD;
 		
 		
 		
