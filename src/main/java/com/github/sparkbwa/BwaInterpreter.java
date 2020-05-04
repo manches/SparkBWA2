@@ -273,7 +273,16 @@ public class BwaInterpreter {
                           }
                    });
 	*/	   
-		   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
+		   JavaRDD<String> cRDD1 = ctx.textFile(pathToFastq);
+				   
+				   
+		   JavaRDD<String> filteredJavaRDD = cRDD1.filter(new
+						   Function<String,Boolean>(){
+						   public Boolean call(String arg0) throws Exception {
+						   return (!arg0.equals(""));
+						   }
+						   });	   
+		   JavaRDD<Row> cRDD = filteredJavaRDD
 				   .map((Function<String, Row>) record -> {
 			      String[] parts = record.split("\n");
 			      //return RowFactory.create(attributes[0], attributes[1].trim());
