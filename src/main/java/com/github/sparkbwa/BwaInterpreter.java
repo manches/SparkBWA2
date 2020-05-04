@@ -273,10 +273,12 @@ public class BwaInterpreter {
 					return arg0.toString();
 				}});
 			LOG.error("[ ] :: -------------------------------------------: ");
+			LOG.error("[ ] :: -------------------------------------------: ");
+			LOG.error("[ ] :: -------------------------------------------: ");
 			rdd2.foreach(rdd -> {
 			LOG.error("[ ] :: MANCHES FINAL - loadFastq : " + rdd);
 			LOG.error("[ ] :: -------------------------------------------: ");
-	
+			}
 		
 		
 		// Group group the lines which belongs to the same record, and concatinate them into a record.
