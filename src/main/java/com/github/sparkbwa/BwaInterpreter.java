@@ -88,10 +88,12 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.LongWritable;
-
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.conf.Configuration;
 /**
  * BwaInterpreter class
  *
