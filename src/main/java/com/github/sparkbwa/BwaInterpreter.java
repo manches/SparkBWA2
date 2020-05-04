@@ -273,14 +273,7 @@ public class BwaInterpreter {
 					return arg0.toString();
 				}});
 		    
-		    rdd.foreach(new VoidFunction(){
-
-				@Override
-				public void call(String record) throws Exception {
-					System.out.println("Record==>"+record);
-					System.out.println("-----------------");
-					
-				}});
+	
 		
 		
 		// Group group the lines which belongs to the same record, and concatinate them into a record.
