@@ -234,8 +234,12 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static JavaPairRDD<Long, String> loadFastqDS2(JavaSparkContext ctx, String pathToFastq) {
+	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+		
+		   for(String line:fastqLines.collect()){
+	            System.out.println("********* "+line);
+	        }
 
 		// Determine which FASTQ record the line belongs to.
 		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
@@ -245,7 +249,7 @@ public class BwaInterpreter {
 	}
 	
 	
-	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
+	public static JavaPairRDD<Long, String> loadFastqold(JavaSparkContext ctx, String pathToFastq) {
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		// Determine which FASTQ record the line belongs to.
