@@ -246,7 +246,7 @@ public class BwaInterpreter {
 	
 	
 	public static JavaPairRDD<Long, String> loadFastq(JavaSparkContext ctx, String pathToFastq) {
-		ctx.hadoopConfiguration.set("textinputformat.record.delimiter","@);
+		ctx.hadoopConfiguration.set("textinputformat.record.delimiter","@");
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		// Determine which FASTQ record the line belongs to.
