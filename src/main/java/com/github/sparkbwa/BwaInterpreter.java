@@ -260,9 +260,14 @@ public class BwaInterpreter {
 				   .map((Function<String, Row>) record -> {
 			      String[] parts = record.split("\n");
 			      //return RowFactory.create(attributes[0], attributes[1].trim());
-			      if (parts[0].startsWith("@")) {
+		    	  System.out.println("filteredJavaRDD********** |||"+parts[0].trim()+"|||||||");
+			      if (parts[0].trim().startsWith("@")) {
+			    	  System.out.println("YES");
+
 			    	  return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());  
 			      } else {
+			    	  System.out.println("NO");
+
 			    	  return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 			      }
 			     
