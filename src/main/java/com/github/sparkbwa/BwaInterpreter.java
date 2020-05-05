@@ -398,14 +398,16 @@ public class BwaInterpreter {
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
 
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
- 
+		System.out.println("AQUI");
 		   
 		   JavaRDD<String> filteredJavaRDD = ctx.textFile(pathToFastq).filter(new
 				   Function<String,Boolean>(){
 				   public Boolean call(String arg0) throws Exception {
 				   return (!arg0.equals(""));
 				   }
-				   });	  		   
+				   });
+			System.out.println("AQUI2");
+
 		      // collect RDD for printing
 		    for(String line:filteredJavaRDD.collect()){
 		        System.out.println("filteredJavaRDD********** "+line);
