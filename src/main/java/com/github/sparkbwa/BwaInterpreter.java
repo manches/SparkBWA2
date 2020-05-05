@@ -234,49 +234,21 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static JavaPairRDD<Long, String> loadFastq(SparkSession ss, String pathToFastq) {
+	public static JavaPairRDD<Long, String> loadFastqDS(SparkSession ss, String pathToFastq) {
 
-		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
+//		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		
-		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
-		//Dataset<String> fastqLinesDS =  sqlContext.createDataset(fastqLines.rdd(), Encoder.STRING());
+//		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+
 		
-		//Dataset<String> dataframe = spark.read().text("R1.fq").as(Encoders.STRING());
-		
-		
-		  /* for(String line:fastqLines.collect()){
-	            System.out.println("********* "+line);
-	            String line1 = null;
-	            String line2 = null;
-	            String line3 = null;
-	            String line4 = null;
-	        }
-		   */
-		
+	    StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
 	    StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence", DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux", DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
-	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
-	    
-			//JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
-
-		   
-	/*	   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
-                   .map(new Function<String, row>() {
-                          @Override
-                          public row call(String line) throws Exception {
-                                 String[] parts = line.split("\n");
-                                 Row r = null;
-                                 r = RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
-                                 return r;
-                          }
-                   });
-	*/	   
-		   JavaRDD<String> cRDD1 = ctx.textFile(pathToFastq);
-			   
-				   
-		   JavaRDD<String> filteredJavaRDD = cRDD1.filter(new
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
+	   
+		   JavaRDD<String> filteredJavaRDD = ctx.textFile(pathToFastq).filter(new
 						   Function<String,Boolean>(){
 						   public Boolean call(String arg0) throws Exception {
 						   return (!arg0.equals(""));
@@ -291,38 +263,61 @@ public class BwaInterpreter {
 			      //return RowFactory.create(attributes[0], attributes[1].trim());
 			      return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 			    });
+		      // collect RDD for printing
+	        for(String line:filteredJavaRDD.collect()){
+	            System.out.println("filteredJavaRDD********** "+line);
+	        }
 
-
-      Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema);     
+      Dataset<Row> mainDataset = ss.createDataFrame(cRDD.zipWithIndex(), schema);     
       mainDataset.show();
 		   
-		   
-		   
+//		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
+//		Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.LONG()));
+//Dataset<Row> newDataSet = this. .createDataset(JavaPairRDD.toRDD(fastqLinesByRecordNum),encoder2).toDF("value1","value2");
+
+//		newDataSet.printSchema();
+
+
+// pipe character | is the record seperator
+
+		//JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+
+	   
+/*	   JavaRDD<Row> cRDD = ctx.textFile(pathToFastq)
+             .map(new Function<String, row>() {
+                    @Override
+                    public row call(String line) throws Exception {
+                           String[] parts = line.split("\n");
+                           Row r = null;
+                           r = RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+                           return r;
+                    }
+             });
+*/	  	   
 		   
 
 		// Determine which FASTQ record the line belongs to.
-		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
+		//JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
 
 		// Group group the lines which belongs to the same record, and concatinate them into a record.
-		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
+		//return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
 	}
 	
 	
-	public static JavaPairRDD<Long, String> loadFastqold(JavaSparkContext ctx, String pathToFastq) {
-		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+	
+	
+	
+	/**
+	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
+	 * @param ctx The JavaSparkContext to use
+	 * @param pathToFastq The path to the FASTQ file
+	 * @return A JavaPairRDD containing <Long Read ID, String Read>
+	 */	
+	public static JavaPairRDD<Long, String> loadFastqold(SparkSession ss, String pathToFastq) {
+		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 
 		// Determine which FASTQ record the line belongs to.
 		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
-		
-//		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
-//				Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.LONG()));
-//		Dataset<Row> newDataSet = this. .createDataset(JavaPairRDD.toRDD(fastqLinesByRecordNum),encoder2).toDF("value1","value2");
-
-//				newDataSet.printSchema();
-		
-		
-	     // pipe character | is the record seperator
-
 		
 		// Group group the lines which belongs to the same record, and concatinate them into a record.
 		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
