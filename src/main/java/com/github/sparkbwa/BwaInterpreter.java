@@ -238,7 +238,7 @@ public class BwaInterpreter {
 
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		
-//		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		
 	    StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
@@ -254,12 +254,7 @@ public class BwaInterpreter {
 						   public Boolean call(String arg0) throws Exception {
 						   return (!arg0.equals(""));
 						   }
-						   });	   
-	       // collect RDD for printing
-	        for(String line:filteredJavaRDD.collect()){
-	            System.out.println("filteredJavaRDD********** "+line);
-	        }
-		   
+						   });	  		   
 		   
 		   JavaRDD<Row> cRDD = filteredJavaRDD
 				   .map((Function<String, Row>) record -> {
@@ -272,7 +267,7 @@ public class BwaInterpreter {
 	            System.out.println("filteredJavaRDD********** "+line);
 	        }
 
-      Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema);     
+      Dataset<Row> mainDataset = ss.createDataFrame(cRDD.zipWithIndex(), schema);     
       mainDataset.show();
 		   
 //		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
@@ -301,10 +296,10 @@ public class BwaInterpreter {
 		   
 
 		// Determine which FASTQ record the line belongs to.
-		//JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
+		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
 
 		// Group group the lines which belongs to the same record, and concatinate them into a record.
-		//return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
+		return fastqLinesByRecordNum.groupByKey().mapValues(new FASTQRecordCreator());
 	}
 	
 	
