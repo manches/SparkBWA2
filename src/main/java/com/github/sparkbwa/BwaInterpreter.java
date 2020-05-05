@@ -400,16 +400,21 @@ public class BwaInterpreter {
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
  
 		   
-		JavaRDD<Row> cRDD = ctx.textFile(pathToFastq).filter(new
+		   JavaRDD<String> filteredJavaRDD = ctx.textFile(pathToFastq).filter(new
 				   Function<String,Boolean>(){
 				   public Boolean call(String arg0) throws Exception {
 				   return (!arg0.equals(""));
 				   }
-				   }).map((Function<String, Row>) record -> {
-			      String[] parts = record.split("\n");
-			      //return RowFactory.create(attributes[0], attributes[1].trim());
-			      return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
-			    });
+				   });	  		   
+   
+		   JavaRDD<Row> cRDD = filteredJavaRDD
+				   .map((Function<String, Row>) record -> {
+					   String[] parts = record.split("\n");
+					   //return RowFactory.create(attributes[0], attributes[1].trim());
+					   return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+				   });
+
+
 
 		Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 		mainDataset.show();
