@@ -18,6 +18,8 @@ package com.github.sparkbwa;
 
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
 
 public class TextInputFormat extends FileInputFormat<LongWritable, Text> {
 	 
