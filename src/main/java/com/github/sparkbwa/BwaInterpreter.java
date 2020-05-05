@@ -408,10 +408,6 @@ public class BwaInterpreter {
 				   });
 			System.out.println("AQUI2");
 
-		      // collect RDD for printing
-		    for(String line:filteredJavaRDD.collect()){
-		        System.out.println("filteredJavaRDD********** "+line);
-		    }
 		    JavaRDD<Row> cRDD = filteredJavaRDD
 		    		.map((Function<String, Row>) record -> {
 		    			String[] parts = record.split("\n");
@@ -419,8 +415,10 @@ public class BwaInterpreter {
 		    			return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 	    });
 
+			System.out.println("AQUI3");
 
 		Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
+		System.out.println("AQUI4");
 		mainDataset.show();
         
   
