@@ -234,7 +234,7 @@ public class BwaInterpreter {
 	 * @param pathToFastq The path to the FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
-	public static JavaPairRDD<Long, String> loadFastqDS(SparkSession ss, String pathToFastq) {
+	public static JavaPairRDD<Long, String> loadFastq(SparkSession ss, String pathToFastq) {
 
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		
