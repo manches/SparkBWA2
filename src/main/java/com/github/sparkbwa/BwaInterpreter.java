@@ -267,7 +267,7 @@ public class BwaInterpreter {
 	            System.out.println("filteredJavaRDD********** "+line);
 	        }
 
-      Dataset<Row> mainDataset = ss.createDataFrame(cRDD.zipWithIndex(), schema);     
+      Dataset<Row> mainDataset = ss.createDataFrame(cRDD.zipWithIndex(), schema).withColumn("index1", functions.monotonicallyIncreasingId());     
       mainDataset.show();
 		   
 //		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
@@ -314,6 +314,7 @@ public class BwaInterpreter {
 	 */	
 	public static JavaPairRDD<Long, String> loadFastqold(SparkSession ss, String pathToFastq) {
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		// Determine which FASTQ record the line belongs to.
 		JavaPairRDD<Long, Tuple2<String, Long>> fastqLinesByRecordNum = fastqLines.zipWithIndex().mapToPair(new FASTQRecordGrouper());
