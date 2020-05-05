@@ -260,7 +260,7 @@ public class BwaInterpreter {
 				   .map((Function<String, Row>) record -> {
 			      String[] parts = record.split("\n");
 			      //return RowFactory.create(attributes[0], attributes[1].trim());
-			      if (sTexto.startsWith("@")) {
+			      if (parts[0].startsWith("@")) {
 			    	  return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());  
 			      } else {
 			    	  return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
