@@ -236,7 +236,7 @@ public class BwaInterpreter {
 	 */
 	public static JavaPairRDD<Long, String> loadFastqDS(SparkSession ss, String pathToFastq) {
 
-//		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
+		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		
 //		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
