@@ -267,7 +267,7 @@ public class BwaInterpreter {
 	            System.out.println("filteredJavaRDD********** "+line);
 	        }
 
-      Dataset<Row> mainDataset = ss.createDataFrame(cRDD.zipWithIndex(), schema).withColumn("index1", functions.monotonicallyIncreasingId());     
+      Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index1", functions.monotonicallyIncreasingId());     
       mainDataset.show();
 		   
 //		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
