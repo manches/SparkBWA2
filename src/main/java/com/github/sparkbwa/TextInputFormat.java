@@ -29,7 +29,7 @@ public class TextInputFormat extends FileInputFormat<LongWritable, Text> {
 	// Hardcoding this value as “.”
 	// You can add any delimiter as your requirement
 	 
-	    String delimiter = “.”;
+	    String delimiter = "@";
 	    byte[] recordDelimiterBytes = null;
 	    if (null != delimiter)
 	      recordDelimiterBytes = delimiter.getBytes();
