@@ -241,20 +241,24 @@ public class BwaInterpreter {
 //		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 
 		
-	    StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
 	    StructField field2 = DataTypes.createStructField("identifier", DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence", DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux", DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality", DataTypes.StringType, true);
-	    StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
-	   
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
+	    
+ 
+ 
 		   JavaRDD<String> filteredJavaRDD = ctx.textFile(pathToFastq).filter(new
 						   Function<String,Boolean>(){
 						   public Boolean call(String arg0) throws Exception {
 						   return (!arg0.equals(""));
 						   }
 						   });	   
-	
+	       // collect RDD for printing
+	        for(String line:filteredJavaRDD.collect()){
+	            System.out.println("filteredJavaRDD********** "+line);
+	        }
 		   
 		   
 		   JavaRDD<Row> cRDD = filteredJavaRDD
@@ -268,7 +272,7 @@ public class BwaInterpreter {
 	            System.out.println("filteredJavaRDD********** "+line);
 	        }
 
-      Dataset<Row> mainDataset = ss.createDataFrame(cRDD.zipWithIndex(), schema);     
+      Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema);     
       mainDataset.show();
 		   
 //		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
