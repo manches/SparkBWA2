@@ -390,79 +390,35 @@ public class BwaInterpreter {
 	 */
 	public static Dataset<Row> loadFastqtoDS(SparkSession ss, String pathToFastq, int index) {			
 
-		BufferedReader br = null;
-		FileSystem fs = null;
-		Path pt = null;
-        FileReader fr = null;
-        String line1 = null;
-        String line2 = null;
-        String line3 = null;
-        String line4 = null;
-        int i = 0;
-        Row r = null;
 
-        List<Row> rowList =  new ArrayList<Row>();
-
-	    StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
-	    StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5));
-	    Dataset<Row> dataset_aux = ss.createDataFrame(rowList, schema);
-	    Dataset<Row> dataset_final = null;
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
 
-		
-        try {
-        
-           
-             pt = new Path(pathToFastq);
-             Configuration conf = new Configuration();
-             conf.setBoolean("fs.hdfs.impl.disable.cache", true);
-             fs = FileSystem.get(conf);
-             br = new BufferedReader(new InputStreamReader(fs.open(pt)));
-            
-            // read line by line  
-            while ((line1 = br.readLine()) != null) {
-                line2 = br.readLine();
-                line3 = br.readLine();
-                line4 = br.readLine();
-                i = i + 1;
+		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
+ 
+		   
+		JavaRDD<Row> cRDD = ctx.textFile(pathToFastq).filter(new
+				   Function<String,Boolean>(){
+				   public Boolean call(String arg0) throws Exception {
+				   return (!arg0.equals(""));
+				   }
+				   }).map((Function<String, Row>) record -> {
+			      String[] parts = record.split("\n");
+			      //return RowFactory.create(attributes[0], attributes[1].trim());
+			      return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+			    });
 
-        		r = RowFactory.create(i,line1,line2,line3,line4);
-        		rowList.add(r);
-        	    Dataset<Row> dataset_temp = ss.createDataFrame(rowList, schema);
-        	    rowList.clear();
-                r = null;
-                dataset_final = dataset_aux.union(dataset_temp);
-                dataset_aux = dataset_final;
-                //System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////");
-                //dataset_final.show(20, false);
-                //System.out.println("--------------------------------------------------------------------------------------------------------");
-                //dataset_aux.show(20, false);
-          
-            }
-
-        } catch (IOException e) {
-            System.err.format("IOException: %s%n", e);
-        } finally {
-            try {
-                if (br != null)
-                    br.close();
-
-                if (fr != null)
-                    fr.close();
-            } catch (IOException ex) {
-                System.err.format("IOException: %s%n", ex);
-            }
-        }        
-
+		Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
+		mainDataset.show();
         
   
         //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
         //data.show(false);
 
-		return dataset_final;
+		return mainDataset;
 	}
 
 
@@ -538,8 +494,8 @@ public class BwaInterpreter {
 	 * Method to perform and handle the paired reads sorting
 	 * @return A JavaRDD containing grouped reads from the paired FASTQ files
 	 */
-//	private Dataset<Row> handlePairedReadsSorting() {
-	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
+	private Dataset<Row> handlePairedReadsSorting() {
+//	private JavaRDD<Tuple2<String, String>> handlePairedReadsSorting() {
 		JavaRDD<Tuple2<String, String>> readsRDD = null;
 		Dataset<Row> dfFinal = null;
 		long startTime = System.nanoTime();
@@ -547,20 +503,20 @@ public class BwaInterpreter {
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. Timing: " + startTime);
 
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
-		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.sparkSession, options.getInputPath());
-		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.sparkSession, options.getInputPath2());
-		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
-		//Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
-		//LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
+//		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.sparkSession, options.getInputPath());
+//		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.sparkSession, options.getInputPath2());
+//		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
+		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
+		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
 
-		//Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sparkSession, options.getInputPath2(),2);
-		//LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");
+		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sparkSession, options.getInputPath2(),2);
+		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");
 		
 		//datasettmpDS1.show(false);
 		//datasettmpDS2.show(false);	 a
 
-		//Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
-		//LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
+		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
+		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
 
 		//joined.show(2,false);		
 								
@@ -569,18 +525,18 @@ public class BwaInterpreter {
 		
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
-			readsRDD = pairedReadsRDD.sortByKey().values();
-			//dfFinal = joined.orderBy("index");
+			//readsRDD = pairedReadsRDD.sortByKey().values();
+			dfFinal = joined.orderBy("index");
 			LOG.error("["+this.getClass().getName()+"] :: Sorting in memory without partitioning");
 		}
 
 		// Sort in memory with partitioning
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
-			pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
-			readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
+			//pairedReadsRDD = pairedReadsRDD.repartition(options.getPartitionNumber());
+			//readsRDD = pairedReadsRDD.sortByKey().values();//.persist(StorageLevel.MEMORY_ONLY());
 			
-			//Dataset<Row> dfAux = joined.repartition(options.getPartitionNumber());
-			//dfFinal = joined.orderBy("index");
+			Dataset<Row> dfAux = joined.repartition(options.getPartitionNumber());
+			dfFinal = joined.orderBy("index");
 			
 			LOG.error("["+this.getClass().getName()+"] :: Repartition with sort");
 		}
@@ -593,8 +549,8 @@ public class BwaInterpreter {
 		// No Sort with partitioning
 		else {
 			LOG.error("["+this.getClass().getName()+"] :: No sort with partitioning");
-			int numPartitions = pairedReadsRDD.partitions().size();  
-			//int numPartitions = joined.rdd().getNumPartitions();   
+			//int numPartitions = pairedReadsRDD.partitions().size();  
+			int numPartitions = joined.rdd().getNumPartitions();   
 			/*
 			 * As in previous cases, the coalesce operation is not suitable 
 			 * if we want to achieve the maximum speedup, so, repartition
@@ -607,12 +563,12 @@ public class BwaInterpreter {
 				LOG.error("["+this.getClass().getName()+"] :: Repartition(Coalesce) with no sort"+"["+numPartitions+"]"+"["+options.getPartitionNumber()+"]");
 			}
 			
-			readsRDD = pairedReadsRDD
-				.repartition(options.getPartitionNumber())
-				.values();
+			//readsRDD = pairedReadsRDD
+			//	.repartition(options.getPartitionNumber())
+			//	.values();
 				//NO ES EL CASO -> .persist(StorageLevel.MEMORY_ONLY());
 			
-			//dfFinal = joined.repartition(options.getPartitionNumber());
+			dfFinal = joined.repartition(options.getPartitionNumber());
 		}
 
 		long endTime = System.nanoTime();
@@ -621,11 +577,11 @@ public class BwaInterpreter {
 		LOG.error("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
 		//readsRDD.persist(StorageLevel.MEMORY_ONLY());
 		
-		LOG.error("[ ] :: -------------------------------------------: ");
-			readsRDD.foreach(rdd -> {
-			LOG.error("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
-			LOG.error("[ ] :: -------------------------------------------: ");
-		 });
+		//LOG.error("[ ] :: -------------------------------------------: ");
+		//	readsRDD.foreach(rdd -> {
+		//	LOG.error("[ ] :: MANCHES FINAL - handlePairedReadsSorting : " + rdd);
+		//	LOG.error("[ ] :: -------------------------------------------: ");
+		// });
 /*
  * 
  * 
@@ -675,8 +631,8 @@ public class BwaInterpreter {
 		 *
 		 */
 		 
-		//return dfFinal;
-		return readsRDD;
+		return dfFinal;
+		//return readsRDD;
 		
 		
 		
@@ -688,8 +644,8 @@ public class BwaInterpreter {
 	 * @param readsRDD The RDD containing the paired reads
 	 * @return A list of strings containing the resulting sam files where the output alignments are stored
 	 */
-	//private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsDS) {
-	private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
+	private List<String> MapPairedBwa(Bwa bwa, Dataset<Row> readsDS) {
+	//private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
 
 		StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
@@ -703,8 +659,8 @@ public class BwaInterpreter {
         StructField field9 = DataTypes.createStructField("quality2", DataTypes.StringType, true);
         StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5, field6, field7, field8, field9));
 
-       // List<String> listOne = readsDS
-		//		.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
+        List<String> listOne = readsDS
+				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
 
 
      /*   
@@ -726,13 +682,13 @@ public class BwaInterpreter {
         */
 
         
-		//return listOne;
+		return listOne;
 		
 		
 	
-		return readsRDD 
-				.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
-				.collect();
+		//return readsRDD 
+		//		.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
+		//		.collect();
 
 	}
 
@@ -761,10 +717,10 @@ public class BwaInterpreter {
 
 		List<String> returnedValues;
 		if (bwa.isPairedReads()) {
-			//Dataset<Row> readsDS = handlePairedReadsSorting();
-			JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
-			//returnedValues = MapPairedBwa(bwa, readsDS);
-			returnedValues = MapPairedBwa(bwa, readsRDD);
+			Dataset<Row> readsDS = handlePairedReadsSorting();
+			//JavaRDD<Tuple2<String, String>> readsRDD = handlePairedReadsSorting();
+			returnedValues = MapPairedBwa(bwa, readsDS);
+			//returnedValues = MapPairedBwa(bwa, readsRDD);
 			
 			//System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			//returnedValues.forEach(System.out::println);
