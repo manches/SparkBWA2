@@ -427,15 +427,10 @@ public class BwaInterpreter {
 	
 			System.out.println("AQUI2");
 			
-			JavaRDD<String> cRDD2 = filteredJavaRDD
-		    		.map((Function<String, String>) record -> {
-		    			String[] parts = record.split("\r");
-		    			//return RowFactory.create(attributes[0], attributes[1].trim());
-		    			return record;
-	    });
-		      for(String line:cRDD2.collect()){
-		            System.out.println("* cRDD2"+line);
-		        }
+		    for(String line:filteredJavaRDD.collect()){
+	            System.out.println("* cRDD2"+line);
+	        }
+			
 
 		    JavaRDD<Row> cRDD = filteredJavaRDD
 		    		.map((Function<String, Row>) record -> {
