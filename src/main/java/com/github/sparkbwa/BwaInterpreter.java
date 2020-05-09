@@ -415,9 +415,7 @@ public class BwaInterpreter {
 		   
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 		
-	      for(String line:fastqLines.collect()){
-	            System.out.println("* fastqLines"+line);
-	        }
+
 		
 		   JavaRDD<String> filteredJavaRDD = fastqLines.filter(new
 				   Function<String,Boolean>(){
@@ -426,14 +424,22 @@ public class BwaInterpreter {
 				   }
 				   });
 		   
-		      for(String line:filteredJavaRDD.collect()){
-		            System.out.println("* filteredJavaRDD"+line);
-		        }
+	
 			System.out.println("AQUI2");
+			
+			JavaRDD<String> cRDD2 = filteredJavaRDD
+		    		.map((Function<String, String>) record -> {
+		    			String[] parts = record.split("\r");
+		    			//return RowFactory.create(attributes[0], attributes[1].trim());
+		    			return parts;
+	    });
+		      for(String line:cRDD2.collect()){
+		            System.out.println("* cRDD2"+line);
+		        }
 
 		    JavaRDD<Row> cRDD = filteredJavaRDD
 		    		.map((Function<String, Row>) record -> {
-		    			String[] parts = record.split("\r");
+		    			String[] parts = record.split("\n");
 		    			//return RowFactory.create(attributes[0], attributes[1].trim());
 		    			return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 	    });
