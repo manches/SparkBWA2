@@ -431,7 +431,7 @@ public class BwaInterpreter {
 		    		.map((Function<String, String>) record -> {
 		    			String[] parts = record.split("\r");
 		    			//return RowFactory.create(attributes[0], attributes[1].trim());
-		    			return parts;
+		    			return record;
 	    });
 		      for(String line:cRDD2.collect()){
 		            System.out.println("* cRDD2"+line);
