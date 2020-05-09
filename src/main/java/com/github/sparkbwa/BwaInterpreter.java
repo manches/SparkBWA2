@@ -432,7 +432,7 @@ public class BwaInterpreter {
 
 		Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 		System.out.println("AQUI4");
-		mainDataset.show();
+		mainDataset.show(10,false);
         
   
         //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
