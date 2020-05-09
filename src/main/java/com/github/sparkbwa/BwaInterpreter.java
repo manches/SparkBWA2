@@ -437,9 +437,7 @@ public class BwaInterpreter {
 		    			//return RowFactory.create(attributes[0], attributes[1].trim());
 		    			return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 	    });
-		    for(String line:cRDD.collect()){
-	            System.out.println("* cRDD"+line);
-	        }
+
 		    
 
 			System.out.println("AQUI3");
