@@ -856,10 +856,10 @@ public class BwaInterpreter {
 			this.sparkConf = this.ctx.getConf();
 		}
 
-		//The Hadoop configuration is obtained
+		//The Hadoop configuration is obtained    
 		this.conf = this.ctx.hadoopConfiguration();
         this.conf.setBoolean("fs.hdfs.impl.disable.cache", true);
-		this.conf.set("textinputformat.record.delimiter","^@");
+		this.conf.set("textinputformat.record.delimiter","^[@]");
 
 		//The block size
 		this.blocksize = this.conf.getLong("dfs.blocksize", 134217728);
