@@ -429,6 +429,8 @@ public class BwaInterpreter {
 			
 		    for(String line:filteredJavaRDD.collect()){
 	            System.out.println("* cRDD2"+line);
+	            System.out.println("* cRDD2"+line);
+
 	        }
 			
 
@@ -872,7 +874,7 @@ public class BwaInterpreter {
 		//The Hadoop configuration is obtained    
 		this.conf = this.ctx.hadoopConfiguration();
         this.conf.setBoolean("fs.hdfs.impl.disable.cache", true);
-		this.conf.set("textinputformat.record.delimiter","@");
+		this.conf.set("textinputformat.record.delimiter","\n@");
 
 		//The block size
 		this.blocksize = this.conf.getLong("dfs.blocksize", 134217728);
