@@ -281,8 +281,8 @@ public class BwaInterpreter {
 	        }
 
       Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index1", functions.monotonicallyIncreasingId());     
-      mainDataset.show();
-		   
+      mainDataset.show(10,false);
+      
 //		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
 //		Encoders.tuple(Encoders.LONG(), Encoders.tuple(Encoders.STRING(),Encoders.LONG()));
 //Dataset<Row> newDataSet = this. .createDataset(JavaPairRDD.toRDD(fastqLinesByRecordNum),encoder2).toDF("value1","value2");
