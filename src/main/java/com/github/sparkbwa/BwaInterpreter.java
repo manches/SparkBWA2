@@ -415,11 +415,14 @@ public class BwaInterpreter {
 		   
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 		
-    	List<String> data = Arrays.asList(" "); 
+    	List<String> data = Arrays.asList(""); 
     	JavaRDD<String> items = ctx.parallelize(data,1);
     	
 		JavaRDD<String> filteredJavaRDD = items.union(fastqLines);
 		
+        for(String line:filteredJavaRDD.collect()){
+            System.out.println("filteredJavaRDD********** "+line);
+        }
 		  /*JavaRDD<String> filteredJavaRDD = filteredJavaRDD2.filter(new
 		  *Function<String,Boolean>(){ public Boolean call(String arg0) throws Exception
 		  *{ return (!arg0.equals("")); } });
