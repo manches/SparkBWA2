@@ -437,7 +437,7 @@ public class BwaInterpreter {
 		    			return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 	    } catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
-			LOG.error("["+this.getClass().getName()+"]     "+ record+"||||||||" "+e.toString());
+			LOG.error("["+this.getClass().getName()+"]     "+ record+"||||||||"+e.toString());
 		} 
 		    		
 		    				);
