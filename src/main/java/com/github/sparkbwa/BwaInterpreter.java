@@ -435,7 +435,7 @@ public class BwaInterpreter {
 		    JavaRDD<Row> cRDD = filteredJavaRDD
 		    		.map((Function<String, Row>) record -> {try
 		    		{
-		    			String[] parts = record.split("\n@");
+		    			String[] parts = record.split("\n");
 		    			//return RowFactory.create(attributes[0], attributes[1].trim());
 		    			return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 	    } catch (ArrayIndexOutOfBoundsException e) {
@@ -879,7 +879,7 @@ public class BwaInterpreter {
 		//The Hadoop configuration is obtained    
 		this.conf = this.ctx.hadoopConfiguration();
         this.conf.setBoolean("fs.hdfs.impl.disable.cache", true);
-		//this.conf.set("textinputformat.record.delimiter","\n@");
+		this.conf.set("textinputformat.record.delimiter","\u0002@");
 
 		//The block size
 		this.blocksize = this.conf.getLong("dfs.blocksize", 134217728);
