@@ -430,11 +430,17 @@ public class BwaInterpreter {
 			
 
 		    JavaRDD<Row> cRDD = filteredJavaRDD
-		    		.map((Function<String, Row>) record -> {
+		    		.map((Function<String, Row>) record -> try
+		    		{
 		    			String[] parts = record.split("\n");
 		    			//return RowFactory.create(attributes[0], attributes[1].trim());
 		    			return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
-	    });
+	    } catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			LOG.error("["+this.getClass().getName()+"]     "+ record+"||||||||" "+e.toString());
+		} 
+		    		
+		    				);
 
 		    
 
