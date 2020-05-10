@@ -428,11 +428,6 @@ public class BwaInterpreter {
 	
 			System.out.println("AQUI2");
 			
-		    for(String line:filteredJavaRDD.collect()){
-	            System.out.println("* cRDD2"+line);
-
-	        }
-			
 
 		    JavaRDD<Row> cRDD = filteredJavaRDD
 		    		.map((Function<String, Row>) record -> {
