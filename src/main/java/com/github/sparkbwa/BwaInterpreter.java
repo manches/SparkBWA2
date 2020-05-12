@@ -97,7 +97,7 @@ import org.apache.hadoop.conf.Configuration;
 /**
  * BwaInterpreter class
  *
- * @author Jose M. Abuin
+ * @author Jose M. Abuin 
  * @brief This class communicates Spark with BWA
  */
 public class BwaInterpreter {
