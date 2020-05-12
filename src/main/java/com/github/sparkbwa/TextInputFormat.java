@@ -23,7 +23,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.*;
 import org.apache.hadoop.mapreduce.*;
-
+import org.apache.hadoop.mapreduce.lib.*;
 
 public class TextInputFormat extends FileInputFormat<LongWritable, Text> {
 
