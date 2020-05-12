@@ -30,7 +30,8 @@ import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.io.compress.CompressionCodecFactory;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-
+import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.mapreduce.lib.*;
 
 public class LineRecordReader extends RecordReader<LongWritable, Text> {
 	  private static final Log LOG = LogFactory.getLog(LineRecordReader.class);
