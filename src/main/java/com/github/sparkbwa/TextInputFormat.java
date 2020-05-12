@@ -15,6 +15,14 @@
  * see <http://www.gnu.org/licenses/>.
  */
 package com.github.sparkbwa;
+
+import java.io.*;
+
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.*;
+
 public class TextInputFormat extends FileInputFormat<LongWritable, Text> {
 
   @Override
