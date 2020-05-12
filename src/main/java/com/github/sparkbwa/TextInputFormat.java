@@ -22,6 +22,8 @@ import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.*;
+import org.apache.hadoop.mapreduce.InputSplit
+
 
 public class TextInputFormat extends FileInputFormat<LongWritable, Text> {
 
@@ -36,7 +38,7 @@ public class TextInputFormat extends FileInputFormat<LongWritable, Text> {
       recordDelimiterBytes = delimiter.getBytes(Charsets.UTF_8);
     return new LineRecordReader(recordDelimiterBytes);
   }
-//这个对文件做压缩用的
+ 
   @Override
   protected boolean isSplitable(JobContext context, Path file) {
     final CompressionCodec codec =
