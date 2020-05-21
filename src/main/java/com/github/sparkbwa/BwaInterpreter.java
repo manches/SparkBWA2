@@ -414,8 +414,10 @@ public class BwaInterpreter {
 		System.out.println("AQUI A");
 		
 		SparkContext sc = ss.sparkContext();
+		RDD<String> rdd = sc.textFile(pathToFastq,2);
 		
-		RDDFunctions rf = new RDDFunctions<>(sc.textFile(pathToFastq,2));
+		
+		RDDFunctions rf = new RDDFunctions<>(rdd);
 		
 		
 		Dataset<Row> mainDataset = ss.createDataset(rf.sliding(4, 4)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
