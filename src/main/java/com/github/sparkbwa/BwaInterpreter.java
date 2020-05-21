@@ -423,17 +423,12 @@ public class BwaInterpreter {
 		
 		JavaRDD<Object> javaRDD = rf.toJavaRDD(); 
 		
-	     JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {try
- 		{
+	     JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {
 	            List<String> fileds = (List<String>) record;
 	            return RowFactory.create(fileds.toArray());
-	    } catch (ClassCastException e) {
-			e.printStackTrace();
-			LOG.error("[MANCHESSSSSSSSS]     "+ record+"||||||||"+e.toString());
-		} 
-	     	return null;
 	        });
 	     
+	   
 	     
 		
 			Dataset<Row> mainDataset = ss.createDataFrame(rowRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
