@@ -421,8 +421,9 @@ public class BwaInterpreter {
 		//RDD<Object> r = RDDFunctions.fromRDD(filteredWords.rdd(), filteredWords.classTag()).sliding(7);
 		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
 		
+		JavaRDD<Object> javaRDD = rf.toJavaRDD(); 
 		
-	     JavaRDD<Row> rowRDD = rf.map((Function<Object, Row>) record -> {
+	     JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {
 	            List fileds = (List) record;
 	            return RowFactory.create(fileds.toArray());
 	        });
