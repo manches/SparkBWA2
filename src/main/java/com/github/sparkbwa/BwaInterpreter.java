@@ -75,6 +75,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import java.io.File;
+import org.apache.spark.mllib.rdd.RDDFunctions._
+
 
 import org.apache.spark.api.java.function.Function;
 import java.util.AbstractCollection;
@@ -392,8 +394,43 @@ public class BwaInterpreter {
 		
 		}
 	*/
+	
+	/**
+	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
+	 * @param ctx The JavaSparkContext to use
+	 * @param pathToFastq The path to the FASTQ file
+	 * @return A JavaPairRDD containing <Long Read ID, String Read>
+	 */
+	public static Dataset<Row> loadFastqtoDSnew(SparkSession ss, String pathToFastq, int index) {			
+
+
+	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
+	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
+	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
+	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
+
+		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
+		System.out.println("AQUI A");
+		
+		SparkContext sc = ss.sparkContext();
 		
 		
+		
+		Dataset<Row> mainDataset = ss.createDataset(sc.textFile(pathToFastq).sliding(4, 4)).toDF("identifier", "sequence","e", "quality".withColumn("index", functions.monotonicallyIncreasingId());     
+
+			System.out.println("AQUI B");
+	
+			mainDataset.show(10,false);
+        
+  
+        //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
+        //data.show(false);
+
+		return mainDataset;
+	}
+
+	
 		
 	/**
 	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
@@ -550,10 +587,10 @@ public class BwaInterpreter {
 //		JavaPairRDD<Long, String> datasetTmp1 = loadFastq(this.sparkSession, options.getInputPath());
 //		JavaPairRDD<Long, String> datasetTmp2 = loadFastq(this.sparkSession, options.getInputPath2());
 //		JavaPairRDD<Long, Tuple2<String, String>> pairedReadsRDD = datasetTmp1.join(datasetTmp2);
-		Dataset<Row> datasettmpDS1 = loadFastqtoDS(this.sparkSession, options.getInputPath(),1);
+		Dataset<Row> datasettmpDS1 = loadFastqtoDSnew(this.sparkSession, options.getInputPath(),1);
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
 
-		Dataset<Row> datasettmpDS2 = loadFastqtoDS(this.sparkSession, options.getInputPath2(),2);
+		Dataset<Row> datasettmpDS2 = loadFastqtoDSnew(this.sparkSession, options.getInputPath2(),2);
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");
 		
 		//datasettmpDS1.show(false);
