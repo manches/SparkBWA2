@@ -415,7 +415,7 @@ public class BwaInterpreter {
 		
 		SparkContext sc = ss.sparkContext();
 		
-		RDDFunctions rf = new RDDFunctions<>(sc.textFile(pathToFastq,2)) 
+		RDDFunctions rf = new RDDFunctions<>(sc.textFile(pathToFastq,2));
 		
 		
 		Dataset<Row> mainDataset = ss.createDataset(rf.sliding(4, 4)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
