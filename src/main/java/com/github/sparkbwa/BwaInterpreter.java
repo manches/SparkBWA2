@@ -75,7 +75,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import java.io.File;
-import org.apache.spark.mllib.rdd.RDDFunctions._
+import org.apache.spark.mllib.rdd.RDDFunctions._;
 
 
 import org.apache.spark.api.java.function.Function;
@@ -417,7 +417,7 @@ public class BwaInterpreter {
 		
 		
 		
-		Dataset<Row> mainDataset = ss.createDataset(sc.textFile(pathToFastq).sliding(4, 4)).toDF("identifier", "sequence","e", "quality".withColumn("index", functions.monotonicallyIncreasingId());     
+		Dataset<Row> mainDataset = ss.createDataset(sc.textFile(pathToFastq).sliding(4, 4)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
