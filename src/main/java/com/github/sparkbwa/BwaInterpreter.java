@@ -288,7 +288,7 @@ public class BwaInterpreter {
 	        }
 	        
 	       // Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index1", functions.monotonicallyIncreasingId());     
-	        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(cRDD, schema),1,"index1");     
+	        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(cRDD, schema),1L,"index1");     
       mainDataset.show(10,false);
       
 //		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
