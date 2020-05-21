@@ -414,7 +414,7 @@ public class BwaInterpreter {
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 		
-		JavaRDD<Object> javaRDD = RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4).toJavaRDD(); 		
+		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
 		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
 		
 		
