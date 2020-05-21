@@ -421,7 +421,7 @@ public class BwaInterpreter {
 		//RDD<Object> r = RDDFunctions.fromRDD(filteredWords.rdd(), filteredWords.classTag()).sliding(7);
 		
 		Dataset<Row> mainDataset = ss.createDataset(RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4).map {
-		  case Array(id, seq, e, qual) => (id, seq, e, qual)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
+		  case Array(id, seq, e, qual) => (id, seq, e, qual)}).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
