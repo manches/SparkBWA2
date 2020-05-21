@@ -75,7 +75,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import java.io.File;
-import org.apache.spark.mllib.rdd.RDDFunctions.*;
+import org.apache.spark.mllib.rdd.*;
 
 
 import org.apache.spark.api.java.function.Function;
