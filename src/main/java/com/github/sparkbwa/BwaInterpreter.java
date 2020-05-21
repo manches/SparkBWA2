@@ -446,7 +446,7 @@ public class BwaInterpreter {
 
 	     
 		
-			/Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
+			Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
