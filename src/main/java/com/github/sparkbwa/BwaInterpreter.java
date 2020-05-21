@@ -609,7 +609,7 @@ public class BwaInterpreter {
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
 
-		//joined.show(2,false);		
+		joined.show(10,false);		
 								
 		//datasetTmp1.unpersist();
 		//datasetTmp2.unpersist();
