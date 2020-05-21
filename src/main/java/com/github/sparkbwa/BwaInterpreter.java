@@ -819,7 +819,7 @@ public class BwaInterpreter {
 					}
 					br.close();
 
-					//fs.delete(new Path(returnedValues.get(i)), true);
+					fs.delete(new Path(returnedValues.get(i)), true);
 				}
 
 				outputFinalStream.close();
