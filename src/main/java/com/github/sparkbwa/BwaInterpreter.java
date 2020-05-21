@@ -286,9 +286,8 @@ public class BwaInterpreter {
 	        for(String line:filteredJavaRDD.collect()){
 	            System.out.println("filteredJavaRDD********** "+line);
 	        }
-	        
-	       // Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index1", functions.monotonicallyIncreasingId());     
-	        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(cRDD, schema),1L,"index1");     
+	        	
+      Dataset<Row> mainDataset = ss.createDataFrame(cRDD, schema).withColumn("index1", functions.monotonicallyIncreasingId());     
       mainDataset.show(10,false);
       
 //		Encoder<Tuple2<Long, Tuple2<String,Long>>> encoder2 =
@@ -433,8 +432,9 @@ public class BwaInterpreter {
 
 			}
 		});	     
-		
-			Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
+        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(result, schema),1L,"index1");     
+
+		//	Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 //			mainDataset.show(10,false);
   
 		return mainDataset;
