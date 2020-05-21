@@ -153,10 +153,10 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 
 			// Delete temporary files, as they have now been copied to the output directory
 			LOG.error("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName1);
-			FastqFile1.delete();
+			//FastqFile1.delete();
 
 			LOG.error("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName2);
-			FastqFile2.delete();
+			//FastqFile2.delete();
 	        
 
 	        
