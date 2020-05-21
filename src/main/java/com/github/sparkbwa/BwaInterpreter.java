@@ -603,8 +603,8 @@ public class BwaInterpreter {
 		Dataset<Row> datasettmpDS2 = loadFastqtoDSnew(this.sparkSession, options.getInputPath2(),2);
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");
 		
-		//datasettmpDS1.show(false);
-		//datasettmpDS2.show(false);	 a
+		datasettmpDS1.show(10,false);
+		datasettmpDS2.show(10,false);	 
 
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
@@ -819,7 +819,7 @@ public class BwaInterpreter {
 					}
 					br.close();
 
-					fs.delete(new Path(returnedValues.get(i)), true);
+					//fs.delete(new Path(returnedValues.get(i)), true);
 				}
 
 				outputFinalStream.close();
