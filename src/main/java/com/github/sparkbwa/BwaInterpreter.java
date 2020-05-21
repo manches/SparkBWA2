@@ -419,9 +419,12 @@ public class BwaInterpreter {
 		//RDD<String> rdd = sc.textFile(pathToFastq,2);
 		
 		//RDD<Object> r = RDDFunctions.fromRDD(filteredWords.rdd(), filteredWords.classTag()).sliding(7);
+		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4).map()
+		  case Array(id, seq, e, qual) => (id, seq, e, qual))
+		}).toDF("identifier", "sequence", "quality")
 		
-		Dataset<Row> mainDataset = ss.createDataset(RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4).map {
-		  case Array(id, seq, e, qual) => (id, seq, e, qual)}).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
+		
+		Dataset<Row> mainDataset = ss.createDataset(rf).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
