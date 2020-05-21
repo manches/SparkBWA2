@@ -446,17 +446,17 @@ public class BwaInterpreter {
 
 	     
 		
-			//Dataset<Row> mainDataset = ss.createDataFrame(rowRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
+			/Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
-			//mainDataset.show(10,false);
+			mainDataset.show(10,false);
         
   
         //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
         //data.show(false);
 
-		return null;
+		return mainDataset;
 	}
 
 	
