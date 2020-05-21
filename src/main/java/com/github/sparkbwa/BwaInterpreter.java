@@ -417,10 +417,10 @@ public class BwaInterpreter {
 		RDD<String> rdd = sc.textFile(pathToFastq,2);
 		
 		
-		RDDFunctions<String> rf = new RDDFunctions<String>(rdd,scala.reflect.ClassTag<java.lang.String>);
+		RDD<String> rf = new RDDFunctions<String>(rdd).sliding(4, 4);
 		
 		
-		Dataset<Row> mainDataset = ss.createDataset(rf.sliding(4, 4)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
+		Dataset<Row> mainDataset = ss.createDataset(rf).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
