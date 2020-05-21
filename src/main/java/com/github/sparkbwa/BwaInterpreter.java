@@ -417,7 +417,7 @@ public class BwaInterpreter {
 		RDD<String> rdd = sc.textFile(pathToFastq,2);
 		
 		
-		RDDFunctions rf = new RDDFunctions<>(rdd);
+		RDDFunctions<String> rf = new RDDFunctions<String>(rdd);
 		
 		
 		Dataset<Row> mainDataset = ss.createDataset(rf.sliding(4, 4)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
