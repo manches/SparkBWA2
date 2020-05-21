@@ -423,25 +423,38 @@ public class BwaInterpreter {
 		
 		JavaRDD<Object> javaRDD = rf.toJavaRDD(); 
 		
-	     JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {
-	            List<String> fileds = (List<String>) record;
-	            return RowFactory.create(fileds.toArray());
-	        });
-	     
-	   
+	    // JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {
+	     //       List<String> fileds = (List<String>) record;	            
+//	            return RowFactory.create(fileds.toArray());
+//	        });
+		
+	JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
+		
+		
+		//Map the object RDD to String RDD
+		JavaRDD<String> result = x.map(new Function<Object,String>() {
+			@Override
+			public String call(Object arg0) throws Exception {
+				return Arrays.toString((Object[])arg0);
+			}
+		});	     
+		
+        for(String line:result.collect()){
+            System.out.println("result********** "+line);
+       }
 	     
 		
-			Dataset<Row> mainDataset = ss.createDataFrame(rowRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
+			//Dataset<Row> mainDataset = ss.createDataFrame(rowRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
-			mainDataset.show(10,false);
+			//mainDataset.show(10,false);
         
   
         //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
         //data.show(false);
 
-		return mainDataset;
+		return null;
 	}
 
 	
