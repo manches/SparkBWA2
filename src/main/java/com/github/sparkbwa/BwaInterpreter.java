@@ -431,7 +431,7 @@ public class BwaInterpreter {
 			e.printStackTrace();
 			LOG.error("[MANCHESSSSSSSSS]     "+ record+"||||||||"+e.toString());
 		} 
-
+	     	return null;
 	        });
 	     
 	     
