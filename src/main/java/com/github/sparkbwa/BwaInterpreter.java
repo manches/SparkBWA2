@@ -432,16 +432,18 @@ public class BwaInterpreter {
 		
 		
 		//Map the object RDD to String RDD
-		JavaRDD<String> result = x.map(new Function<Object,String>() {
+		JavaRDD<row> result = x.map(new Function<Object,String>() {
 			@Override
-			public String call(Object arg0) throws Exception {
-				return Arrays.toString((Object[])arg0);
+			public row call(Object arg0) throws Exception {
+			      String[] parts = Arrays.toString((Object[])arg0).split(",");
+
+		    	return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+
+				//return Arrays.toString((Object[])arg0);
 			}
 		});	     
 		
-        for(String line:result.collect()){
-            System.out.println("result********** "+line);
-       }
+
 	     
 		
 			//Dataset<Row> mainDataset = ss.createDataFrame(rowRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
