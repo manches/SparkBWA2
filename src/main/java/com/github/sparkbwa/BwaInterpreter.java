@@ -432,7 +432,7 @@ public class BwaInterpreter {
 
 			}
 		});	     
-        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(result, schema),1L,"index1");     
+        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(result, schema),1L,"index");     
 
 		//	Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 //			mainDataset.show(10,false);
