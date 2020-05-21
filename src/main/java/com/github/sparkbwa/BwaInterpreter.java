@@ -412,23 +412,10 @@ public class BwaInterpreter {
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
 
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
-		System.out.println("AQUI A");
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
-
-		//SparkContext sc = ss.sparkContext();
-		//RDD<String> rdd = sc.textFile(pathToFastq,2);
 		
-		//RDD<Object> r = RDDFunctions.fromRDD(filteredWords.rdd(), filteredWords.classTag()).sliding(7);
-		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
-		
-		JavaRDD<Object> javaRDD = rf.toJavaRDD(); 
-		
-	    // JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {
-	     //       List<String> fileds = (List<String>) record;	            
-//	            return RowFactory.create(fileds.toArray());
-//	        });
-		
-	JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
+		JavaRDD<Object> javaRDD = RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4).toJavaRDD(); 		
+		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
 		
 		
 		//Map the object RDD to String RDD
@@ -439,23 +426,12 @@ public class BwaInterpreter {
 
 		    	return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 
-				//return Arrays.toString((Object[])arg0);
 			}
 		});	     
 		
-
-	     
-		
 			Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
-
-			System.out.println("AQUI B");
-	
-			mainDataset.show(10,false);
-        
+//			mainDataset.show(10,false);
   
-        //Dataset<Row> data = sqlContext.createDataFrame(rowList, schema);
-        //data.show(false);
-
 		return mainDataset;
 	}
 
@@ -714,8 +690,8 @@ public class BwaInterpreter {
  * 
  */
 	
- 		//dfFinal.show(10,false);
-		//dfFinal.printSchema();
+ 		dfFinal.show(10,false);
+		dfFinal.printSchema();
 	    
 		/*root
 		 |-- index: integer (nullable = true)
@@ -758,44 +734,11 @@ public class BwaInterpreter {
 	//private List<String> MapPairedBwa(Bwa bwa, JavaRDD<Tuple2<String, String>> readsRDD) {
 		// The mapPartitionsWithIndex is used over this RDD to perform the alignment. The resulting sam filenames are returned
 
-		StructField field1 = DataTypes.createStructField("index", DataTypes.IntegerType, true);
-        StructField field2 = DataTypes.createStructField("identifier1", DataTypes.StringType, true);
-        StructField field3 = DataTypes.createStructField("sequence1", DataTypes.StringType, true);
-        StructField field4 = DataTypes.createStructField("aux1", DataTypes.StringType, true);
-        StructField field5 = DataTypes.createStructField("quality1", DataTypes.StringType, true);
-        StructField field6 = DataTypes.createStructField("identifier2", DataTypes.StringType, true);
-        StructField field7 = DataTypes.createStructField("sequence2", DataTypes.StringType, true);
-        StructField field8 = DataTypes.createStructField("aux2", DataTypes.StringType, true);
-        StructField field9 = DataTypes.createStructField("quality2", DataTypes.StringType, true);
-        StructType schema = DataTypes.createStructType(Lists.newArrayList(field1, field2, field3, field4, field5, field6, field7, field8, field9));
-
         List<String> listOne = readsDS
 				.mapPartitions(new BwaPairedAlignmentDS(this.sparkSession.sparkContext(), bwa),Encoders.STRING() ).as(Encoders.STRING()).collectAsList();
-
-
-     /*   
-        try {
-            Configuration conf = new Configuration();
-            conf.setBoolean("fs.hdfs.impl.disable.cache", true);
-        	FileSystem fs = FileSystem.get(conf);
-        	InputStream is = fs.open(new Path("hdfs:/user/curso105/hg38.fna"));
-    		OutputStream os = new BufferedOutputStream(new FileOutputStream("hg38.fna")); // Data set is getting copied into local path in the file sysetm through buffer mechanism
-    		IOUtils.copyBytes(is, os, conf);
-        } catch (FileNotFoundException e) {
-			e.printStackTrace();
-			LOG.error("["+this.getClass().getName()+"] "+e.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-			LOG.error("["+this.getClass().getName()+"] "+e.toString());
-		} 
-
-        */
-
         
 		return listOne;
 		
-		
-	
 		//return readsRDD 
 		//		.mapPartitionsWithIndex(new BwaPairedAlignment(readsRDD.context(), bwa), true)
 		//		.collect();
