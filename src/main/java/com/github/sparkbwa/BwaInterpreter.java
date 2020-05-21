@@ -422,17 +422,12 @@ public class BwaInterpreter {
 		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
 		
 		
-	     //JavaRDD<Row> rowRDD = rf.map((Function<Object, Row>) record -> {
-	       //     List fileds = (List) record;
-	        //    return RowFactory.create(fileds.toArray());
-	       // });
+	     JavaRDD<Row> rowRDD = rf.map((Function<Object, Row>) record -> {
+	            List fileds = (List) record;
+	            return RowFactory.create(fileds.toArray());
+	        });
 	     
-			 JavaRDD<Row> rowRDD = rf.map(new Function<Object, Row>() {			
-			 public Row call(Object s) {
-			 String[] array = s.split(",");
-			 return RowFactory.create((Object[])array);
-			 }
-			 });
+	     
 		
 			Dataset<Row> mainDataset = ss.createDataFrame(rowRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 
