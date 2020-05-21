@@ -422,9 +422,12 @@ public class BwaInterpreter {
 		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
 		
 		
+	     JavaRDD<Row> rowRDD = rf.map((Function<Object, Row>) record -> {
+	            List fileds = (List) record;
+	            return RowFactory.create(fileds.toArray());
+	        });
 		
-		
-		Dataset<Row> mainDataset = ss.createDataset(rf.map(case Array(id, seq, e, qual) => (id, seq,e, qual))).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
+			Dataset<Row> mainDataset = ss.createDataFrame(rowRDD, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
