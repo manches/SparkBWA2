@@ -90,7 +90,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import org.apache.spark.sql.expressions.Window
+import org.apache.spark.sql.expressions.Window;
 import java.util.HashMap; 
 import java.util.Map;
 import org.apache.spark.sql.expressions.UserDefinedFunction;
