@@ -424,7 +424,7 @@ public class BwaInterpreter {
 		
 		
 		
-		Dataset<Row> mainDataset = ss.createDataset(rf.map(case Array(id, seq, _, qual) => (id, seq, qual))).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
+		Dataset<Row> mainDataset = ss.createDataset(rf.map(case Array(id, seq, e, qual) => (id, seq,e, qual))).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
