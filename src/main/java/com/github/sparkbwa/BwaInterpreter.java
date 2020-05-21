@@ -417,7 +417,7 @@ public class BwaInterpreter {
 		
 		
 		
-		Dataset<Row> mainDataset = ss.createDataset(sc.textFile(pathToFastq).sliding(4, 4)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
+		Dataset<Row> mainDataset = ss.createDataset(sc.textFile(pathToFastq,2).sliding(4, 4)).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
 
 			System.out.println("AQUI B");
 	
