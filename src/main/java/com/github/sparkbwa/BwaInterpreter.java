@@ -424,7 +424,7 @@ public class BwaInterpreter {
 		JavaRDD<Object> javaRDD = rf.toJavaRDD(); 
 		
 	     JavaRDD<Row> rowRDD = javaRDD.map((Function<String, Row>) record -> {
-	            List<String> fileds = (List<String>) record;
+	            List fileds = (List) record;
 	            return RowFactory.create(fileds.toArray());
 	        });
 	     
