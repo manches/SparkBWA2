@@ -423,10 +423,27 @@ public class BwaInterpreter {
 		
 		JavaRDD<Object> javaRDD = rf.toJavaRDD(); 
 		
-	     JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {
-	            List<String> fileds = (List<String>) record;
-	            return RowFactory.create(fileds.toArray());
-	        });
+
+	     
+	     
+	     JavaRDD<Row> rowRDD = javaRDD
+		    		.map((Function<String, Row>) record -> {try
+		    		{
+		    			String[] parts = record.split("\n");
+		    			//return RowFactory.create(attributes[0], attributes[1].trim());
+		    			if ( parts[0].trim().startsWith("@") ) {
+			    			return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());		    				
+		    			}else {		    				
+			    			return RowFactory.create("@"+parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
+		    			}
+	    } catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			LOG.error("[MANCHESSSSSSSSS]     "+ record+"||||||||"+e.toString());
+		} 
+	                return null;
+
+		    		});
+
 	     
 	     
 		
