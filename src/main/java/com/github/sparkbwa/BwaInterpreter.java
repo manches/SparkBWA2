@@ -76,6 +76,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import java.io.File;
 import org.apache.spark.mllib.rdd.*;
+import org.apache.spark.mllib.rdd.RDDFunctions;
 
 
 import org.apache.spark.api.java.function.Function;
@@ -416,8 +417,8 @@ public class BwaInterpreter {
 		SparkContext sc = ss.sparkContext();
 		RDD<String> rdd = sc.textFile(pathToFastq,2);
 		
-		
-		RDD<String> rf = new RDDFunctions<String>(rdd).sliding(4, 4);
+		//RDD<Object> r = RDDFunctions.fromRDD(filteredWords.rdd(), filteredWords.classTag()).sliding(7);
+		RDD<String> rf =  RDDFunctions.fromRDD(rdd,rdd.classTag()).sliding(4, 4);
 		
 		
 		Dataset<Row> mainDataset = ss.createDataset(rf).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
