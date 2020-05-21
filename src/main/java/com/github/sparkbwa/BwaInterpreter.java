@@ -427,7 +427,7 @@ public class BwaInterpreter {
 			@Override
 			public Row call(Object arg0) throws Exception {
 				  String text = Arrays.toString((Object[])arg0);
-			      String[] parts = text.substring(1, text.length()-1)).split(",");
+			      String[] parts = text.substring(1, text.length()-1).split(",");
 
 		    	return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 
