@@ -413,12 +413,13 @@ public class BwaInterpreter {
 
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		System.out.println("AQUI A");
-		
-		SparkContext sc = ss.sparkContext();
-		RDD<String> rdd = sc.textFile(pathToFastq,2);
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+
+		//SparkContext sc = ss.sparkContext();
+		//RDD<String> rdd = sc.textFile(pathToFastq,2);
 		
 		//RDD<Object> r = RDDFunctions.fromRDD(filteredWords.rdd(), filteredWords.classTag()).sliding(7);
-		RDD<String> rf =  RDDFunctions.fromRDD(rdd,rdd.classTag()).sliding(4, 4);
+		RDD<String> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
 		
 		
 		Dataset<Row> mainDataset = ss.createDataset(rf).toDF("identifier", "sequence","e", "quality").withColumn("index", functions.monotonicallyIncreasingId());     
