@@ -423,9 +423,15 @@ public class BwaInterpreter {
 		
 		JavaRDD<Object> javaRDD = rf.toJavaRDD(); 
 		
-	     JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {
+	     JavaRDD<Row> rowRDD = javaRDD.map((Function<Object, Row>) record -> {try
+ 		{
 	            List<String> fileds = (List<String>) record;
 	            return RowFactory.create(fileds.toArray());
+	    } catch (ClassCastException e) {
+			e.printStackTrace();
+			LOG.error("[MANCHESSSSSSSSS]     "+ record+"||||||||"+e.toString());
+		} 
+
 	        });
 	     
 	     
