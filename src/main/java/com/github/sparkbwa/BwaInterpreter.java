@@ -421,21 +421,23 @@ public class BwaInterpreter {
 		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
 		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
 		
-		/*
+		
 		//Map the object RDD to String RDD
-		JavaRDD<Row> result = x.map(new Function<Object,Row>() {
+		JavaRDD<Row> result = rf.map(new Function<Object,Row>() {
 			@Override
 			public Row call(Object arg0) throws Exception {
-				ArrayList al1 = (ArrayList) arg0;
-				return RowFactory.create(al1.toArray());
+
+				
+				
+				List<> mlist =  (List) Object;
+				return RowFactory.create(mlist.toArray());
 			//	  String text = Arrays.toString((Object[])arg0);
 			//      String[] parts = text.substring(1, text.length()-1).split(",");
 		    //	return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
 
 			}
-		});
-		*/	     
-        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(x, schema),1L,"index");     
+		});	     
+        Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(result, schema),1L,"index");     
 
 		//	Dataset<Row> mainDataset = ss.createDataFrame(result, schema).withColumn("index", functions.monotonicallyIncreasingId());     
 //			mainDataset.show(10,false);
