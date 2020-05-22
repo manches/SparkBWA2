@@ -426,7 +426,7 @@ public class BwaInterpreter {
 		JavaRDD<Row> result = x.map(new Function<Object,Row>() {
 			@Override
 			public Row call(Object arg0) throws Exception {
-				  return RowFactory.create(Object[])arg0);
+				  return RowFactory.create((Object[])arg0);
 //				  String text = Arrays.toString((Object[])arg0);
 //			      String[] parts = text.substring(1, text.length()-1).split(",");
 //
