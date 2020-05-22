@@ -90,6 +90,15 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 		File FastqFile1 = new File(fastqFileName1);
 		File FastqFile2 = new File(fastqFileName2);
 
+		String group = "usc";
+		UserPrincipalLookupService lookupService = FileSystems.getDefault()
+		            .getUserPrincipalLookupService();
+		GroupPrincipal group = lookupService.lookupPrincipalByGroupName(group);
+		Files.getFileAttributeView(FastqFile1, PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
+		Files.getFileAttributeView(FastqFile2, PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
+		
+		
+
 		FileOutputStream fos1;
 		FileOutputStream fos2;
 		StringWriter sw1 = null;
@@ -153,10 +162,10 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 
 			// Delete temporary files, as they have now been copied to the output directory
 			LOG.error("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName1);
-			FastqFile1.delete();
+			//FastqFile1.delete();
 
 			LOG.error("["+this.getClass().getName()+"] :: Deleting file: " + fastqFileName2);
-			FastqFile2.delete();
+			//FastqFile2.delete();
 	        
 
 	        
