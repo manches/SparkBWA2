@@ -95,9 +95,9 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 		String groupName = "usc";
 		UserPrincipalLookupService lookupService = FileSystems.getDefault().getUserPrincipalLookupService();
 		GroupPrincipal group = lookupService.lookupPrincipalByGroupName(groupName);
-		Files.getFileAttributeView(FastqFile1, PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
-		Files.getFileAttributeView(FastqFile2, PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
-		
+		Files.getFileAttributeView(FastqFile1.toPath(), PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
+		Files.getFileAttributeView(FastqFile2.toPath(), PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
+
 		
 
 		FileOutputStream fos1;
