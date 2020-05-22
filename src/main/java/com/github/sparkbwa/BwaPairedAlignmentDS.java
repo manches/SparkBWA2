@@ -25,6 +25,7 @@ import org.apache.spark.sql.Row;
 import scala.Tuple2;
 
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
