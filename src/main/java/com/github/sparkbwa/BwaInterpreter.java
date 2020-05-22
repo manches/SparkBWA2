@@ -425,12 +425,9 @@ public class BwaInterpreter {
 		//Map the object RDD to String RDD
 		JavaRDD<Row> result = rf.map(new Function<Object,Row>() {
 			@Override
-			public Row call(Object arg0) throws Exception {
-
-				
-				
-				List mlist =  (List) arg0;
-				return RowFactory.create(mlist.toArray());
+			public Row call(Object arg0) throws Exception {		
+				String[] ary =  (java.lang.String[]) arg0;
+				return RowFactory.create(mlist);
 			//	  String text = Arrays.toString((Object[])arg0);
 			//      String[] parts = text.substring(1, text.length()-1).split(",");
 		    //	return RowFactory.create(parts[0].trim(),parts[1].trim(),parts[2].trim(),parts[3].trim());
