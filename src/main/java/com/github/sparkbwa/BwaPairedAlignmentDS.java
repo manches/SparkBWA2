@@ -151,12 +151,6 @@ public class BwaPairedAlignmentDS extends BwaAlignmentBase implements MapPartiti
 	        bw1.close();
 			bw2.close();
 
-			String groupName = "usc";
-			UserPrincipalLookupService lookupService = FileSystems.getDefault().getUserPrincipalLookupService();
-			GroupPrincipal group = lookupService.lookupPrincipalByGroupName(groupName);
-			Files.getFileAttributeView(FastqFile1.toPath(), PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
-			Files.getFileAttributeView(FastqFile2.toPath(), PosixFileAttributeView.class, LinkOption.NOFOLLOW_LINKS).setGroup(group);
-
 			arg0 = null;
 
 			// This is where the actual local alignment takes place
