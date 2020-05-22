@@ -606,9 +606,13 @@ public class BwaInterpreter {
 		
 		datasettmpDS1.show(10,false);
 		datasettmpDS1.count();
+		System.out.println("AQQQQQQQQUi " + datasettmpDS1.count());
+
 		
 		datasettmpDS2.show(10,false);
 		datasettmpDS2.count();
+		System.out.println("AQQQQQQQQUi " + datasettmpDS2.count());
+
 
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
@@ -701,7 +705,7 @@ public class BwaInterpreter {
 	
  		dfFinal.show(10,false);
 		dfFinal.printSchema();
-		dfFinal.count();
+		System.out.println("AQQQQQQQQUi " + dfFinal.count());
 	    
 		/*root
 		 |-- index: integer (nullable = true)
