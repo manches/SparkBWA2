@@ -710,7 +710,7 @@ public class BwaInterpreter {
 		 |-- aux1: string (nullable = true)
 		 |-- quality1: string (nullable = true)
 		 |-- identifier2: string (nullable = true)
-		 |-- sequence2: string (nullable = true)
+		 |-- sequence2: string (nullable = true) 
 		 |-- aux2: string (nullable = true)
 		 |-- quality2: string (nullable = true)
 		 
