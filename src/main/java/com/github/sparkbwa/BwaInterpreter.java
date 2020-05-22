@@ -429,7 +429,7 @@ public class BwaInterpreter {
 
 				
 				
-				List<> mlist =  (List) arg0;
+				List mlist =  (List) arg0;
 				return RowFactory.create(mlist.toArray());
 			//	  String text = Arrays.toString((Object[])arg0);
 			//      String[] parts = text.substring(1, text.length()-1).split(",");
