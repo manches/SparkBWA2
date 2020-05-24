@@ -251,11 +251,12 @@ public class BwaInterpreter {
 		LOG.error("[MANCHESSSSSSSS] :: End of startTime1: " + startTime1);
 
 
+	    StructField field1 = DataTypes.createStructField("index", DataTypes.StringType, true);
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
-	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field1, field2, field3, field4, field5));
 
 			long startTime2 = System.nanoTime();
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime2: " + startTime2);
@@ -267,7 +268,7 @@ public class BwaInterpreter {
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime3: " + startTime3);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime3 - startTime2) / 1e9 / 60.0 + " minutes");
 		
-		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq).zipWithIndex();
 			long startTime4 = System.nanoTime();
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime4: " + startTime4);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime4 - startTime3) / 1e9 / 60.0 + " minutes");
