@@ -251,7 +251,7 @@ public class BwaInterpreter {
 		LOG.error("[MANCHESSSSSSSS] :: End of startTime1: " + startTime1);
 
 
-	    StructField field1 = DataTypes.createStructField("index", DataTypes.StringType, true);
+	    StructField field1 = DataTypes.createStructField("index3", DataTypes.StringType, true);
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
@@ -280,14 +280,15 @@ public class BwaInterpreter {
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime5 - startTime4) / 1e9 / 60.0 + " minutes");
 
 		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
+		JavaRDD<Object,Long> = x2.zipWithIndex();
 			long startTime6 = System.nanoTime();
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime6: " + startTime6);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime6 - startTime5) / 1e9 / 60.0 + " minutes");
 
-		JavaRDD<Row> result = x.map(new Function<Object,Row>() {
+		JavaRDD<Row> result = x2.map(new Function<Object,Long,Row>() {
 			@Override
-			public Row call(Object arg0) throws Exception {
-				  return RowFactory.create((Object[])arg0);
+			public Row call(Object arg0, Long arg1) throws Exception {
+				  return RowFactory.create(arg1,(Object[])arg0);
 			}
 		});	  
 		
