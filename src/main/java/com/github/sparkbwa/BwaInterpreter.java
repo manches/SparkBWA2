@@ -268,7 +268,7 @@ public class BwaInterpreter {
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime3: " + startTime3);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime3 - startTime2) / 1e9 / 60.0 + " minutes");
 		
-		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq).zipWithIndex();
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 			long startTime4 = System.nanoTime();
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime4: " + startTime4);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime4 - startTime3) / 1e9 / 60.0 + " minutes");
@@ -284,7 +284,7 @@ public class BwaInterpreter {
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime6: " + startTime6);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime6 - startTime5) / 1e9 / 60.0 + " minutes");
 
-		JavaRDD<Row> result = x.map(new Function<Object,Row>() {
+		JavaRDD<Row> result = rf.map(new Function<Object,Row>() {
 			@Override
 			public Row call(Object arg0) throws Exception {
 				  return RowFactory.create((Object[])arg0);
@@ -297,7 +297,7 @@ public class BwaInterpreter {
         
 //		return zipWithIndex(ss.createDataFrame(result, schema),1L,"index");
 			
-		Dataset<Row> mainDataset = ss.createDataFrame(result, schema);
+		Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(result, schema),1L,"index");
 		mainDataset.show(10,false);
 		      	
 		return mainDataset;
