@@ -18,6 +18,10 @@ package com.github.sparkbwa;
 
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.SparkContext;
+import org.apache.spark.api.java.function.MapPartitionsFunction;
+import org.apache.spark.TaskContext;
+import org.apache.spark.sql.Row;
 
 import java.io.*;
 import java.util.ArrayList;
