@@ -251,7 +251,7 @@ public class BwaInterpreter {
 		LOG.error("[MANCHESSSSSSSS] :: End of startTime1: " + startTime1);
 
 
-	    StructField field1 = DataTypes.createStructField("index3", DataTypes.LongType, true);
+	    StructField field1 = DataTypes.createStructField("index", DataTypes.LongType, true);
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
@@ -298,7 +298,7 @@ public class BwaInterpreter {
         
 //		return zipWithIndex(ss.createDataFrame(result, schema),1L,"index");
 			
-		Dataset<Row> mainDataset = zipWithIndex(ss.createDataFrame(result, schema),1L,"index");
+		Dataset<Row> mainDataset = ss.createDataFrame(result, schema);
 		mainDataset.show(10,false);
 		      	
 		return mainDataset;
