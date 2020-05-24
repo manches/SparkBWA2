@@ -274,7 +274,6 @@ public class BwaInterpreter {
 		});	  
 		
 		Dataset<Row> mainDataset = ss.createDataFrame(result, schema);
-		mainDataset.show(10,false);
 		      	
 		return mainDataset;
 	}
@@ -368,8 +367,6 @@ public class BwaInterpreter {
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
 
-		joined.show(10,false);
-
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			dfFinal = joined.orderBy("index");
@@ -413,7 +410,6 @@ public class BwaInterpreter {
 
 		LOG.error("["+this.getClass().getName()+"] :: End of sorting. Timing: " + endTime);
 		LOG.error("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
-		dfFinal.show();
 		
 		return dfFinal;		
 		
