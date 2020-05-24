@@ -285,7 +285,7 @@ public class BwaInterpreter {
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime6: " + startTime6);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime6 - startTime5) / 1e9 / 60.0 + " minutes");
 
-		JavaRDD<Row> result = x2.map(new Function<Tuple2,Row>() {
+		JavaRDD<Row> result = x2.map(new Function<Tuple2<Object,Long>,Row>() {
 			@Override
 			public Row call(Tuple2 arg0) throws Exception {
 				  return RowFactory.create((Long)arg0._2(),(Object[])arg0._1());
