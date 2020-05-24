@@ -291,7 +291,7 @@ public class BwaInterpreter {
 				
 				  ArrayList<Object> aux = new ArrayList<Object>(Arrays.asList((Object[])arg0._1()));
 				  aux.add((Long.toString((Long)arg0._2()))); 
-				  return RowFactory.create(aux);
+				  return RowFactory.create(aux.toArray());
 			}
 		});	  
 		
