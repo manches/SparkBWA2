@@ -207,33 +207,7 @@ public class BwaInterpreter {
 	}
 	
 	
-	public static Dataset<Row> zipWithIndex(Dataset<Row> df, Long offset, String indexName) {
-        Dataset<Row> dfWithPartitionId = df
-                .withColumn("partition_id", spark_partition_id())
-                .withColumn("inc_id", monotonically_increasing_id());
 
-        Object partitionOffsetsObject = dfWithPartitionId
-                .groupBy("partition_id")
-                .agg(count(lit(1)).alias("cnt"), first("inc_id").alias("inc_id"))
-                .orderBy("partition_id")
-                .select(col("partition_id"), sum("cnt").over(Window.orderBy("partition_id")).minus(col("cnt")).minus(col("inc_id")).plus(lit(offset).alias("cnt")))
-                .collect();
-        Row[] partitionOffsetsArray = ((Row[]) partitionOffsetsObject);
-        Map<Integer, Long> partitionOffsets = new HashMap<>();
-        for (int i = 0; i < partitionOffsetsArray.length; i++) {
-            partitionOffsets.put(partitionOffsetsArray[i].getInt(0), partitionOffsetsArray[i].getLong(1));
-        }
-
-        UserDefinedFunction getPartitionOffset = udf(
-                (partitionId) -> partitionOffsets.get((Integer) partitionId), DataTypes.LongType
-        );
-
-        return dfWithPartitionId
-                .withColumn("partition_offset", getPartitionOffset.apply(col("partition_id")))
-                .withColumn(indexName, col("partition_offset").plus(col("inc_id")))
-                .drop("partition_id", "partition_offset", "inc_id");
-    }
-	
 	
 
 	
