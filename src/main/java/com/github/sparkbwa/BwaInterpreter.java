@@ -302,7 +302,10 @@ public class BwaInterpreter {
 //		return zipWithIndex(ss.createDataFrame(result, schema),1L,"index");
 			
 		Dataset<Row> mainDataset = ss.createDataFrame(result, schema);
-		mainDataset.show(10,false);
+		//mainDataset.show(10,false);
+		long startTime71 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime7.1: " + startTime71);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime71 - startTime7) / 1e9 / 60.0 + " minutes");
 		      	
 		return mainDataset;
 	}
