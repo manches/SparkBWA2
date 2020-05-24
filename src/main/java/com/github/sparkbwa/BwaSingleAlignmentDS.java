@@ -35,7 +35,7 @@ public class BwaSingleAlignmentDS extends BwaAlignmentBase implements MapPartiti
 	 * @param context The Spark context
 	 * @param bwaInterpreter The BWA interpreter object to use
 	 */
-	public BwaSingleAlignment(SparkContext context, Bwa bwaInterpreter) {
+	public BwaSingleAlignmentDS(SparkContext context, Bwa bwaInterpreter) {
 		super(context, bwaInterpreter);
 	}
 
