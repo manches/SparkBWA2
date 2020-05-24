@@ -246,6 +246,10 @@ public class BwaInterpreter {
 	 */
 	public static Dataset<Row> loadFastqtoDSnew(SparkSession ss, String pathToFastq, int index) {			
 
+		long startTime1 = System.nanoTime();
+		
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime1: " + startTime1);
+
 
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
@@ -253,18 +257,41 @@ public class BwaInterpreter {
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5));
 
+		long startTime2 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime2: " + startTime2);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime2 - startTime1) / 1e9 / 60.0 + " minutes");
+	    
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
-		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
 		
+		long startTime3 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime3: " + startTime3);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime3 - startTime2) / 1e9 / 60.0 + " minutes");
+		
+		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
+		long startTime4 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime4: " + startTime4);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime4 - startTime3) / 1e9 / 60.0 + " minutes");
+
 		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
+		long startTime5 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime5: " + startTime5);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime5 - startTime4) / 1e9 / 60.0 + " minutes");
+
 		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
+		long startTime6 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime6: " + startTime6);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime6 - startTime5) / 1e9 / 60.0 + " minutes");
 
 		JavaRDD<Row> result = x.map(new Function<Object,Row>() {
 			@Override
 			public Row call(Object arg0) throws Exception {
 				  return RowFactory.create((Object[])arg0);
 			}
-		});	     
+		});	  
+		
+		long startTime7 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime7: " + startTime7);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime7 - startTime6) / 1e9 / 60.0 + " minutes");
         
 		return zipWithIndex(ss.createDataFrame(result, schema),1L,"index");     
   
