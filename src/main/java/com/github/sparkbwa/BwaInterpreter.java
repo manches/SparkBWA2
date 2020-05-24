@@ -251,7 +251,7 @@ public class BwaInterpreter {
 		LOG.error("[MANCHESSSSSSSS] :: End of startTime1: " + startTime1);
 
 
-	    StructField field1 = DataTypes.createStructField("index3", DataTypes.StringType, true);
+	    StructField field1 = DataTypes.createStructField("index3", DataTypes.LongType, true);
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
@@ -288,7 +288,7 @@ public class BwaInterpreter {
 		JavaRDD<Row> result = x2.map(new Function<Tuple2<Object,Long>,Row>() {
 			@Override
 			public Row call(Tuple2 arg0) throws Exception {
-				  return RowFactory.create((String)arg0._2(),(Object[])arg0._1());
+				  return RowFactory.create((Long)arg0._2(),(Object[])arg0._1());
 			}
 		});	  
 		
