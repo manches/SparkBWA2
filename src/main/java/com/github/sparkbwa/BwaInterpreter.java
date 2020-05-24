@@ -380,13 +380,26 @@ public class BwaInterpreter {
 		Dataset<Row> datasettmpDS1 = loadFastqtoDSnew(this.sparkSession, options.getInputPath(),1);
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
 
+		long startTime8 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime8: " + startTime8);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime8 - startTime) / 1e9 / 60.0 + " minutes");
+        
+	
+		
 		Dataset<Row> datasettmpDS2 = loadFastqtoDSnew(this.sparkSession, options.getInputPath2(),2);
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");
 		
-
+		long startTime9 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime9: " + startTime9);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime9 - startTime8) / 1e9 / 60.0 + " minutes");
+        
+	
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
-		
+
+		long startTime10 = System.nanoTime();
+		LOG.error("[MANCHESSSSSSSS] :: End of startTime10: " + startTime10);
+		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime10 - startTime9) / 1e9 / 60.0 + " minutes");	
 		
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
