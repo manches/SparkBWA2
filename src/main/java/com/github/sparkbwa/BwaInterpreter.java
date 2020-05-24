@@ -252,7 +252,7 @@ public class BwaInterpreter {
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
-	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field1, field2, field3, field4, field5));
+	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field2, field3, field4, field5, field1  ));
 	    
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		
