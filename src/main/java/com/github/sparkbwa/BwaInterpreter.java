@@ -288,8 +288,7 @@ public class BwaInterpreter {
 		JavaRDD<Row> result = x2.map(new Function<Tuple2<Object,Long>,Row>() {
 			@Override
 			public Row call(Tuple2 arg0) throws Exception {
-				  Object[] aux = (Object[])arg0._1();
-				  aux.add(Long.toString((Long)arg0._2()));
+				  Object[] aux = appendValue((Object[])arg0._1(), (Long.toString((Long)arg0._2())));
 				  return RowFactory.create(aux);
 			}
 		});	  
