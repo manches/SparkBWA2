@@ -296,10 +296,10 @@ public class BwaInterpreter {
         
 //		return zipWithIndex(ss.createDataFrame(result, schema),1L,"index");
 			
-		Dataset<Row> mainDataset = ss.createDataFrame(result, schema)    
+		Dataset<Row> mainDataset = ss.createDataFrame(result, schema);
 		mainDataset.show(10,false);
 		      	
-		return mainDataset
+		return mainDataset;
 	}
 
 	
