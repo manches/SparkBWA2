@@ -280,7 +280,7 @@ public class BwaInterpreter {
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime5 - startTime4) / 1e9 / 60.0 + " minutes");
 
 		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
-		JavaRDD<Object,Long> x2 = x.zipWithIndex();
+		JavaPairRDD<Object,Long> x2 = x.zipWithIndex();
 			long startTime6 = System.nanoTime();
 			LOG.error("[MANCHESSSSSSSS] :: End of startTime6: " + startTime6);
 			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime6 - startTime5) / 1e9 / 60.0 + " minutes");
