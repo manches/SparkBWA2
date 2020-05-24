@@ -298,7 +298,7 @@ public class BwaInterpreter {
 		else if ((options.getPartitionNumber() != 0) && (options.isSortFastqReads())) {
 			
 			Dataset<Row> dfAux = singleReadsKeyVal.repartition(options.getPartitionNumber());
-			dfFinal = joined.orderBy("index");
+			dfFinal = singleReadsKeyVal.orderBy("index");
 			
 			LOG.error("["+this.getClass().getName()+"] :: Repartition with sort");
 		}

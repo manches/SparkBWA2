@@ -83,7 +83,7 @@ public class BwaSingleAlignmentDS extends BwaAlignmentBase implements MapPartiti
 
 			Row newFastqRead = null;
 
-			while (arg1.hasNext()) {
+			while (arg0.hasNext()) {
 				newFastqRead = arg0.next();
 				
 
@@ -110,7 +110,7 @@ public class BwaSingleAlignmentDS extends BwaAlignmentBase implements MapPartiti
 			bw1.close();
 
 			//We do not need the input data anymore, as it is written in a local file
-			arg1 = null;
+			arg0 = null;
 
 			// This is where the actual local alignment takes place
 			returnedValues = this.runAlignmentProcess(taskID, fastqFileName1, null);
