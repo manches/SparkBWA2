@@ -246,10 +246,6 @@ public class BwaInterpreter {
 	 */
 	public static Dataset<Row> loadFastqtoDSnew(SparkSession ss, String pathToFastq, int index) {			
 
-		long startTime1 = System.nanoTime();
-		
-		LOG.error("[MANCHESSSSSSSS] :: End of startTime1: " + startTime1);
-
 
 	    StructField field1 = DataTypes.createStructField("index", DataTypes.StringType, true);
 	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
@@ -257,33 +253,15 @@ public class BwaInterpreter {
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
 	    StructType schema = DataTypes.createStructType(Lists.newArrayList( field1, field2, field3, field4, field5));
-
-			long startTime2 = System.nanoTime();
-			LOG.error("[MANCHESSSSSSSS] :: End of startTime2: " + startTime2);
-			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime2 - startTime1) / 1e9 / 60.0 + " minutes");
 	    
 		JavaSparkContext ctx = JavaSparkContext.fromSparkContext(ss.sparkContext());
 		
-			long startTime3 = System.nanoTime();
-			LOG.error("[MANCHESSSSSSSS] :: End of startTime3: " + startTime3);
-			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime3 - startTime2) / 1e9 / 60.0 + " minutes");
-		
 		JavaRDD<String> fastqLines = ctx.textFile(pathToFastq);
-			long startTime4 = System.nanoTime();
-			LOG.error("[MANCHESSSSSSSS] :: End of startTime4: " + startTime4);
-			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime4 - startTime3) / 1e9 / 60.0 + " minutes");
 
 		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
-		
-			long startTime5 = System.nanoTime();
-			LOG.error("[MANCHESSSSSSSS] :: End of startTime5: " + startTime5);
-			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime5 - startTime4) / 1e9 / 60.0 + " minutes");
 
 		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
 		JavaPairRDD<Object,Long> x2 = x.zipWithIndex();
-			long startTime6 = System.nanoTime();
-			LOG.error("[MANCHESSSSSSSS] :: End of startTime6: " + startTime6);
-			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime6 - startTime5) / 1e9 / 60.0 + " minutes");
 
 		JavaRDD<Row> result = x2.map(new Function<Tuple2<Object,Long>,Row>() {
 			@Override
@@ -295,17 +273,8 @@ public class BwaInterpreter {
 			}
 		});	  
 		
-			long startTime7 = System.nanoTime();
-			LOG.error("[MANCHESSSSSSSS] :: End of startTime7: " + startTime7);
-			LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime7 - startTime6) / 1e9 / 60.0 + " minutes");
-        
-//		return zipWithIndex(ss.createDataFrame(result, schema),1L,"index");
-			
 		Dataset<Row> mainDataset = ss.createDataFrame(result, schema);
-		//mainDataset.show(10,false);
-		long startTime71 = System.nanoTime();
-		LOG.error("[MANCHESSSSSSSS] :: End of startTime7.1: " + startTime71);
-		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime71 - startTime7) / 1e9 / 60.0 + " minutes");
+		mainDataset.show(10,false);
 		      	
 		return mainDataset;
 	}
@@ -392,28 +361,15 @@ public class BwaInterpreter {
 		// Read the two FASTQ files from HDFS using the loadFastq method. After that, a Spark join operation is performed
 		Dataset<Row> datasettmpDS1 = loadFastqtoDSnew(this.sparkSession, options.getInputPath(),1);
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS1: " );
-
-		long startTime8 = System.nanoTime();
-		LOG.error("[MANCHESSSSSSSS] :: End of startTime8: " + startTime8);
-		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime8 - startTime) / 1e9 / 60.0 + " minutes");
-        
-	
 		
 		Dataset<Row> datasettmpDS2 = loadFastqtoDSnew(this.sparkSession, options.getInputPath2(),2);
-		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");
-		
-		long startTime9 = System.nanoTime();
-		LOG.error("[MANCHESSSSSSSS] :: End of startTime9: " + startTime9);
-		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime9 - startTime8) / 1e9 / 60.0 + " minutes");
-        
+		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. datasettmpDS2");        
 	
 		Dataset<Row> joined = datasettmpDS1.join(datasettmpDS2,"index");
 		LOG.error("["+this.getClass().getName()+"] ::Not sorting in HDFS. joined ");
 
-		long startTime10 = System.nanoTime();
-		LOG.error("[MANCHESSSSSSSS] :: End of startTime10: " + startTime10);
-		LOG.error("[MANCHESSSSSSSS] :: Total time: " + (startTime10 - startTime9) / 1e9 / 60.0 + " minutes");	
-		
+		joined.show(10,false);
+
 		// Sort in memory with no partitioning
 		if ((options.getPartitionNumber() == 0) && (options.isSortFastqReads())) {
 			dfFinal = joined.orderBy("index");
@@ -457,7 +413,8 @@ public class BwaInterpreter {
 
 		LOG.error("["+this.getClass().getName()+"] :: End of sorting. Timing: " + endTime);
 		LOG.error("["+this.getClass().getName()+"] :: Total time: " + (endTime - startTime) / 1e9 / 60.0 + " minutes");
-
+		dfFinal.show();
+		
 		return dfFinal;		
 		
 	}
