@@ -222,7 +222,7 @@ public class BwaInterpreter {
 
 
 	    StructField field1 = DataTypes.createStructField("index", DataTypes.StringType, true);
-	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);a
+	    StructField field2 = DataTypes.createStructField("identifier"+index, DataTypes.StringType, true);
 	    StructField field3 = DataTypes.createStructField("sequence"+index, DataTypes.StringType, true);
 	    StructField field4 = DataTypes.createStructField("aux"+index, DataTypes.StringType, true);
 	    StructField field5 = DataTypes.createStructField("quality"+index, DataTypes.StringType, true);
