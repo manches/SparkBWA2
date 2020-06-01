@@ -214,7 +214,7 @@ public class BwaInterpreter {
 	/**
 	 * Function to load a FASTQ file from HDFS into a JavaPairRDD<Long, String>
 	 * @param ctx The JavaSparkContext to use
-	 * @param ss The SparkSession to use
+	 * @param ss The SparkSession to use 
 	 * @param index first or second FASTQ file
 	 * @return A JavaPairRDD containing <Long Read ID, String Read>
 	 */
