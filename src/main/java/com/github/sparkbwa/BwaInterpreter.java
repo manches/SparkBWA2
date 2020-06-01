@@ -235,8 +235,8 @@ public class BwaInterpreter {
 		RDD<Object> rf =  RDDFunctions.fromRDD(fastqLines.rdd(),fastqLines.classTag()).sliding(4, 4);
 
 		JavaRDD<Object> x = new JavaRDD<>(rf, rf.elementClassTag());
-		JavaPairRDD<Object,Long> x2 = x.zipWithIndex();
-
+		JavaPairRDD<Object,Long> x2 = x.zipWithUniqueId(); //zipwithUniqId
+		
 		JavaRDD<Row> result = x2.map(new Function<Tuple2<Object,Long>,Row>() {
 			@Override
 			public Row call(Tuple2 arg0) throws Exception {
