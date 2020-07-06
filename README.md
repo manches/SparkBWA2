@@ -1,3 +1,5 @@
+ADAPTING RDD TO DATASET
+
 # What's SparkBWA about? #
 
 **SparkBWA** is a tool that integrates the Burrows-Wheeler Aligner--[BWA][1] on a [Apache Spark][4] framework running on the top of [Hadoop][2]. The current version of SparkBWA (v0.2, October 2016) supports the following BWA algorithms:
